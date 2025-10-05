@@ -1,0 +1,257 @@
+# Task ID: 6
+# Title: Filtre Paneli ve Arama Bileşeni Geliştirme
+# Status: pending
+# Dependencies: 1, 3
+# Priority: medium
+# Description: Fiş/fatura kayıtlarını filtrelemek ve aramak için kullanılacak bileşenlerin oluşturulması
+# Details:
+1. Filtre paneli bileşeni oluştur (`components/FilterPanel.tsx`):
+   ```tsx
+   import { useState } from 'react';
+   import { useRouter, useSearchParams } from 'next/navigation';
+   
+   export function FilterPanel() {
+     const router = useRouter();
+     const searchParams = useSearchParams();
+     
+     const [startDate, setStartDate] = useState(searchParams.get('startDate') || '');
+     const [endDate, setEndDate] = useState(searchParams.get('endDate') || '');
+     const [fisNo, setFisNo] = useState(searchParams.get('fisNo') || '');
+     const [minAmount, setMinAmount] = useState(searchParams.get('minAmount') || '');
+     const [maxAmount, setMaxAmount] = useState(searchParams.get('maxAmount') || '');
+     
+     const handleFilter = (e: React.FormEvent) => {
+       e.preventDefault();
+       
+       const params = new URLSearchParams();
+       if (startDate) params.set('startDate', startDate);
+       if (endDate) params.set('endDate', endDate);
+       if (fisNo) params.set('fisNo', fisNo);
+       if (minAmount) params.set('minAmount', minAmount);
+       if (maxAmount) params.set('maxAmount', maxAmount);
+       
+       router.push(`/?${params.toString()}`);
+     };
+     
+     const handleReset = () => {
+       setStartDate('');
+       setEndDate('');
+       setFisNo('');
+       setMinAmount('');
+       setMaxAmount('');
+       router.push('/');
+     };
+     
+     const isDateRangeValid = !startDate || !endDate || new Date(startDate) <= new Date(endDate);
+     
+     return (
+       <div className="rounded-2xl border bg-white p-4">
+         <h2 className="font-medium mb-4">Filtreler</h2>
+         
+         <form onSubmit={handleFilter}>
+           <div className="space-y-4">
+             <div>
+               <label htmlFor="startDate" className="block text-sm text-slate-600 mb-1">
+                 Başlangıç Tarihi
+               </label>
+               <input
+                 id="startDate"
+                 type="date"
+                 value={startDate}
+                 onChange={(e) => setStartDate(e.target.value)}
+                 className="w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+               />
+             </div>
+             
+             <div>
+               <label htmlFor="endDate" className="block text-sm text-slate-600 mb-1">
+                 Bitiş Tarihi
+               </label>
+               <input
+                 id="endDate"
+                 type="date"
+                 value={endDate}
+                 onChange={(e) => setEndDate(e.target.value)}
+                 className="w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                 aria-invalid={!isDateRangeValid}
+                 aria-describedby={!isDateRangeValid ? 'dateError' : undefined}
+               />
+               {!isDateRangeValid && (
+                 <p id="dateError" className="text-xs text-rose-500 mt-1">
+                   Bitiş tarihi başlangıç tarihinden önce olamaz
+                 </p>
+               )}
+             </div>
+             
+             <div>
+               <label htmlFor="fisNo" className="block text-sm text-slate-600 mb-1">
+                 Fiş No
+               </label>
+               <input
+                 id="fisNo"
+                 type="text"
+                 value={fisNo}
+                 onChange={(e) => setFisNo(e.target.value)}
+                 className="w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+               />
+             </div>
+             
+             <div>
+               <label htmlFor="minAmount" className="block text-sm text-slate-600 mb-1">
+                 Min. Tutar (TL)
+               </label>
+               <input
+                 id="minAmount"
+                 type="number"
+                 min="0"
+                 step="0.01"
+                 value={minAmount}
+                 onChange={(e) => setMinAmount(e.target.value)}
+                 className="w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+               />
+             </div>
+             
+             <div>
+               <label htmlFor="maxAmount" className="block text-sm text-slate-600 mb-1">
+                 Maks. Tutar (TL)
+               </label>
+               <input
+                 id="maxAmount"
+                 type="number"
+                 min="0"
+                 step="0.01"
+                 value={maxAmount}
+                 onChange={(e) => setMaxAmount(e.target.value)}
+                 className="w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+               />
+             </div>
+             
+             <div className="flex gap-2 pt-2">
+               <button
+                 type="submit"
+                 disabled={!isDateRangeValid}
+                 className="flex-1 bg-blue-600 text-white rounded-xl py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+               >
+                 Filtrele
+               </button>
+               <button
+                 type="button"
+                 onClick={handleReset}
+                 className="flex-1 bg-white text-slate-600 border border-gray-300 rounded-xl py-2 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-300"
+               >
+                 Sıfırla
+               </button>
+             </div>
+           </div>
+         </form>
+       </div>
+     );
+   }
+   ```
+
+2. Arama bileşeni oluştur (`components/SearchInput.tsx`):
+   ```tsx
+   import { useState, useEffect } from 'react';
+   import { useRouter, useSearchParams } from 'next/navigation';
+   import { Search } from 'lucide-react';
+   import { useDebounce } from '@/lib/hooks';
+   
+   export function SearchInput() {
+     const router = useRouter();
+     const searchParams = useSearchParams();
+     const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+     const debouncedSearchTerm = useDebounce(searchTerm, 300);
+     
+     useEffect(() => {
+       if (debouncedSearchTerm !== searchParams.get('search')) {
+         const params = new URLSearchParams(searchParams.toString());
+         
+         if (debouncedSearchTerm) {
+           params.set('search', debouncedSearchTerm);
+         } else {
+           params.delete('search');
+         }
+         
+         router.push(`/?${params.toString()}`);
+       }
+     }, [debouncedSearchTerm, router, searchParams]);
+     
+     return (
+       <div className="relative mb-4">
+         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+           <Search className="h-5 w-5 text-gray-400" />
+         </div>
+         <input
+           type="text"
+           value={searchTerm}
+           onChange={(e) => setSearchTerm(e.target.value)}
+           placeholder="Fiş no / ürün adı / açıklama"
+           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+         />
+       </div>
+     );
+   }
+   ```
+
+3. Debounce hook oluştur (`lib/hooks.ts`):
+   ```typescript
+   import { useState, useEffect } from 'react';
+   
+   export function useDebounce<T>(value: T, delay: number): T {
+     const [debouncedValue, setDebouncedValue] = useState<T>(value);
+     
+     useEffect(() => {
+       const handler = setTimeout(() => {
+         setDebouncedValue(value);
+       }, delay);
+       
+       return () => {
+         clearTimeout(handler);
+       };
+     }, [value, delay]);
+     
+     return debouncedValue;
+   }
+   ```
+
+# Test Strategy:
+1. Filtre formunun doğru çalıştığını test et
+2. Tarih aralığı doğrulamasının çalıştığını kontrol et
+3. URL parametrelerinin doğru şekilde güncellendiğini doğrula
+4. Sıfırlama butonunun tüm filtreleri temizlediğini kontrol et
+5. Arama bileşeninin debounce ile çalıştığını test et (300ms gecikme)
+6. Arama teriminin URL'ye doğru şekilde eklendiğini doğrula
+7. Erişilebilirlik kontrolü yap (form etiketleri, ARIA özellikleri)
+8. Responsive davranışı farklı ekran boyutlarında test et
+
+# Subtasks:
+## 1. FilterPanel Bileşeninin Geliştirilmesi [pending]
+### Dependencies: None
+### Description: Fiş/fatura kayıtlarını filtrelemek için kullanılacak filtre paneli bileşeninin oluşturulması ve temel işlevselliğinin sağlanması.
+### Details:
+components/FilterPanel.tsx dosyasını oluşturun ve içeriğini verilen kod ile doldurun. Bileşen, tarih aralığı, fiş numarası ve tutar aralığı gibi filtreleme seçenekleri sunmalıdır. Filtreleme işlemi URL parametrelerini güncelleyerek çalışmalıdır. Tarih aralığı doğrulaması ekleyin ve hatalı girişlerde kullanıcıya uyarı gösterin. Filtrele ve Sıfırla butonlarının işlevselliğini sağlayın.
+
+## 2. useDebounce Hook Oluşturulması [pending]
+### Dependencies: None
+### Description: Arama işlemlerinde gereksiz API çağrılarını önlemek için debounce fonksiyonalitesini sağlayacak custom hook'un geliştirilmesi.
+### Details:
+lib/hooks.ts dosyasını oluşturun ve useDebounce hook'unu ekleyin. Hook, bir değer ve gecikme süresi almalı ve belirtilen süre boyunca değer değişmezse güncellenmiş değeri döndürmelidir. Bu hook, kullanıcı arama yaparken her tuş vuruşunda değil, kullanıcı yazmayı bıraktıktan belirli bir süre sonra arama işleminin gerçekleşmesini sağlayacaktır.
+
+## 3. SearchInput Bileşeninin Geliştirilmesi [pending]
+### Dependencies: 6.2
+### Description: Fiş/fatura kayıtlarını aramak için kullanılacak arama bileşeninin oluşturulması ve debounce özelliğinin entegrasyonu.
+### Details:
+components/SearchInput.tsx dosyasını oluşturun ve içeriğini verilen kod ile doldurun. Bileşen, kullanıcı girdisini almalı ve useDebounce hook'unu kullanarak belirli bir gecikme (300ms) sonrasında URL parametrelerini güncelleyerek arama işlemini gerçekleştirmelidir. Arama simgesi ve stil özelliklerini ekleyin.
+
+## 4. Filtre ve Arama Bileşenlerinin Entegrasyonu [pending]
+### Dependencies: 6.1, 6.3
+### Description: Filtre paneli ve arama bileşenlerinin ana sayfaya entegre edilmesi ve birlikte çalışmasının sağlanması.
+### Details:
+Ana sayfa bileşeninde (app/page.tsx) FilterPanel ve SearchInput bileşenlerini import edin ve uygun yerlere yerleştirin. İki bileşenin URL parametrelerini doğru şekilde yönetmesini ve birbirlerinin filtrelerini etkilememesini sağlayın. Responsive tasarım için gerekli CSS sınıflarını ekleyin.
+
+## 5. Filtre ve Arama Sonuçlarının Gösterilmesi [pending]
+### Dependencies: 6.1, 6.3, 6.4
+### Description: Filtre ve arama sonuçlarına göre fiş/fatura listesinin güncellenmesi ve kullanıcıya aktif filtrelerin gösterilmesi.
+### Details:
+FisList bileşenini güncelleyerek URL parametrelerindeki filtre ve arama kriterlerine göre verileri filtrelemesini sağlayın. Aktif filtreleri gösteren bir bileşen ekleyin (örn. FilterBadges.tsx) ve kullanıcının tek tek filtreleri kaldırabilmesini sağlayın. Sonuç bulunamadığında uygun bir mesaj gösterin. Filtreleme ve arama işlemlerinin yükleme durumlarını ele alın.
+

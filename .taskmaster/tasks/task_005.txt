@@ -1,0 +1,196 @@
+# Task ID: 5
+# Title: Ana Sayfa ve İstatistik Kartları Geliştirme
+# Status: pending
+# Dependencies: 1, 2, 3, 4
+# Priority: medium
+# Description: Ana sayfa layout'u, istatistik kartları ve genel sayfa yapısının oluşturulması
+# Details:
+1. Ana sayfa bileşenini oluştur (`app/page.tsx`):
+   ```tsx
+   import { Header } from '@/components/Header';
+   import { StatCard } from '@/components/StatCard';
+   import { FileUpload } from '@/components/FileUpload';
+   import { FilterPanel } from '@/components/FilterPanel';
+   import { FisList } from '@/components/FisList';
+   import { ListChecks, Coins, Percent, CalendarClock, Gauge } from 'lucide-react';
+   
+   export default function Home() {
+     return (
+       <div className="min-h-screen bg-slate-50">
+         <Header />
+         
+         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+           <h1 className="text-2xl font-semibold mb-6">Fatura/Fiş Dashboard</h1>
+           
+           {/* İstatistik Kartları */}
+           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+             <StatCard 
+               icon={ListChecks} 
+               title="Toplam Kayıt" 
+               value="0" 
+             />
+             <StatCard 
+               icon={Coins} 
+               title="Toplam Tutar" 
+               value="0,00 TL" 
+             />
+             <StatCard 
+               icon={Percent} 
+               title="Toplam KDV" 
+               value="0,00 TL" 
+             />
+             <StatCard 
+               icon={CalendarClock} 
+               title="Bugünkü Kayıtlar" 
+               value="0" 
+             />
+             <StatCard 
+               icon={Gauge} 
+               title="Ortalama Tutar" 
+               value="0,00 TL" 
+             />
+           </div>
+           
+           {/* Dosya Yükleme */}
+           <div className="mb-8">
+             <FileUpload />
+           </div>
+           
+           {/* İçerik Alanı */}
+           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+             <div className="md:col-span-1">
+               <FilterPanel />
+             </div>
+             <div className="md:col-span-3">
+               <FisList />
+             </div>
+           </div>
+         </main>
+       </div>
+     );
+   }
+   ```
+
+2. İstatistik verilerini çekmek için API route oluştur (`app/api/stats/route.ts`):
+   ```typescript
+   import { NextResponse } from 'next/server';
+   import { supabase } from '@/lib/supabase';
+   import { format } from 'date-fns';
+   import { tr } from 'date-fns/locale';
+   
+   export async function GET() {
+     try {
+       // Toplam kayıt sayısı
+       const { count: totalCount, error: countError } = await supabase
+         .from('fisler')
+         .select('*', { count: 'exact', head: true });
+       
+       if (countError) throw countError;
+       
+       // Toplam tutar ve KDV
+       const { data: totals, error: totalsError } = await supabase
+         .from('fisler')
+         .select('total, total_kdv');
+       
+       if (totalsError) throw totalsError;
+       
+       const totalAmount = totals.reduce((sum, item) => sum + (item.total || 0), 0);
+       const totalKdv = totals.reduce((sum, item) => sum + (item.total_kdv || 0), 0);
+       
+       // Bugünkü kayıtlar
+       const today = format(new Date(), 'yyyy-MM-dd');
+       const { count: todayCount, error: todayError } = await supabase
+         .from('fisler')
+         .select('*', { count: 'exact', head: true })
+         .gte('tarih_saat', `${today}T00:00:00`)
+         .lt('tarih_saat', `${today}T23:59:59`);
+       
+       if (todayError) throw todayError;
+       
+       // Ortalama tutar
+       const averageAmount = totalCount > 0 ? totalAmount / totalCount : 0;
+       
+       return NextResponse.json({
+         totalCount: totalCount || 0,
+         totalAmount,
+         totalKdv,
+         todayCount: todayCount || 0,
+         averageAmount
+       });
+     } catch (error) {
+       console.error('İstatistik verisi alınırken hata:', error);
+       return NextResponse.json({ error: 'İstatistik verisi alınamadı' }, { status: 500 });
+     }
+   }
+   ```
+
+3. İstatistik verilerini SWR ile çek ve göster:
+   ```tsx
+   import useSWR from 'swr';
+   import { formatCurrency } from '@/lib/utils';
+   
+   // Ana sayfa içinde:
+   const { data: stats, error: statsError, isLoading: statsLoading } = useSWR(
+     '/api/stats',
+     async (url) => {
+       const res = await fetch(url);
+       if (!res.ok) throw new Error('İstatistik verisi alınamadı');
+       return res.json();
+     },
+     { refreshInterval: 30000 } // 30 saniyede bir yenile
+   );
+   
+   // İstatistik kartlarını güncelle
+   <StatCard 
+     icon={ListChecks} 
+     title="Toplam Kayıt" 
+     value={statsLoading ? '...' : stats?.totalCount || '0'} 
+   />
+   <StatCard 
+     icon={Coins} 
+     title="Toplam Tutar" 
+     value={statsLoading ? '...' : formatCurrency(stats?.totalAmount || 0)} 
+   />
+   // ... diğer kartlar
+   ```
+
+# Test Strategy:
+1. Ana sayfanın tüm bileşenlerinin doğru render edildiğini kontrol et
+2. İstatistik API'sinin doğru veri döndürdüğünü test et
+3. SWR ile veri çekme işleminin çalıştığını doğrula
+4. İstatistik kartlarının doğru verilerle güncellendiğini kontrol et
+5. Responsive tasarımın farklı ekran boyutlarında doğru çalıştığını test et
+6. Yükleme durumlarının doğru gösterildiğini kontrol et
+7. Para birimi formatlamasının doğru yapıldığını test et (virgül ile ondalık gösterimi)
+
+# Subtasks:
+## 1. Ana Sayfa Bileşeninin Oluşturulması [pending]
+### Dependencies: None
+### Description: Ana sayfa layout'unun oluşturulması ve temel bileşenlerin yerleştirilmesi
+### Details:
+app/page.tsx dosyasını oluştur ve içerisine Header, StatCard, FileUpload, FilterPanel ve FisList bileşenlerini yerleştir. Responsive grid yapısını kur ve sayfa başlığını ekle. Lucide ikonlarını import et ve StatCard bileşenlerine gerekli ikonları aktar. Sayfa yapısını min-h-screen ile tam ekran yap ve bg-slate-50 ile arka plan rengini ayarla.
+
+## 2. İstatistik Kartı Bileşeninin Geliştirilmesi [pending]
+### Dependencies: 5.1
+### Description: İstatistik verilerini gösterecek kart bileşeninin tasarlanması ve oluşturulması
+### Details:
+components/StatCard.tsx dosyasını oluştur. Bileşen, ikon, başlık ve değer prop'larını almalı. Kart tasarımını Tailwind CSS ile oluştur: beyaz arka plan, hafif gölge, yuvarlak köşeler. İkon alanını üstte, başlığı ortada ve değeri altta göster. Yükleme durumu için skeleton animasyonu ekle. Bileşeni responsive olarak tasarla ve farklı ekran boyutlarında düzgün görünmesini sağla.
+
+## 3. İstatistik API Route'unun Oluşturulması [pending]
+### Dependencies: 5.1, 5.2
+### Description: İstatistik verilerini Supabase'den çekecek API endpoint'inin geliştirilmesi
+### Details:
+app/api/stats/route.ts dosyasını oluştur. NextResponse ve supabase client'ı import et. GET fonksiyonu içinde toplam kayıt sayısı, toplam tutar, toplam KDV, bugünkü kayıtlar ve ortalama tutar verilerini Supabase sorgularıyla çek. date-fns kütüphanesini kullanarak tarih filtrelemesini yap. Hata yönetimini try-catch bloğuyla sağla ve uygun HTTP yanıtlarını döndür. Performans için gerekli indeksleri Supabase'de oluştur.
+
+## 4. SWR ile İstatistik Verilerinin Çekilmesi [pending]
+### Dependencies: 5.1, 5.2, 5.3
+### Description: SWR kütüphanesini kullanarak istatistik verilerinin client tarafında çekilmesi ve yönetilmesi
+### Details:
+Ana sayfa bileşeninde SWR hook'unu kullanarak /api/stats endpoint'inden veri çek. useSWR hook'unu kullanarak veri çekme, yükleme durumu ve hata yönetimini sağla. refreshInterval özelliğini 30 saniye olarak ayarla. formatCurrency yardımcı fonksiyonunu lib/utils.ts içinde oluştur ve para birimlerini formatlama için kullan. İstatistik kartlarını SWR'dan gelen verilerle güncelle ve yükleme durumlarını ele al.
+
+## 5. İstatistik Kartlarının Dinamik Verilerle Güncellenmesi [pending]
+### Dependencies: 5.1, 5.2, 5.3, 5.4
+### Description: İstatistik kartlarının SWR'dan gelen verilerle güncellenmesi ve görsel iyileştirmelerin yapılması
+### Details:
+Ana sayfa bileşeninde StatCard bileşenlerini SWR'dan gelen verilerle güncelle. Yükleme durumunda skeleton göster, hata durumunda kullanıcıya bilgi ver. Toplam kayıt, toplam tutar, toplam KDV, bugünkü kayıtlar ve ortalama tutar verilerini ilgili kartlara aktar. Para birimi değerlerini formatCurrency ile formatla. Sayı değerlerini toLocaleString ile formatla. Kartlara hover efekti ekle ve geçiş animasyonları uygula. Veri yoksa veya sıfırsa uygun mesajlar göster.
+

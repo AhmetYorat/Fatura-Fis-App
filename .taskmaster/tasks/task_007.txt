@@ -1,0 +1,312 @@
+# Task ID: 7
+# Title: Fiş Listesi ve Sayfalama Geliştirme
+# Status: pending
+# Dependencies: 1, 2, 3, 6
+# Priority: medium
+# Description: Fiş/fatura kayıtlarının listelendiği, filtrelendiği ve sayfalandığı bileşenin oluşturulması
+# Details:
+1. Fiş listesi bileşeni oluştur (`components/FisList.tsx`):
+   ```tsx
+   import { useState } from 'react';
+   import Link from 'next/link';
+   import useSWR from 'swr';
+   import { useSearchParams } from 'next/navigation';
+   import { format } from 'date-fns';
+   import { tr } from 'date-fns/locale';
+   import { ChevronLeft, ChevronRight, Calendar, Package } from 'lucide-react';
+   import { SearchInput } from './SearchInput';
+   import { formatCurrency } from '@/lib/utils';
+   import type { Fis } from '@/types/database';
+   
+   export function FisList() {
+     const searchParams = useSearchParams();
+     const [page, setPage] = useState(1);
+     const pageSize = 20;
+     
+     // URL'den filtreleri al
+     const search = searchParams.get('search') || '';
+     const startDate = searchParams.get('startDate') || '';
+     const endDate = searchParams.get('endDate') || '';
+     const fisNo = searchParams.get('fisNo') || '';
+     const minAmount = searchParams.get('minAmount') || '';
+     const maxAmount = searchParams.get('maxAmount') || '';
+     
+     // API endpoint oluştur
+     const apiUrl = `/api/fisler?page=${page}&pageSize=${pageSize}${search ? `&search=${search}` : ''}${startDate ? `&startDate=${startDate}` : ''}${endDate ? `&endDate=${endDate}` : ''}${fisNo ? `&fisNo=${fisNo}` : ''}${minAmount ? `&minAmount=${minAmount}` : ''}${maxAmount ? `&maxAmount=${maxAmount}` : ''}`;
+     
+     const { data, error, isLoading } = useSWR<{ data: Fis[], total: number }>(apiUrl, async (url) => {
+       const res = await fetch(url);
+       if (!res.ok) throw new Error('Veriler alınamadı');
+       return res.json();
+     });
+     
+     const totalPages = data ? Math.ceil(data.total / pageSize) : 0;
+     
+     const handlePrevPage = () => {
+       if (page > 1) setPage(page - 1);
+     };
+     
+     const handleNextPage = () => {
+       if (page < totalPages) setPage(page + 1);
+     };
+     
+     // Boş durum
+     if (data && data.data.length === 0) {
+       return (
+         <div>
+           <SearchInput />
+           <div className="rounded-2xl border bg-white p-8 text-center">
+             <div className="flex justify-center mb-4">
+               <Package className="h-12 w-12 text-gray-400" />
+             </div>
+             <h3 className="text-lg font-medium text-gray-900 mb-1">Henüz kayıt yok</h3>
+             <p className="text-gray-500">İlk fişini yükle veya filtreleri değiştir.</p>
+           </div>
+         </div>
+       );
+     }
+     
+     // Yükleme durumu
+     if (isLoading) {
+       return (
+         <div>
+           <SearchInput />
+           <div className="space-y-4">
+             {[...Array(5)].map((_, i) => (
+               <div key={i} className="rounded-xl border p-4 bg-white">
+                 <div className="animate-pulse flex justify-between">
+                   <div className="h-5 bg-slate-200 rounded w-1/4"></div>
+                   <div className="h-5 bg-slate-200 rounded w-1/4"></div>
+                 </div>
+                 <div className="animate-pulse flex justify-between mt-2">
+                   <div className="h-4 bg-slate-200 rounded w-1/3"></div>
+                   <div className="h-4 bg-slate-200 rounded w-1/6"></div>
+                 </div>
+               </div>
+             ))}
+           </div>
+         </div>
+       );
+     }
+     
+     // Hata durumu
+     if (error) {
+       return (
+         <div>
+           <SearchInput />
+           <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-700">
+             Veriler yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin veya daha sonra tekrar deneyin.
+           </div>
+         </div>
+       );
+     }
+     
+     return (
+       <div>
+         <SearchInput />
+         
+         <div className="space-y-4 mb-6">
+           {data?.data.map((fis) => (
+             <div key={fis.id} className="rounded-xl border p-4 bg-white hover:shadow-md transition-shadow">
+               <div className="flex justify-between items-center mb-2">
+                 <h3 className="font-medium">Fiş #{fis.fis_no}</h3>
+                 <span className="font-semibold">{formatCurrency(fis.total)}</span>
+               </div>
+               <div className="flex justify-between items-center text-sm text-slate-600">
+                 <div className="flex items-center">
+                   <Calendar className="h-4 w-4 mr-1" />
+                   {format(new Date(fis.tarih_saat), 'd MMMM yyyy HH:mm', { locale: tr })}
+                   <span className="mx-2">•</span>
+                   <span>{fis.items.length} ürün</span>
+                 </div>
+                 <Link
+                   href={`/detay/${fis.id}`}
+                   className="text-blue-600 hover:text-blue-800 font-medium"
+                 >
+                   Detay Gör
+                 </Link>
+               </div>
+             </div>
+           ))}
+         </div>
+         
+         {/* Sayfalama */}
+         {totalPages > 1 && (
+           <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+             <div className="text-sm text-gray-500">
+               Toplam {data?.total} kayıt • Sayfa {page}/{totalPages}
+             </div>
+             <div className="flex space-x-2">
+               <button
+                 onClick={handlePrevPage}
+                 disabled={page === 1}
+                 className="p-2 rounded-lg border bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+                 aria-label="Önceki sayfa"
+               >
+                 <ChevronLeft className="h-5 w-5" />
+               </button>
+               <button
+                 onClick={handleNextPage}
+                 disabled={page === totalPages}
+                 className="p-2 rounded-lg border bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+                 aria-label="Sonraki sayfa"
+               >
+                 <ChevronRight className="h-5 w-5" />
+               </button>
+             </div>
+           </div>
+         )}
+       </div>
+     );
+   }
+   ```
+
+2. Fiş listesi API route oluştur (`app/api/fisler/route.ts`):
+   ```typescript
+   import { NextRequest, NextResponse } from 'next/server';
+   import { supabase } from '@/lib/supabase';
+   
+   export async function GET(request: NextRequest) {
+     try {
+       const { searchParams } = new URL(request.url);
+       
+       const page = parseInt(searchParams.get('page') || '1');
+       const pageSize = parseInt(searchParams.get('pageSize') || '20');
+       const search = searchParams.get('search');
+       const startDate = searchParams.get('startDate');
+       const endDate = searchParams.get('endDate');
+       const fisNo = searchParams.get('fisNo');
+       const minAmount = searchParams.get('minAmount');
+       const maxAmount = searchParams.get('maxAmount');
+       
+       // Sayfalama hesaplamaları
+       const from = (page - 1) * pageSize;
+       const to = from + pageSize - 1;
+       
+       // Sorgu oluştur
+       let query = supabase
+         .from('fisler')
+         .select('*', { count: 'exact' })
+         .order('tarih_saat', { ascending: false });
+       
+       // Filtreleri uygula
+       if (search) {
+         query = query.or(`fis_no.ilike.%${search}%,items.name.ilike.%${search}%`);
+       }
+       
+       if (startDate) {
+         query = query.gte('tarih_saat', `${startDate}T00:00:00`);
+       }
+       
+       if (endDate) {
+         query = query.lte('tarih_saat', `${endDate}T23:59:59`);
+       }
+       
+       if (fisNo) {
+         query = query.ilike('fis_no', `%${fisNo}%`);
+       }
+       
+       if (minAmount) {
+         query = query.gte('total', minAmount);
+       }
+       
+       if (maxAmount) {
+         query = query.lte('total', maxAmount);
+       }
+       
+       // Sayfalama uygula
+       query = query.range(from, to);
+       
+       const { data, error, count } = await query;
+       
+       if (error) throw error;
+       
+       return NextResponse.json({
+         data: data || [],
+         total: count || 0
+       });
+     } catch (error) {
+       console.error('Fiş listesi alınırken hata:', error);
+       return NextResponse.json({ error: 'Fiş listesi alınamadı' }, { status: 500 });
+     }
+   }
+   ```
+
+3. Para birimi formatı için yardımcı fonksiyon oluştur (`lib/utils.ts`):
+   ```typescript
+   export function formatCurrency(amount: number): string {
+     return new Intl.NumberFormat('tr-TR', {
+       style: 'currency',
+       currency: 'TRY',
+       minimumFractionDigits: 2,
+       maximumFractionDigits: 2
+     }).format(amount);
+   }
+   ```
+
+# Test Strategy:
+1. Fiş listesinin doğru render edildiğini kontrol et
+2. API route'un doğru filtreleme ve sayfalama yaptığını test et
+3. Boş durum, yükleme durumu ve hata durumlarının doğru gösterildiğini kontrol et
+4. Sayfalama kontrollerinin doğru çalıştığını test et
+5. Para birimi formatlamasının doğru yapıldığını kontrol et (₺ sembolü ve virgül ile ondalık gösterimi)
+6. Tarih formatlamasının Türkçe locale ile doğru yapıldığını test et
+7. Filtrelerin URL parametrelerine doğru şekilde yansıdığını doğrula
+8. Arama işlevinin doğru çalıştığını test et
+
+# Subtasks:
+## 1. SearchInput Bileşenini Geliştirme [pending]
+### Dependencies: None
+### Description: Fiş listesinde kullanılacak arama ve filtreleme bileşeninin oluşturulması
+### Details:
+1. `components/SearchInput.tsx` dosyasını oluştur
+2. Arama kutusu, tarih aralığı, fiş numarası ve tutar aralığı filtrelerini içeren bir form tasarla
+3. URL parametrelerini kullanarak filtrelerin durumunu yönet
+4. Debounce mekanizması ile arama işlemini optimize et (300ms gecikme)
+5. Filtreleri temizleme butonu ekle
+6. Responsive tasarım için mobil ve masaüstü görünümlerini ayarla
+
+## 2. API Route Geliştirme ve Filtreleme Mantığı [pending]
+### Dependencies: None
+### Description: Fiş listesi için API endpoint'in geliştirilmesi ve filtreleme mantığının uygulanması
+### Details:
+1. `app/api/fisler/route.ts` dosyasını oluştur
+2. URL parametrelerinden sayfa, sayfa boyutu ve filtre değerlerini al
+3. Supabase sorgusu oluştur ve filtreleri uygula
+4. Sayfalama için range fonksiyonunu kullan
+5. Hata yönetimi ekle ve uygun HTTP yanıtları döndür
+6. Performans için sorgu optimizasyonu yap
+
+## 3. Fiş Listesi Bileşeni Geliştirme [pending]
+### Dependencies: 7.1, 7.2
+### Description: Fiş kayıtlarını listeleyen ana bileşenin oluşturulması
+### Details:
+1. `components/FisList.tsx` dosyasını oluştur
+2. useSWR hook'u ile API'den veri çekme mantığını uygula
+3. Yükleme, boş durum ve hata durumları için UI tasarla
+4. Her fiş için kart tasarımını oluştur (fiş no, tarih, toplam tutar, ürün sayısı)
+5. Detay sayfasına yönlendirme için link ekle
+6. Tarih ve para birimi formatlaması için yardımcı fonksiyonları kullan
+
+## 4. Sayfalama Bileşeni Geliştirme [pending]
+### Dependencies: 7.3
+### Description: Fiş listesi için sayfalama kontrollerinin oluşturulması
+### Details:
+1. FisList bileşeni içinde sayfalama mantığını uygula
+2. Önceki ve sonraki sayfa butonlarını ekle
+3. Mevcut sayfa ve toplam sayfa bilgisini göster
+4. Sayfa değişikliklerinde URL parametrelerini güncelle
+5. Sayfa değişikliklerinde veri yeniden yükleme mantığını uygula
+6. Sayfa butonlarının durumunu (aktif/pasif) yönet
+
+## 5. Yardımcı Fonksiyonlar ve Optimizasyon [pending]
+### Dependencies: 7.3, 7.4
+### Description: Para birimi formatı, tarih formatı ve performans optimizasyonları için yardımcı fonksiyonların geliştirilmesi
+### Details:
+1. `lib/utils.ts` dosyasında formatCurrency fonksiyonunu oluştur
+2. Tarih formatlaması için date-fns kütüphanesini kullan
+3. API isteklerini optimize etmek için SWR'nin önbellek mekanizmasını yapılandır
+4. Filtreleme ve sayfalama için URL parametrelerini yönetecek yardımcı fonksiyonlar ekle
+5. Fiş listesi bileşeninin performansını artırmak için React.memo kullan
+6. Büyük veri setleri için sanal liste (virtualization) tekniklerini değerlendir
+

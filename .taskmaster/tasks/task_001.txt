@@ -1,0 +1,300 @@
+# Task ID: 1
+# Title: Next.js 15 Proje Kurulumu ve Temel Yapılandırma
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Next.js 15 projesi oluşturma, Tailwind CSS entegrasyonu, temel klasör yapısı ve gerekli bağımlılıkların kurulumu
+# Details:
+1. `npx create-next-app@latest fatura-dashboard` komutu ile yeni proje oluştur
+2. Kurulum sırasında Tailwind CSS, TypeScript ve App Router seçeneklerini etkinleştir
+3. Proje klasör yapısını oluştur:
+   - `/app`: sayfa bileşenleri
+   - `/app/api`: API route'ları
+   - `/components`: UI bileşenleri
+   - `/lib`: yardımcı fonksiyonlar
+   - `/types`: TypeScript tipleri
+4. Gerekli bağımlılıkları kur:
+   - `npm install react-hot-toast` (bildirimler için)
+   - `npm install swr` (veri çekme için)
+   - `npm install date-fns` (tarih işlemleri için)
+   - `npm install lucide-react` (ikonlar için)
+5. Tailwind CSS yapılandırmasını güncelle (tailwind.config.js):
+   ```js
+   module.exports = {
+     content: [
+       './app/**/*.{js,ts,jsx,tsx}',
+       './components/**/*.{js,ts,jsx,tsx}',
+     ],
+     theme: {
+       extend: {
+         colors: {
+           primary: colors.blue,
+           accent: colors.green,
+           warning: colors.amber,
+           danger: colors.rose,
+         }
+       }
+     },
+     plugins: [],
+   }
+   ```
+6. Temel layout bileşenini oluştur (`app/layout.tsx`)
+7. Toaster bileşenini global olarak ekle
+
+# Test Strategy:
+1. Projenin başarıyla oluşturulduğunu doğrula
+2. `npm run dev` ile geliştirme sunucusunun çalıştığını kontrol et
+3. Tailwind CSS'in doğru çalıştığını basit bir stil uygulayarak test et
+4. Tüm bağımlılıkların doğru yüklendiğini ve import edilebilir olduğunu kontrol et
+5. Tarayıcıda responsive tasarımın doğru çalıştığını farklı ekran boyutlarında test et
+
+# Subtasks:
+## 1. Next.js 15 Projesi Oluşturma ve Temel Yapılandırma [pending]
+### Dependencies: None
+### Description: Next.js 15 projesinin oluşturulması, TypeScript ve App Router yapılandırması ile temel proje iskeletinin kurulması
+### Details:
+1. Terminal üzerinden `npx create-next-app@latest fatura-dashboard` komutunu çalıştır
+2. Kurulum sırasında aşağıdaki seçenekleri etkinleştir:
+   - TypeScript: Evet
+   - ESLint: Evet
+   - Tailwind CSS: Evet
+   - App Router: Evet
+   - Import alias: `@/*` olarak ayarla
+3. Kurulum tamamlandıktan sonra proje klasörüne gir: `cd fatura-dashboard`
+4. Projeyi başlat ve çalıştığını kontrol et: `npm run dev`
+5. Tarayıcıda `http://localhost:3000` adresini açarak projenin çalıştığını doğrula
+
+## 2. Proje Klasör Yapısı ve Bağımlılıkların Kurulumu [pending]
+### Dependencies: None
+### Description: Proje için gerekli klasör yapısının oluşturulması ve gerekli npm paketlerinin kurulması
+### Details:
+1. Proje klasör yapısını oluştur:
+   - `/app`: sayfa bileşenleri için
+   - `/app/api`: API route'ları için
+   - `/components`: UI bileşenleri için
+   - `/lib`: yardımcı fonksiyonlar için
+   - `/types`: TypeScript tipleri için
+2. Gerekli bağımlılıkları kur:
+   - `npm install react-hot-toast` (bildirimler için)
+   - `npm install swr` (veri çekme için)
+   - `npm install date-fns` (tarih işlemleri için)
+   - `npm install lucide-react` (ikonlar için)
+3. Eksik klasörleri oluşturmak için terminal komutlarını çalıştır:
+   ```
+   mkdir -p app/api components lib types
+   ```
+4. Her klasöre örnek bir dosya ekleyerek yapının doğru oluşturulduğunu kontrol et
+
+## 3. Tailwind CSS Yapılandırması ve Tema Ayarları [pending]
+### Dependencies: None
+### Description: Tailwind CSS yapılandırmasının güncellenmesi, tema renklerinin ve özel stillerin tanımlanması
+### Details:
+1. `tailwind.config.js` dosyasını aç ve aşağıdaki şekilde güncelle:
+   ```js
+   const colors = require('tailwindcss/colors');
+
+   module.exports = {
+     content: [
+       './app/**/*.{js,ts,jsx,tsx}',
+       './components/**/*.{js,ts,jsx,tsx}',
+     ],
+     theme: {
+       extend: {
+         colors: {
+           primary: colors.blue,
+           accent: colors.green,
+           warning: colors.amber,
+           danger: colors.rose,
+         }
+       }
+     },
+     plugins: [],
+   }
+   ```
+2. `globals.css` dosyasını aç ve temel stil tanımlamalarını ekle:
+   ```css
+   @tailwind base;
+   @tailwind components;
+   @tailwind utilities;
+
+   @layer components {
+     .btn {
+       @apply px-4 py-2 rounded-md font-medium transition-colors;
+     }
+     .btn-primary {
+       @apply bg-primary-600 text-white hover:bg-primary-700;
+     }
+     .card {
+       @apply bg-white rounded-lg shadow p-4;
+     }
+   }
+   ```
+3. Tailwind CSS yapılandırmasının doğru çalıştığını test etmek için basit bir bileşen oluştur
+
+## 4. Temel Layout ve Toaster Bileşeni Ekleme [pending]
+### Dependencies: None
+### Description: Uygulama için temel layout bileşeninin oluşturulması ve bildirimler için Toaster bileşeninin global olarak eklenmesi
+### Details:
+1. `app/layout.tsx` dosyasını aşağıdaki şekilde oluştur:
+   ```tsx
+   import './globals.css';
+   import { Inter } from 'next/font/google';
+   import { Toaster } from 'react-hot-toast';
+
+   const inter = Inter({ subsets: ['latin'] });
+
+   export const metadata = {
+     title: 'Fatura Dashboard',
+     description: 'Fiş ve fatura yönetim uygulaması',
+   };
+
+   export default function RootLayout({
+     children,
+   }: {
+     children: React.ReactNode;
+   }) {
+     return (
+       <html lang="tr">
+         <body className={`${inter.className} bg-gray-50 min-h-screen`}>
+           <Toaster position="top-right" />
+           <main className="container mx-auto px-4 py-8">
+             {children}
+           </main>
+         </body>
+       </html>
+     );
+   }
+   ```
+2. `app/page.tsx` dosyasını basit bir karşılama sayfası olarak güncelle:
+   ```tsx
+   import { Home as HomeIcon } from 'lucide-react';
+
+   export default function Home() {
+     return (
+       <div className="flex flex-col items-center justify-center min-h-[70vh]">
+         <h1 className="text-3xl font-bold text-primary-600 mb-4">Fatura Dashboard</h1>
+         <p className="text-gray-600 mb-8">Fiş ve fatura yönetim uygulamasına hoş geldiniz</p>
+         <div className="flex items-center gap-2 bg-primary-100 text-primary-800 p-4 rounded-lg">
+           <HomeIcon size={20} />
+           <span>Kurulum başarıyla tamamlandı!</span>
+         </div>
+       </div>
+     );
+   }
+   ```
+3. Toaster bileşeninin çalıştığını test etmek için basit bir bildirim ekle
+
+## 5. Temel Bileşenlerin ve Tiplerin Oluşturulması [pending]
+### Dependencies: None
+### Description: Uygulama için gerekli temel bileşenlerin ve TypeScript tip tanımlamalarının oluşturulması
+### Details:
+1. `types/index.ts` dosyasını oluştur ve temel tipleri tanımla:
+   ```typescript
+   export interface Fis {
+     id: string;
+     fis_no: string;
+     tarih_saat: string;
+     created_at: string;
+     updated_at: string;
+     total: number;
+     total_kdv: number;
+     items: FisItem[];
+   }
+
+   export interface FisItem {
+     name: string;
+     quantity: number;
+     price: number;
+     total: number;
+   }
+   ```
+2. `components/Button.tsx` dosyasını oluştur:
+   ```tsx
+   import { ButtonHTMLAttributes, ReactNode } from 'react';
+
+   interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+     variant?: 'primary' | 'secondary' | 'outline' | 'danger';
+     size?: 'sm' | 'md' | 'lg';
+     children: ReactNode;
+     isLoading?: boolean;
+   }
+
+   export function Button({
+     variant = 'primary',
+     size = 'md',
+     children,
+     isLoading = false,
+     className = '',
+     ...props
+   }: ButtonProps) {
+     const baseClasses = 'btn font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
+     
+     const variantClasses = {
+       primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
+       secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-500',
+       outline: 'bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-gray-500',
+       danger: 'bg-danger-600 text-white hover:bg-danger-700 focus:ring-danger-500',
+     };
+     
+     const sizeClasses = {
+       sm: 'px-3 py-1.5 text-sm',
+       md: 'px-4 py-2 text-base',
+       lg: 'px-6 py-3 text-lg',
+     };
+     
+     return (
+       <button
+         className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+         disabled={isLoading}
+         {...props}
+       >
+         {isLoading ? (
+           <span className="flex items-center justify-center">
+             <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+             </svg>
+             Yükleniyor...
+           </span>
+         ) : children}
+       </button>
+     );
+   }
+   ```
+3. `components/Card.tsx` dosyasını oluştur:
+   ```tsx
+   import { ReactNode } from 'react';
+
+   interface CardProps {
+     title?: string;
+     children: ReactNode;
+     className?: string;
+   }
+
+   export function Card({ title, children, className = '' }: CardProps) {
+     return (
+       <div className={`bg-white rounded-lg shadow-sm p-4 ${className}`}>
+         {title && <h3 className="text-lg font-medium text-gray-800 mb-3">{title}</h3>}
+         {children}
+       </div>
+     );
+   }
+   ```
+4. `lib/utils.ts` dosyasını oluştur ve yardımcı fonksiyonları ekle:
+   ```typescript
+   import { format, parseISO } from 'date-fns';
+   import { tr } from 'date-fns/locale';
+
+   export function formatDate(dateString: string): string {
+     const date = parseISO(dateString);
+     return format(date, 'dd MMMM yyyy', { locale: tr });
+   }
+
+   export function formatCurrency(amount: number): string {
+     return new Intl.NumberFormat('tr-TR', {
+       style: 'currency',
+       currency: 'TRY',
+     }).format(amount);
+   }
+   ```
+

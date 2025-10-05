@@ -1,0 +1,308 @@
+# Task ID: 4
+# Title: Dosya Yükleme Bileşeni (Dropzone) Geliştirme
+# Status: pending
+# Dependencies: 1, 3
+# Priority: high
+# Description: Kullanıcıların fiş/fatura görsellerini yükleyebilecekleri sürükle-bırak destekli bir dosya yükleme bileşeni
+# Details:
+1. Dropzone bileşeni oluştur (`components/FileUpload.tsx`):
+   ```tsx
+   import { useState, useRef, useCallback } from 'react';
+   import { ImagePlus, X, Loader2 } from 'lucide-react';
+   import toast from 'react-hot-toast';
+   import { mutate } from 'swr';
+   
+   export function FileUpload() {
+     const [isDragging, setIsDragging] = useState(false);
+     const [isUploading, setIsUploading] = useState(false);
+     const [progress, setProgress] = useState(0);
+     const [error, setError] = useState('');
+     const fileInputRef = useRef<HTMLInputElement>(null);
+     const abortControllerRef = useRef<AbortController | null>(null);
+     
+     const handleDragOver = useCallback((e: React.DragEvent) => {
+       e.preventDefault();
+       setIsDragging(true);
+     }, []);
+     
+     const handleDragLeave = useCallback(() => {
+       setIsDragging(false);
+     }, []);
+     
+     const handleDrop = useCallback((e: React.DragEvent) => {
+       e.preventDefault();
+       setIsDragging(false);
+       
+       const files = e.dataTransfer.files;
+       if (files.length > 0) {
+         handleFileUpload(files[0]);
+       }
+     }, []);
+     
+     const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+       const files = e.target.files;
+       if (files && files.length > 0) {
+         handleFileUpload(files[0]);
+       }
+     }, []);
+     
+     const handleFileUpload = async (file: File) => {
+       // Dosya tipi kontrolü
+       if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
+         setError('Sadece JPG, JPEG ve PNG dosyaları desteklenmektedir.');
+         return;
+       }
+       
+       // Dosya boyutu kontrolü (10MB)
+       if (file.size > 10 * 1024 * 1024) {
+         setError('Dosya boyutu 10MB'dan küçük olmalıdır.');
+         return;
+       }
+       
+       setError('');
+       setIsUploading(true);
+       setProgress(0);
+       
+       const formData = new FormData();
+       formData.append('file', file);
+       
+       abortControllerRef.current = new AbortController();
+       
+       try {
+         const response = await fetch('/api/upload', {
+           method: 'POST',
+           body: formData,
+           signal: abortControllerRef.current.signal
+         });
+         
+         const data = await response.json();
+         
+         if (data.upload === 'success') {
+           toast.success('Yükleme başarılı. Kayıt eklendi/güncellendi.');
+           // SWR ile veri yenileme
+           mutate('/api/fisler');
+         } else {
+           setError('Yükleme başarısız. Lütfen tekrar deneyin.');
+           toast.error('Yükleme başarısız. Lütfen tekrar deneyin.');
+         }
+       } catch (err) {
+         if (err.name !== 'AbortError') {
+           setError('Yükleme sırasında bir hata oluştu.');
+           toast.error('Yükleme başarısız. Lütfen tekrar deneyin.');
+         }
+       } finally {
+         setIsUploading(false);
+         setProgress(0);
+         abortControllerRef.current = null;
+         if (fileInputRef.current) {
+           fileInputRef.current.value = '';
+         }
+       }
+     };
+     
+     const cancelUpload = () => {
+       if (abortControllerRef.current) {
+         abortControllerRef.current.abort();
+         abortControllerRef.current = null;
+         setIsUploading(false);
+         setProgress(0);
+       }
+     };
+     
+     return (
+       <div
+         className={`w-full max-w-xl mx-auto border-2 border-dashed ${isDragging ? 'border-blue-400 bg-blue-50' : 'border-gray-300'} rounded-2xl bg-white p-8 text-center min-h-[220px] flex flex-col items-center justify-center`}
+         onDragOver={handleDragOver}
+         onDragLeave={handleDragLeave}
+         onDrop={handleDrop}
+         onClick={() => fileInputRef.current?.click()}
+         role="button"
+         tabIndex={0}
+         aria-label="Fiş veya fatura görseli yükle"
+         onKeyDown={(e) => {
+           if (e.key === 'Enter' || e.key === ' ') {
+             fileInputRef.current?.click();
+           }
+         }}
+       >
+         <input
+           type="file"
+           ref={fileInputRef}
+           onChange={handleFileChange}
+           accept="image/jpeg,image/jpg,image/png"
+           className="hidden"
+         />
+         
+         {isUploading ? (
+           <div className="w-full">
+             <div className="flex items-center justify-center mb-4">
+               <Loader2 className="animate-spin mr-2" />
+               <span>Yükleniyor... {progress}%</span>
+             </div>
+             <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+               <div
+                 className="bg-blue-600 h-2 rounded-full"
+                 style={{ width: `${progress}%` }}
+               />
+             </div>
+             <button
+               onClick={(e) => {
+                 e.stopPropagation();
+                 cancelUpload();
+               }}
+               className="text-sm text-red-500 hover:text-red-700"
+             >
+               İptal Et
+             </button>
+           </div>
+         ) : (
+           <>
+             <ImagePlus className="h-12 w-12 text-gray-400 mb-4" />
+             <p className="text-gray-600 mb-2">
+               Fiş veya fatura görselini buraya sürükleyin veya seçin
+             </p>
+             <p className="text-xs text-gray-500 mb-4">
+               Desteklenen formatlar: JPG, JPEG, PNG (maks. 10MB)
+             </p>
+             <button
+               className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+               onClick={(e) => {
+                 e.stopPropagation();
+                 fileInputRef.current?.click();
+               }}
+             >
+               Dosya Seç
+             </button>
+           </>
+         )}
+         
+         {error && (
+           <div className="mt-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-rose-700 text-sm">
+             {error}
+           </div>
+         )}
+       </div>
+     );
+   }
+   ```
+
+2. API route oluştur (`app/api/upload/route.ts`):
+   ```typescript
+   import { NextRequest, NextResponse } from 'next/server';
+   
+   export async function POST(request: NextRequest) {
+     try {
+       const formData = await request.formData();
+       const file = formData.get('file') as File;
+       
+       if (!file) {
+         return NextResponse.json({ error: 'Dosya bulunamadı' }, { status: 400 });
+       }
+       
+       // n8n webhook'una gönder
+       const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
+       
+       if (!n8nWebhookUrl) {
+         return NextResponse.json({ error: 'Webhook URL yapılandırılmamış' }, { status: 500 });
+       }
+       
+       const n8nFormData = new FormData();
+       n8nFormData.append('file', file);
+       
+       const n8nResponse = await fetch(n8nWebhookUrl, {
+         method: 'POST',
+         body: n8nFormData,
+       });
+       
+       const n8nData = await n8nResponse.json();
+       
+       return NextResponse.json(n8nData);
+     } catch (error) {
+       console.error('Yükleme hatası:', error);
+       return NextResponse.json({ error: 'Dosya yükleme hatası' }, { status: 500 });
+     }
+   }
+   ```
+
+# Test Strategy:
+1. Dosya yükleme bileşeninin tüm durumlarını test et:
+   - Idle durumu
+   - Drag-over durumu
+   - Yükleme durumu
+   - Başarılı yükleme
+   - Hata durumu
+2. Dosya tipi kısıtlamalarını test et (sadece JPG, JPEG, PNG)
+3. Dosya boyutu kısıtlamasını test et (maks. 10MB)
+4. Sürükle-bırak işlevselliğini test et
+5. Yükleme iptal işlevini test et
+6. Klavye erişilebilirliğini test et (Enter/Space ile dosya seçme)
+7. API route'un doğru çalıştığını ve n8n webhook'una istek gönderdiğini doğrula
+8. Toast bildirimlerinin doğru gösterildiğini kontrol et
+
+# Subtasks:
+## 1. Dropzone Bileşeni Temel Yapısı Oluşturma [pending]
+### Dependencies: None
+### Description: Dosya yükleme için sürükle-bırak destekli temel bileşen yapısını oluşturma ve stil tanımlarını yapma
+### Details:
+1. `components/FileUpload.tsx` dosyasını oluştur
+2. Gerekli React hook'larını (useState, useRef, useCallback) import et
+3. Temel state'leri tanımla: isDragging, isUploading, progress, error
+4. Dosya input referansı için useRef kullan
+5. Sürükle-bırak olayları için event handler'ları oluştur (handleDragOver, handleDragLeave, handleDrop)
+6. Bileşenin JSX yapısını oluştur (dropzone alanı, dosya seçme butonu, yükleme göstergesi)
+7. Responsive tasarım için Tailwind CSS sınıflarını uygula
+8. Erişilebilirlik özelliklerini ekle (ARIA attributes, keyboard navigation)
+
+## 2. Dosya Doğrulama ve Yükleme Mantığı Geliştirme [pending]
+### Dependencies: 4.1
+### Description: Yüklenen dosyaların doğrulanması, boyut ve format kontrolü, yükleme işlemi için gerekli fonksiyonların oluşturulması
+### Details:
+1. handleFileUpload fonksiyonunu oluştur
+2. Dosya tipi kontrolü ekle (sadece JPG, JPEG, PNG formatlarını kabul et)
+3. Dosya boyutu kontrolü ekle (maksimum 10MB)
+4. FormData oluşturarak dosyayı hazırla
+5. Yükleme işlemi sırasında iptal etme yeteneği için AbortController kullan
+6. Yükleme durumunu ve ilerleme yüzdesini güncelleyen mantığı ekle
+7. Hata durumlarını yönet ve kullanıcıya uygun hata mesajları göster
+8. Dosya seçme input'u için onChange event handler'ını ekle
+
+## 3. API Endpoint Geliştirme [pending]
+### Dependencies: None
+### Description: Dosya yükleme işlemini gerçekleştirecek API route'un oluşturulması ve n8n webhook entegrasyonu
+### Details:
+1. `app/api/upload/route.ts` dosyasını oluştur
+2. NextRequest ve NextResponse tiplerini import et
+3. POST handler fonksiyonunu oluştur
+4. Gelen formData'dan dosyayı çıkar ve doğrula
+5. Çevre değişkenlerinden n8n webhook URL'ini al
+6. Dosyayı n8n webhook'una iletmek için yeni bir FormData oluştur
+7. fetch API kullanarak n8n'e POST isteği gönder
+8. Yanıtı işle ve istemciye uygun cevabı döndür
+9. Hata yönetimi için try-catch bloğu ekle ve hataları loglama mekanizması kur
+
+## 4. Yükleme İlerleme Göstergesi ve Bildirim Entegrasyonu [pending]
+### Dependencies: 4.1, 4.2
+### Description: Dosya yükleme ilerleme çubuğu, yükleme durumu göstergeleri ve toast bildirimleri entegrasyonu
+### Details:
+1. İlerleme çubuğu bileşenini geliştir
+2. Yükleme sırasında ilerleme yüzdesini gösteren state ve görsel öğeleri ekle
+3. react-hot-toast kütüphanesini entegre et
+4. Başarılı yükleme, hata ve iptal durumları için toast bildirimleri ekle
+5. Yükleme sırasında animasyonlu loading göstergesi ekle (Loader2 ikonu ile)
+6. İptal butonu ve fonksiyonunu ekle
+7. Yükleme tamamlandığında veya iptal edildiğinde form durumunu sıfırla
+8. SWR ile veri yenileme için mutate fonksiyonunu ekle
+
+## 5. Hata Yönetimi ve Kullanıcı Deneyimi İyileştirmeleri [pending]
+### Dependencies: 4.1, 4.2, 4.4
+### Description: Dosya yükleme bileşeninde hata yönetimi, kullanıcı geri bildirimleri ve erişilebilirlik iyileştirmeleri
+### Details:
+1. Tüm olası hata senaryolarını belirle ve hata mesajlarını standartlaştır
+2. Ağ hatası, sunucu hatası ve dosya doğrulama hatalarını ayrı ayrı ele al
+3. Hata mesajları için özel bir bileşen oluştur (kırmızı arka plan ve border ile)
+4. Erişilebilirlik için ARIA etiketlerini ve klavye navigasyonunu iyileştir
+5. Ekran okuyucular için açıklayıcı metinler ekle
+6. Farklı durumlar için görsel ipuçları ekle (sürükleme sırasında renk değişimi gibi)
+7. Mobil cihazlarda kullanım deneyimini iyileştir
+8. Yükleme sırasında kullanıcı etkileşimini kısıtla (çift tıklama önleme)
+

@@ -1,0 +1,732 @@
+# Task ID: 3
+# Title: Temel UI Bileşenlerinin Oluşturulması
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: PRD'de belirtilen tasarım sistemine uygun UI bileşenlerinin geliştirilmesi
+# Details:
+1. Temel UI bileşenlerini oluştur (`components/ui` klasöründe):
+   - Button.tsx (primary, ghost varyantları)
+   - Card.tsx (istatistik, liste ve detay varyantları)
+   - Input.tsx (text, number, date tipleri)
+   - Badge.tsx (status göstergeleri için)
+   - Alert.tsx (hata mesajları için)
+   - Skeleton.tsx (yükleme durumları için)
+   - Table.tsx (ürün listesi için)
+
+2. Header bileşeni oluştur (`components/Header.tsx`):
+   ```tsx
+   export function Header() {
+     return (
+       <header className="h-16 bg-white shadow-sm py-4 px-8 flex items-center justify-between">
+         <div className="font-semibold text-xl">FY</div>
+         <nav>
+           <a href="/" className="text-slate-600 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 rounded-lg px-3 py-2">
+             Ana Sayfa
+           </a>
+         </nav>
+       </header>
+     );
+   }
+   ```
+
+3. İstatistik kartı bileşeni oluştur (`components/StatCard.tsx`):
+   ```tsx
+   import { LucideIcon } from 'lucide-react';
+   
+   interface StatCardProps {
+     icon: LucideIcon;
+     title: string;
+     value: string | number;
+   }
+   
+   export function StatCard({ icon: Icon, title, value }: StatCardProps) {
+     return (
+       <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md hover:translate-y-[1px] transition-all">
+         <div className="flex items-center gap-3">
+           <div className="rounded-full p-2 bg-slate-50 w-9 h-9 flex items-center justify-center text-blue-600">
+             <Icon size={20} />
+           </div>
+           <div>
+             <p className="text-sm text-slate-600">{title}</p>
+             <p className="text-2xl font-semibold tabular-nums">{value}</p>
+           </div>
+         </div>
+       </div>
+     );
+   }
+   ```
+
+4. Toast provider ekle (`app/layout.tsx`):
+   ```tsx
+   import { Toaster } from 'react-hot-toast';
+   
+   export default function RootLayout({ children }) {
+     return (
+       <html lang="tr">
+         <body>
+           {children}
+           <Toaster position="top-right" />
+         </body>
+       </html>
+     );
+   }
+   ```
+
+# Test Strategy:
+1. Tüm bileşenlerin tasarım sistemine uygun olarak render edildiğini kontrol et
+2. Responsive davranışı farklı ekran boyutlarında test et
+3. Erişilebilirlik kontrolü yap (klavye navigasyonu, ARIA özellikleri)
+4. Hover, focus ve active durumlarını test et
+5. Bileşenlerin farklı props kombinasyonlarıyla doğru çalıştığını kontrol et
+6. Toast bildirimlerinin doğru görüntülendiğini test et
+
+# Subtasks:
+## 1. Button ve Input Bileşenlerinin Geliştirilmesi [pending]
+### Dependencies: None
+### Description: Button ve Input bileşenlerinin tasarım sistemine uygun olarak geliştirilmesi. Button bileşeni primary ve ghost varyantlarını, Input bileşeni text, number ve date tiplerini desteklemelidir.
+### Details:
+1. Button.tsx bileşenini oluştur:
+```tsx
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'ghost';
+  isLoading?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export function Button({ 
+  children, 
+  variant = 'primary', 
+  isLoading = false, 
+  size = 'md', 
+  className, 
+  disabled, 
+  ...props 
+}: ButtonProps) {
+  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 transition-colors';
+  const variantStyles = {
+    primary: 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-300',
+    ghost: 'bg-transparent text-slate-700 hover:bg-slate-100 active:bg-slate-200 disabled:text-slate-300'
+  };
+  const sizeStyles = {
+    sm: 'text-sm px-3 py-1.5',
+    md: 'text-base px-4 py-2',
+    lg: 'text-lg px-5 py-2.5'
+  };
+  
+  return (
+    <button
+      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className || ''}`}
+      disabled={isLoading || disabled}
+      {...props}
+    >
+      {isLoading && (
+        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      )}
+      {children}
+    </button>
+  );
+}
+```
+
+2. Input.tsx bileşenini oluştur:
+```tsx
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+  type?: 'text' | 'number' | 'date';
+}
+
+export function Input({ 
+  label, 
+  error, 
+  className, 
+  type = 'text', 
+  id, 
+  ...props 
+}: InputProps) {
+  const inputId = id || `input-${Math.random().toString(36).substring(2, 9)}`;
+  
+  return (
+    <div className="w-full">
+      {label && (
+        <label htmlFor={inputId} className="block text-sm font-medium text-slate-700 mb-1">
+          {label}
+        </label>
+      )}
+      <input
+        id={inputId}
+        type={type}
+        className={`w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 ${error ? 'border-red-500' : ''} ${className || ''}`}
+        {...props}
+      />
+      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+    </div>
+  );
+}
+```
+
+## 2. Card ve Badge Bileşenlerinin Geliştirilmesi [pending]
+### Dependencies: None
+### Description: Card ve Badge bileşenlerinin tasarım sistemine uygun olarak geliştirilmesi. Card bileşeni istatistik, liste ve detay varyantlarını, Badge bileşeni farklı durum göstergelerini desteklemelidir.
+### Details:
+1. Card.tsx bileşenini oluştur:
+```tsx
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: 'stat' | 'list' | 'detail';
+  title?: string;
+  footer?: React.ReactNode;
+}
+
+export function Card({ 
+  children, 
+  variant = 'list', 
+  title, 
+  footer, 
+  className, 
+  ...props 
+}: CardProps) {
+  const baseStyles = 'rounded-2xl border border-gray-200 bg-white shadow-sm';
+  const variantStyles = {
+    stat: 'p-4 hover:shadow-md hover:translate-y-[1px] transition-all',
+    list: 'p-5',
+    detail: 'p-6'
+  };
+  
+  return (
+    <div
+      className={`${baseStyles} ${variantStyles[variant]} ${className || ''}`}
+      {...props}
+    >
+      {title && (
+        <div className="mb-4 border-b border-gray-100 pb-3">
+          <h3 className="font-semibold text-slate-800">{title}</h3>
+        </div>
+      )}
+      <div>{children}</div>
+      {footer && (
+        <div className="mt-4 border-t border-gray-100 pt-3">
+          {footer}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+2. Badge.tsx bileşenini oluştur:
+```tsx
+interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
+  variant?: 'success' | 'warning' | 'error' | 'info' | 'default';
+  size?: 'sm' | 'md';
+}
+
+export function Badge({ 
+  children, 
+  variant = 'default', 
+  size = 'md', 
+  className, 
+  ...props 
+}: BadgeProps) {
+  const baseStyles = 'inline-flex items-center font-medium rounded-full';
+  const variantStyles = {
+    success: 'bg-green-100 text-green-800',
+    warning: 'bg-yellow-100 text-yellow-800',
+    error: 'bg-red-100 text-red-800',
+    info: 'bg-blue-100 text-blue-800',
+    default: 'bg-slate-100 text-slate-800'
+  };
+  const sizeStyles = {
+    sm: 'text-xs px-2 py-0.5',
+    md: 'text-sm px-2.5 py-0.5'
+  };
+  
+  return (
+    <span
+      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className || ''}`}
+      {...props}
+    >
+      {children}
+    </span>
+  );
+}
+```
+
+## 3. Alert ve Skeleton Bileşenlerinin Geliştirilmesi [pending]
+### Dependencies: None
+### Description: Alert ve Skeleton bileşenlerinin tasarım sistemine uygun olarak geliştirilmesi. Alert bileşeni hata mesajları için, Skeleton bileşeni yükleme durumları için kullanılacaktır.
+### Details:
+1. Alert.tsx bileşenini oluştur:
+```tsx
+import { AlertCircle, CheckCircle, Info, X } from 'lucide-react';
+import { useState } from 'react';
+
+interface AlertProps {
+  title?: string;
+  message: string;
+  variant?: 'error' | 'success' | 'info' | 'warning';
+  dismissible?: boolean;
+  className?: string;
+}
+
+export function Alert({ 
+  title, 
+  message, 
+  variant = 'info', 
+  dismissible = false,
+  className = ''
+}: AlertProps) {
+  const [dismissed, setDismissed] = useState(false);
+  
+  if (dismissed) return null;
+  
+  const variantStyles = {
+    error: 'bg-red-50 text-red-800 border-red-200',
+    success: 'bg-green-50 text-green-800 border-green-200',
+    info: 'bg-blue-50 text-blue-800 border-blue-200',
+    warning: 'bg-yellow-50 text-yellow-800 border-yellow-200'
+  };
+  
+  const variantIcons = {
+    error: <AlertCircle className="h-5 w-5 text-red-500" />,
+    success: <CheckCircle className="h-5 w-5 text-green-500" />,
+    info: <Info className="h-5 w-5 text-blue-500" />,
+    warning: <AlertCircle className="h-5 w-5 text-yellow-500" />
+  };
+  
+  return (
+    <div className={`rounded-lg border p-4 ${variantStyles[variant]} ${className}`}>
+      <div className="flex items-start">
+        <div className="flex-shrink-0">
+          {variantIcons[variant]}
+        </div>
+        <div className="ml-3 flex-1">
+          {title && <h3 className="text-sm font-medium">{title}</h3>}
+          <div className="text-sm">{message}</div>
+        </div>
+        {dismissible && (
+          <button
+            type="button"
+            className="ml-auto -mx-1.5 -my-1.5 rounded-lg p-1.5 inline-flex h-8 w-8 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            onClick={() => setDismissed(true)}
+          >
+            <span className="sr-only">Kapat</span>
+            <X className="h-5 w-5" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+```
+
+2. Skeleton.tsx bileşenini oluştur:
+```tsx
+interface SkeletonProps {
+  variant?: 'text' | 'circular' | 'rectangular';
+  width?: string | number;
+  height?: string | number;
+  className?: string;
+}
+
+export function Skeleton({ 
+  variant = 'text', 
+  width, 
+  height, 
+  className = ''
+}: SkeletonProps) {
+  const baseStyles = 'animate-pulse bg-slate-200 rounded';
+  
+  const variantStyles = {
+    text: 'h-4 w-full',
+    circular: 'rounded-full',
+    rectangular: ''
+  };
+  
+  const style: React.CSSProperties = {};
+  
+  if (width) style.width = typeof width === 'number' ? `${width}px` : width;
+  if (height) style.height = typeof height === 'number' ? `${height}px` : height;
+  
+  return (
+    <div
+      className={`${baseStyles} ${variantStyles[variant]} ${className}`}
+      style={style}
+    />
+  );
+}
+
+export function SkeletonCard() {
+  return (
+    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+      <Skeleton variant="rectangular" height={24} width={150} className="mb-4" />
+      <Skeleton variant="text" className="mb-2" />
+      <Skeleton variant="text" className="mb-2" />
+      <Skeleton variant="text" width="60%" />
+    </div>
+  );
+}
+```
+
+## 4. Table Bileşeninin Geliştirilmesi [pending]
+### Dependencies: 3.1, 3.3
+### Description: Ürün listesi için kullanılacak Table bileşeninin tasarım sistemine uygun olarak geliştirilmesi. Sıralama, sayfalama ve boş durum gösterimi desteklenmelidir.
+### Details:
+1. Table.tsx bileşenini oluştur:
+```tsx
+import { ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-react';
+import { Skeleton } from './Skeleton';
+
+type SortDirection = 'asc' | 'desc' | null;
+
+interface Column<T> {
+  header: string;
+  accessor: keyof T;
+  cell?: (item: T) => React.ReactNode;
+  sortable?: boolean;
+}
+
+interface TableProps<T> {
+  data: T[];
+  columns: Column<T>[];
+  isLoading?: boolean;
+  sortColumn?: keyof T | null;
+  sortDirection?: SortDirection;
+  onSort?: (column: keyof T, direction: SortDirection) => void;
+  emptyState?: React.ReactNode;
+  className?: string;
+}
+
+export function Table<T>({ 
+  data, 
+  columns, 
+  isLoading = false, 
+  sortColumn = null, 
+  sortDirection = null, 
+  onSort, 
+  emptyState, 
+  className = ''
+}: TableProps<T>) {
+  const handleSort = (column: Column<T>) => {
+    if (!column.sortable || !onSort) return;
+    
+    let newDirection: SortDirection = 'asc';
+    if (sortColumn === column.accessor) {
+      if (sortDirection === 'asc') newDirection = 'desc';
+      else if (sortDirection === 'desc') newDirection = null;
+    }
+    
+    onSort(column.accessor, newDirection);
+  };
+  
+  const getSortIcon = (column: Column<T>) => {
+    if (!column.sortable) return null;
+    
+    if (sortColumn === column.accessor) {
+      if (sortDirection === 'asc') return <ChevronUp className="h-4 w-4" />;
+      if (sortDirection === 'desc') return <ChevronDown className="h-4 w-4" />;
+    }
+    
+    return <ChevronsUpDown className="h-4 w-4 text-slate-400" />;
+  };
+  
+  if (isLoading) {
+    return (
+      <div className="w-full overflow-hidden rounded-lg border border-slate-200">
+        <div className="w-full overflow-x-auto">
+          <table className={`w-full whitespace-nowrap ${className}`}>
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50">
+                {columns.map((column, index) => (
+                  <th key={index} className="px-4 py-3 text-left text-sm font-semibold text-slate-700">
+                    <Skeleton variant="text" width={100} />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 5 }).map((_, rowIndex) => (
+                <tr key={rowIndex} className="border-b border-slate-200">
+                  {columns.map((_, colIndex) => (
+                    <td key={colIndex} className="px-4 py-3 text-sm text-slate-700">
+                      <Skeleton variant="text" width={colIndex === 0 ? 150 : 80} />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+  
+  if (data.length === 0 && emptyState) {
+    return (
+      <div className="w-full overflow-hidden rounded-lg border border-slate-200 p-8 text-center">
+        {emptyState}
+      </div>
+    );
+  }
+  
+  return (
+    <div className="w-full overflow-hidden rounded-lg border border-slate-200">
+      <div className="w-full overflow-x-auto">
+        <table className={`w-full whitespace-nowrap ${className}`}>
+          <thead>
+            <tr className="border-b border-slate-200 bg-slate-50">
+              {columns.map((column, index) => (
+                <th 
+                  key={index} 
+                  className={`px-4 py-3 text-left text-sm font-semibold text-slate-700 ${column.sortable ? 'cursor-pointer' : ''}`}
+                  onClick={() => column.sortable && handleSort(column)}
+                >
+                  <div className="flex items-center gap-1">
+                    {column.header}
+                    {getSortIcon(column)}
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, rowIndex) => (
+              <tr key={rowIndex} className="border-b border-slate-200 hover:bg-slate-50">
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex} className="px-4 py-3 text-sm text-slate-700">
+                    {column.cell ? column.cell(item) : String(item[column.accessor] || '')}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+```
+
+2. TablePagination.tsx bileşenini oluştur:
+```tsx
+import { Button } from './Button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+interface TablePaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  className?: string;
+}
+
+export function TablePagination({ 
+  currentPage, 
+  totalPages, 
+  onPageChange, 
+  className = ''
+}: TablePaginationProps) {
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      onPageChange(currentPage - 1);
+    }
+  };
+  
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      onPageChange(currentPage + 1);
+    }
+  };
+  
+  if (totalPages <= 1) return null;
+  
+  return (
+    <div className={`flex items-center justify-between py-3 ${className}`}>
+      <div className="text-sm text-slate-600">
+        Sayfa {currentPage} / {totalPages}
+      </div>
+      <div className="flex gap-2">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={handlePrevious} 
+          disabled={currentPage === 1}
+        >
+          <ChevronLeft className="h-4 w-4 mr-1" />
+          Önceki
+        </Button>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={handleNext} 
+          disabled={currentPage === totalPages}
+        >
+          Sonraki
+          <ChevronRight className="h-4 w-4 ml-1" />
+        </Button>
+      </div>
+    </div>
+  );
+}
+```
+
+## 5. Header ve Toast Provider Entegrasyonu [pending]
+### Dependencies: 3.1, 3.2, 3.3, 3.4
+### Description: Header bileşeninin ve Toast provider'ın tasarım sistemine uygun olarak entegre edilmesi. Header bileşeni navigasyon için, Toast provider bildirimler için kullanılacaktır.
+### Details:
+1. Header.tsx bileşenini güncelle:
+```tsx
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Home, FileText, BarChart2 } from 'lucide-react';
+
+interface NavItemProps {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+  isActive: boolean;
+}
+
+function NavItem({ href, label, icon, isActive }: NavItemProps) {
+  return (
+    <Link
+      href={href}
+      className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${isActive ? 'bg-blue-50 text-blue-600 font-medium' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50'}`}
+    >
+      {icon}
+      {label}
+    </Link>
+  );
+}
+
+export function Header() {
+  const pathname = usePathname();
+  
+  const navItems = [
+    { href: '/', label: 'Ana Sayfa', icon: <Home size={18} /> },
+    { href: '/fis-listesi', label: 'Fiş Listesi', icon: <FileText size={18} /> },
+    { href: '/istatistikler', label: 'İstatistikler', icon: <BarChart2 size={18} /> }
+  ];
+  
+  return (
+    <header className="sticky top-0 z-10 h-16 bg-white shadow-sm py-4 px-8 flex items-center justify-between">
+      <div className="flex items-center gap-8">
+        <div className="font-semibold text-xl text-blue-600">FY</div>
+        <nav className="hidden md:flex items-center gap-1">
+          {navItems.map((item) => (
+            <NavItem
+              key={item.href}
+              href={item.href}
+              label={item.label}
+              icon={item.icon}
+              isActive={pathname === item.href}
+            />
+          ))}
+        </nav>
+      </div>
+      <div className="md:hidden">
+        {/* Mobil menü butonu - ileride geliştirilecek */}
+        <button className="p-2 rounded-lg hover:bg-slate-100">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+  );
+}
+```
+
+2. Toast provider için `lib/toast.ts` dosyasını oluştur:
+```tsx
+import toast, { Toast } from 'react-hot-toast';
+import { AlertCircle, CheckCircle, Info } from 'lucide-react';
+
+type ToastType = 'success' | 'error' | 'info';
+
+interface CustomToastOptions {
+  duration?: number;
+  position?: 'top-right' | 'top-center' | 'top-left' | 'bottom-right' | 'bottom-center' | 'bottom-left';
+}
+
+const defaultOptions: CustomToastOptions = {
+  duration: 4000,
+  position: 'top-right'
+};
+
+const getIcon = (type: ToastType) => {
+  switch (type) {
+    case 'success':
+      return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case 'error':
+      return <AlertCircle className="h-5 w-5 text-red-500" />;
+    case 'info':
+      return <Info className="h-5 w-5 text-blue-500" />;
+  }
+};
+
+export const showToast = (message: string, type: ToastType = 'info', options?: CustomToastOptions) => {
+  const mergedOptions = { ...defaultOptions, ...options };
+  
+  return toast.custom(
+    (t: Toast) => (
+      <div
+        className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+      >
+        <div className="flex-1 w-0 p-4">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              {getIcon(type)}
+            </div>
+            <div className="ml-3 flex-1">
+              <p className="text-sm text-gray-900">
+                {message}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="flex border-l border-gray-200">
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-slate-600 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Kapat
+          </button>
+        </div>
+      </div>
+    ),
+    mergedOptions
+  );
+};
+
+// Yardımcı fonksiyonlar
+export const successToast = (message: string, options?: CustomToastOptions) => showToast(message, 'success', options);
+export const errorToast = (message: string, options?: CustomToastOptions) => showToast(message, 'error', options);
+export const infoToast = (message: string, options?: CustomToastOptions) => showToast(message, 'info', options);
+```
+
+3. app/layout.tsx dosyasını güncelle:
+```tsx
+import { Toaster } from 'react-hot-toast';
+import { Header } from '@/components/Header';
+import './globals.css';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="tr">
+      <body className="min-h-screen bg-slate-50">
+        <Header />
+        <main className="container mx-auto px-4 py-6">
+          {children}
+        </main>
+        <Toaster position="top-right" />
+      </body>
+    </html>
+  );
+}
+```
+

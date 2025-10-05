@@ -1,0 +1,176 @@
+# Task ID: 2
+# Title: Supabase Veritabanı Kurulumu ve Bağlantısı
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Supabase projesinin oluşturulması, veritabanı tablosunun tasarlanması ve Next.js ile bağlantı kurulması
+# Details:
+1. Supabase hesabı oluştur ve yeni bir proje başlat
+2. PRD'de belirtilen şemaya göre `fisler` tablosunu oluştur:
+   ```sql
+   CREATE TABLE fisler (
+     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+     fis_no TEXT NOT NULL,
+     tarih_saat TIMESTAMP WITH TIME ZONE,
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+     total NUMERIC(10,2),
+     total_kdv NUMERIC(10,2),
+     items JSONB
+   );
+   ```
+3. Supabase API anahtarlarını al
+4. `.env.local` dosyasını oluştur ve Supabase anahtarlarını ekle:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=xxx
+   SUPABASE_SERVICE_ROLE_KEY=xxx
+   ```
+5. Supabase istemcisini oluştur (`lib/supabase.ts`):
+   ```typescript
+   import { createClient } from '@supabase/supabase-js';
+   
+   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+   
+   export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+   ```
+6. TypeScript tiplerini oluştur (`types/database.ts`):
+   ```typescript
+   export interface FisItem {
+     name: string;
+     quantity: number;
+     unit_price: number;
+     kdv: number;
+     total: number;
+   }
+   
+   export interface Fis {
+     id: string;
+     fis_no: string;
+     tarih_saat: string;
+     created_at: string;
+     updated_at: string;
+     total: number;
+     total_kdv: number;
+     items: FisItem[];
+   }
+   ```
+
+# Test Strategy:
+1. Supabase projesinin başarıyla oluşturulduğunu kontrol et
+2. Veritabanı tablosunun doğru şemayla oluşturulduğunu doğrula
+3. Supabase bağlantısını test etmek için basit bir sorgu çalıştır:
+   ```typescript
+   const { data, error } = await supabase.from('fisler').select('*').limit(1);
+   console.log(data, error);
+   ```
+4. Ortam değişkenlerinin doğru yüklendiğini kontrol et
+5. TypeScript tiplerinin doğru çalıştığını test et
+
+# Subtasks:
+## 1. Supabase Hesabı Oluşturma ve Proje Başlatma [pending]
+### Dependencies: None
+### Description: Supabase platformunda hesap oluşturma ve yeni bir proje başlatma işlemlerini içerir.
+### Details:
+1. Supabase.com adresine git ve yeni bir hesap oluştur veya mevcut hesabınla giriş yap
+2. Dashboard üzerinden 'New Project' butonuna tıkla
+3. Proje için anlamlı bir isim belirle (örn: 'fatura-dashboard')
+4. Bölge seçimini Türkiye'ye en yakın olan (örn: Frankfurt) olarak ayarla
+5. Güçlü bir şifre belirle ve kaydet
+6. Proje oluşturma işleminin tamamlanmasını bekle
+
+## 2. Veritabanı Tablosunun Oluşturulması [pending]
+### Dependencies: 2.1
+### Description: Supabase veritabanında 'fisler' tablosunun oluşturulması ve gerekli sütunların yapılandırılması.
+### Details:
+1. Supabase projesinin SQL editörüne git
+2. Aşağıdaki SQL sorgusunu çalıştır:
+```sql
+CREATE TABLE fisler (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  fis_no TEXT NOT NULL,
+  tarih_saat TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  total NUMERIC(10,2),
+  total_kdv NUMERIC(10,2),
+  items JSONB
+);
+```
+3. Sorgunun başarıyla çalıştığını doğrula
+4. Table Editor üzerinden 'fisler' tablosunu kontrol et ve tüm sütunların doğru tiplerle oluşturulduğunu doğrula
+
+## 3. Supabase API Anahtarlarının Alınması ve Çevre Değişkenlerinin Ayarlanması [pending]
+### Dependencies: 2.1
+### Description: Supabase API anahtarlarının alınması ve Next.js projesi için gerekli çevre değişkenlerinin oluşturulması.
+### Details:
+1. Supabase projesinin ayarlar sayfasına git (Settings > API)
+2. 'Project URL' ve 'anon public' API anahtarını kopyala
+3. 'service_role' API anahtarını da kopyala (dikkat: bu anahtar hassastır, sadece güvenli ortamlarda kullanılmalıdır)
+4. Next.js projesinin kök dizininde `.env.local` dosyasını oluştur
+5. Aşağıdaki çevre değişkenlerini ekle:
+```
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=xxx
+SUPABASE_SERVICE_ROLE_KEY=xxx
+```
+6. Gerçek değerleri kopyaladığın anahtarlarla değiştir
+
+## 4. Supabase İstemcisinin Oluşturulması [pending]
+### Dependencies: 2.1, 2.2, 2.3
+### Description: Next.js projesi içinde Supabase istemcisinin yapılandırılması ve bağlantı kurulması.
+### Details:
+1. Gerekli bağımlılıkları yükle: `npm install @supabase/supabase-js`
+2. `lib` klasörünü oluştur (yoksa)
+3. `lib/supabase.ts` dosyasını oluştur ve aşağıdaki kodu ekle:
+```typescript
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+```
+4. Server-side işlemler için gerekirse service role client'ı da ekle:
+```typescript
+export const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+```
+
+## 5. TypeScript Tiplerinin Oluşturulması [pending]
+### Dependencies: 2.2, 2.4
+### Description: Veritabanı şemasına uygun TypeScript tiplerinin oluşturulması ve projeye entegrasyonu.
+### Details:
+1. `types` klasörünü oluştur (yoksa)
+2. `types/database.ts` dosyasını oluştur ve aşağıdaki tipleri ekle:
+```typescript
+export interface FisItem {
+  name: string;
+  quantity: number;
+  unit_price: number;
+  kdv: number;
+  total: number;
+}
+
+export interface Fis {
+  id: string;
+  fis_no: string;
+  tarih_saat: string;
+  created_at: string;
+  updated_at: string;
+  total: number;
+  total_kdv: number;
+  items: FisItem[];
+}
+```
+3. Supabase tiplerini genişletmek için (opsiyonel):
+```typescript
+import { Database } from '@supabase/supabase-js';
+
+export type Tables = Database['public']['Tables'];
+export type FisRecord = Tables['fisler']['Row'];
+```
+

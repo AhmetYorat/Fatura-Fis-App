@@ -1,0 +1,390 @@
+# Task ID: 10
+# Title: Sistem Testleri ve Optimizasyon
+# Status: pending
+# Dependencies: 1, 2, 3, 4, 5, 6, 7, 8, 9
+# Priority: medium
+# Description: Tüm sistemin uçtan uca test edilmesi, performans optimizasyonu ve son kontroller
+# Details:
+1. Uçtan uca test senaryoları:
+   - Fiş/fatura yükleme ve OCR işlemi
+   - Veritabanına kaydetme ve güncelleme
+   - Listeleme, filtreleme ve arama
+   - Detay sayfası görüntüleme
+
+2. Performans optimizasyonları:
+   - SWR önbelleğe alma stratejisini yapılandır (`lib/swr-config.ts`):
+     ```typescript
+     import { SWRConfig } from 'swr';
+     
+     export function SWRProvider({ children }) {
+       return (
+         <SWRConfig
+           value={{
+             fetcher: (url) => fetch(url).then((res) => res.json()),
+             revalidateOnFocus: false,
+             revalidateIfStale: true,
+             revalidateOnReconnect: true,
+             dedupingInterval: 5000,
+             errorRetryCount: 3,
+           }}
+         >
+           {children}
+         </SWRConfig>
+       );
+     }
+     ```
+
+3. Görüntü optimizasyonu:
+   - Yükleme öncesi görüntü boyutunu kontrol et ve gerekirse küçült:
+     ```typescript
+     async function resizeImage(file: File, maxWidth = 1200): Promise<File> {
+       return new Promise((resolve) => {
+         const reader = new FileReader();
+         reader.readAsDataURL(file);
+         reader.onload = (event) => {
+           const img = new Image();
+           img.src = event.target?.result as string;
+           img.onload = () => {
+             const canvas = document.createElement('canvas');
+             const width = Math.min(img.width, maxWidth);
+             const scaleFactor = width / img.width;
+             const height = img.height * scaleFactor;
+             
+             canvas.width = width;
+             canvas.height = height;
+             
+             const ctx = canvas.getContext('2d');
+             ctx?.drawImage(img, 0, 0, width, height);
+             
+             canvas.toBlob((blob) => {
+               if (blob) {
+                 const resizedFile = new File([blob], file.name, {
+                   type: file.type,
+                   lastModified: Date.now(),
+                 });
+                 resolve(resizedFile);
+               } else {
+                 resolve(file); // Fallback to original file
+               }
+             }, file.type, 0.9);
+           };
+         };
+       });
+     }
+     ```
+
+4. Erişilebilirlik kontrolleri:
+   - Tüm interaktif elementlerin klavye ile erişilebilir olduğunu kontrol et
+   - ARIA özelliklerinin doğru kullanıldığını doğrula
+   - Renk kontrastlarının WCAG AA standartlarına uygun olduğunu kontrol et
+
+5. Responsive tasarım kontrolleri:
+   - Mobil cihazlarda (320px-428px) tüm sayfaların doğru görüntülendiğini kontrol et
+   - Tablet cihazlarda (768px-1024px) tüm sayfaların doğru görüntülendiğini kontrol et
+   - Masaüstü cihazlarda (1024px+) tüm sayfaların doğru görüntülendiğini kontrol et
+
+6. Hata yönetimi ve kullanıcı geri bildirimi:
+   - Tüm hata durumlarının kullanıcıya anlaşılır şekilde gösterildiğini kontrol et
+   - Toast bildirimlerinin doğru çalıştığını test et
+
+7. Güvenlik kontrolleri:
+   - API route'ların güvenli olduğunu kontrol et
+   - Dosya yükleme kısıtlamalarının doğru çalıştığını test et
+
+8. Yerelleştirme kontrolleri:
+   - Tüm tarih ve para birimi formatlarının Türkçe locale'e uygun olduğunu kontrol et
+
+9. Tarayıcı uyumluluğu:
+   - Chrome, Firefox, Safari ve Edge tarayıcılarında test et
+
+10. Dağıtım hazırlığı:
+    - Ortam değişkenlerinin doğru yapılandırıldığını kontrol et
+    - Build sürecini test et (`npm run build`)
+    - Statik analiz ve linting kontrollerini yap (`npm run lint`)
+
+# Test Strategy:
+1. Uçtan uca test senaryolarını manuel olarak gerçekleştir
+2. Lighthouse ile performans, erişilebilirlik, SEO ve en iyi uygulamalar puanlarını ölç
+3. WebPageTest ile yükleme performansını test et
+4. WAVE veya axe ile erişilebilirlik kontrolü yap
+5. Farklı cihazlarda ve tarayıcılarda responsive tasarımı test et
+6. Yükleme sürelerini ve API yanıt sürelerini ölç
+7. Hata durumlarını simüle ederek hata yönetimini test et
+8. Yüksek trafik senaryosunu simüle etmek için yük testi yap
+9. Güvenlik açıklarını taramak için OWASP ZAP veya benzer araçları kullan
+10. Kullanıcı deneyimi testleri yap (5-10 kullanıcı ile)
+
+# Subtasks:
+## 1. Uçtan Uca Test Senaryolarının Oluşturulması ve Uygulanması [pending]
+### Dependencies: None
+### Description: Sistemin temel işlevlerini kapsayan uçtan uca test senaryolarının oluşturulması ve manuel olarak uygulanması
+### Details:
+1. Fiş/fatura yükleme ve OCR işlemi için test senaryosu oluştur ve uygula:
+   - Farklı formatlarda (JPEG, PNG, PDF) fiş/fatura yükleme
+   - OCR işleminin doğruluğunu kontrol etme
+   - Hatalı dosya yükleme durumlarını test etme
+
+2. Veritabanı işlemleri için test senaryosu oluştur ve uygula:
+   - Yeni fiş/fatura kaydetme
+   - Mevcut kayıtları güncelleme
+   - Silme işlemlerini test etme
+
+3. Listeleme, filtreleme ve arama işlevleri için test senaryosu oluştur ve uygula:
+   - Farklı filtreleme parametrelerini test etme
+   - Arama işlevinin doğruluğunu kontrol etme
+   - Sayfalama kontrollerinin doğru çalıştığını doğrulama
+
+4. Detay sayfası görüntüleme için test senaryosu oluştur ve uygula:
+   - Detay sayfasına erişim
+   - Tüm bilgilerin doğru görüntülendiğini kontrol etme
+   - Düzenleme işlevlerinin çalıştığını doğrulama
+
+## 2. Performans Optimizasyonu ve Önbellek Yapılandırması [pending]
+### Dependencies: 10.1
+### Description: SWR önbelleğe alma stratejisinin yapılandırılması ve performans iyileştirmelerinin uygulanması
+### Details:
+1. SWR önbelleğe alma stratejisini yapılandır (`lib/swr-config.ts`):
+   ```typescript
+   import { SWRConfig } from 'swr';
+   
+   export function SWRProvider({ children }) {
+     return (
+       <SWRConfig
+         value={{
+           fetcher: (url) => fetch(url).then((res) => res.json()),
+           revalidateOnFocus: false,
+           revalidateIfStale: true,
+           revalidateOnReconnect: true,
+           dedupingInterval: 5000,
+           errorRetryCount: 3,
+         }}
+       >
+         {children}
+       </SWRConfig>
+     );
+   }
+   ```
+
+2. SWR Provider'ı ana layout içinde uygula (`app/layout.tsx`):
+   ```typescript
+   import { SWRProvider } from '@/lib/swr-config';
+   
+   export default function RootLayout({ children }) {
+     return (
+       <html lang="tr">
+         <body>
+           <SWRProvider>{children}</SWRProvider>
+         </body>
+       </html>
+     );
+   }
+   ```
+
+3. API route'ları için HTTP önbelleğe alma başlıklarını yapılandır:
+   ```typescript
+   export async function GET(request) {
+     const response = await fetchData();
+     
+     return new Response(JSON.stringify(response), {
+       headers: {
+         'Content-Type': 'application/json',
+         'Cache-Control': 'max-age=60, s-maxage=60, stale-while-revalidate=300'
+       }
+     });
+   }
+   ```
+
+4. Lighthouse ile performans ölçümü yap ve darboğazları tespit et
+5. Tespit edilen darboğazlara göre ek optimizasyonlar uygula
+
+## 3. Görüntü Optimizasyonu ve Dosya İşleme İyileştirmeleri [pending]
+### Dependencies: 10.1
+### Description: Yüklenen görüntülerin optimizasyonu ve dosya işleme süreçlerinin iyileştirilmesi
+### Details:
+1. Yükleme öncesi görüntü boyutunu kontrol eden ve gerekirse küçülten fonksiyonu uygula:
+   ```typescript
+   async function resizeImage(file: File, maxWidth = 1200): Promise<File> {
+     return new Promise((resolve) => {
+       const reader = new FileReader();
+       reader.readAsDataURL(file);
+       reader.onload = (event) => {
+         const img = new Image();
+         img.src = event.target?.result as string;
+         img.onload = () => {
+           const canvas = document.createElement('canvas');
+           const width = Math.min(img.width, maxWidth);
+           const scaleFactor = width / img.width;
+           const height = img.height * scaleFactor;
+           
+           canvas.width = width;
+           canvas.height = height;
+           
+           const ctx = canvas.getContext('2d');
+           ctx?.drawImage(img, 0, 0, width, height);
+           
+           canvas.toBlob((blob) => {
+             if (blob) {
+               const resizedFile = new File([blob], file.name, {
+                 type: file.type,
+                 lastModified: Date.now(),
+               });
+               resolve(resizedFile);
+             } else {
+               resolve(file); // Fallback to original file
+             }
+           }, file.type, 0.9);
+         };
+       };
+     });
+   }
+   ```
+
+2. Bu fonksiyonu FileUpload bileşenine entegre et:
+   ```typescript
+   const handleFileChange = async (event) => {
+     const file = event.target.files[0];
+     if (file) {
+       setIsLoading(true);
+       try {
+         // Görüntü dosyası ise optimize et
+         const optimizedFile = file.type.startsWith('image/') 
+           ? await resizeImage(file) 
+           : file;
+         
+         // Dosyayı yükle
+         await uploadFile(optimizedFile);
+       } catch (error) {
+         setError('Dosya yükleme sırasında bir hata oluştu');
+       } finally {
+         setIsLoading(false);
+       }
+     }
+   };
+   ```
+
+3. Next.js Image bileşenini kullanarak görüntü optimizasyonunu uygula:
+   ```typescript
+   import Image from 'next/image';
+   
+   // Fiş görüntüsü için
+   <Image 
+     src={receipt.imageUrl} 
+     alt="Fiş görüntüsü" 
+     width={600} 
+     height={800} 
+     quality={80}
+     placeholder="blur"
+     blurDataURL="data:image/png;base64,..."
+     className="rounded-md"
+   />
+   ```
+
+4. Dosya yükleme sınırlamalarını ve kabul edilen dosya tiplerini yapılandır
+5. Dosya yükleme ilerlemesini gösteren bir ilerleme çubuğu ekle
+
+## 4. Erişilebilirlik ve Responsive Tasarım Kontrolleri [pending]
+### Dependencies: 10.1
+### Description: Sistemin erişilebilirlik standartlarına uygunluğunun ve responsive tasarımının kontrol edilmesi ve iyileştirilmesi
+### Details:
+1. Erişilebilirlik kontrolleri yap ve iyileştir:
+   - Tüm interaktif elementlerin klavye ile erişilebilir olduğunu kontrol et
+   - ARIA özelliklerinin doğru kullanıldığını doğrula
+   - Renk kontrastlarının WCAG AA standartlarına uygun olduğunu kontrol et
+   - Form elemanlarının etiketlerinin doğru ilişkilendirildiğini doğrula
+   - Ekran okuyucu uyumluluğunu test et
+
+2. Responsive tasarım kontrollerini yap ve iyileştir:
+   - Mobil cihazlarda (320px-428px) tüm sayfaların doğru görüntülendiğini kontrol et
+   - Tablet cihazlarda (768px-1024px) tüm sayfaların doğru görüntülendiğini kontrol et
+   - Masaüstü cihazlarda (1024px+) tüm sayfaların doğru görüntülendiğini kontrol et
+   - Yatay/dikey yönlendirme değişikliklerinde tasarımın doğru uyarlandığını kontrol et
+
+3. Tailwind CSS medya sorgularını kullanarak responsive iyileştirmeler yap:
+   ```typescript
+   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+     {/* İstatistik kartları */}
+   </div>
+   ```
+
+4. Erişilebilirlik iyileştirmeleri için gerekli bileşenleri güncelle:
+   ```typescript
+   <button 
+     aria-label="Fiş detaylarını görüntüle"
+     className="focus:ring-2 focus:ring-blue-500 focus:outline-none"
+     onClick={handleClick}
+   >
+     Detaylar
+   </button>
+   ```
+
+5. Tarayıcı uyumluluğunu kontrol et:
+   - Chrome, Firefox, Safari ve Edge tarayıcılarında test et
+   - iOS ve Android mobil tarayıcılarında test et
+
+## 5. Güvenlik Kontrolleri ve Dağıtım Hazırlığı [pending]
+### Dependencies: 10.1, 10.2, 10.3, 10.4
+### Description: Güvenlik kontrollerinin yapılması, hata yönetiminin iyileştirilmesi ve dağıtım için son hazırlıkların tamamlanması
+### Details:
+1. Güvenlik kontrollerini yap ve iyileştir:
+   - API route'ların güvenli olduğunu kontrol et
+   - Dosya yükleme kısıtlamalarının doğru çalıştığını test et
+   - CSRF korumasını kontrol et
+   - Kullanıcı girdilerinin doğru şekilde temizlendiğini doğrula
+
+2. Hata yönetimi ve kullanıcı geri bildirimi iyileştirmeleri yap:
+   - Tüm hata durumlarının kullanıcıya anlaşılır şekilde gösterildiğini kontrol et
+   - Toast bildirimlerinin doğru çalıştığını test et
+   - Hata sınırları (Error Boundaries) ekle:
+     ```typescript
+     import { Component, ErrorInfo, ReactNode } from 'react';
+     
+     interface ErrorBoundaryProps {
+       children: ReactNode;
+       fallback: ReactNode;
+     }
+     
+     interface ErrorBoundaryState {
+       hasError: boolean;
+     }
+     
+     class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+       constructor(props: ErrorBoundaryProps) {
+         super(props);
+         this.state = { hasError: false };
+       }
+     
+       static getDerivedStateFromError(_: Error): ErrorBoundaryState {
+         return { hasError: true };
+       }
+     
+       componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+         console.error('ErrorBoundary caught an error:', error, errorInfo);
+       }
+     
+       render() {
+         if (this.state.hasError) {
+           return this.props.fallback;
+         }
+     
+         return this.props.children;
+       }
+     }
+     
+     export default ErrorBoundary;
+     ```
+
+3. Yerelleştirme kontrollerini yap:
+   - Tüm tarih ve para birimi formatlarının Türkçe locale'e uygun olduğunu kontrol et
+   - Metinlerin Türkçe dil kurallarına uygunluğunu kontrol et
+
+4. Dağıtım hazırlıklarını tamamla:
+   - Ortam değişkenlerinin doğru yapılandırıldığını kontrol et
+   - Build sürecini test et (`npm run build`)
+   - Statik analiz ve linting kontrollerini yap (`npm run lint`)
+   - `.env.example` dosyasını oluştur
+   - `README.md` dosyasını güncelle
+
+5. Son performans kontrollerini yap:
+   - Lighthouse ile performans, erişilebilirlik, SEO ve en iyi uygulamalar puanlarını ölç
+   - Core Web Vitals metriklerini kontrol et
+

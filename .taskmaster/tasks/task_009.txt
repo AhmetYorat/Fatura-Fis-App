@@ -1,0 +1,248 @@
+# Task ID: 9
+# Title: n8n Workflow Kurulumu ve Entegrasyonu
+# Status: pending
+# Dependencies: 2
+# Priority: high
+# Description: n8n üzerinde OCR ve veri işleme workflow'unun oluşturulması ve Next.js API ile entegrasyonu
+# Details:
+1. n8n kurulumu ve yapılandırması:
+   - n8n'i yerel olarak veya bulut üzerinde kur
+   - Gerekli API anahtarlarını yapılandır (Mistral OCR, Supabase)
+
+2. n8n workflow adımlarını oluştur:
+   ```
+   [Webhook Node] -> [Mistral Upload Node] -> [Mistral Signed URL Node] -> [Mistral DOC OCR Node] -> [Information Extractor Node] -> [Supabase Operations] -> [Respond to Webhook]
+   ```
+
+3. Webhook Node yapılandırması:
+   - HTTP Method: POST
+   - Response Mode: Last Node
+   - Authentication: None (veya Basic Auth ekle)
+   - Webhook URL'sini not al
+
+4. Mistral Upload Node yapılandırması:
+   - API Key: Mistral API anahtarı
+   - Binary Data: webhook'tan gelen dosya
+   - Output Field: `mistralFileId`
+
+5. Mistral Signed URL Node yapılandırması:
+   - API Key: Mistral API anahtarı
+   - File ID: `{{$node["Mistral Upload"].json["mistralFileId"]}}`
+   - Output Field: `signedUrl`
+
+6. Mistral DOC OCR Node yapılandırması:
+   - API Key: Mistral API anahtarı
+   - File ID: `{{$node["Mistral Upload"].json["mistralFileId"]}}`
+   - Output Field: `ocrText`
+
+7. Information Extractor Node yapılandırması:
+   - Input Text: `{{$node["Mistral DOC OCR"].json["ocrText"]}}`
+   - Extraction Schema:
+     ```json
+     {
+       "fis_no": "string",
+       "tarih_saat": "date (YYYY/MM/DD HH:mm format)",
+       "total": "number",
+       "total_kdv": "number",
+       "items": [
+         {
+           "name": "string",
+           "quantity": "number",
+           "unit_price": "number",
+           "kdv": "number",
+           "total": "number"
+         }
+       ]
+     }
+     ```
+   - Output Field: `extractedData`
+
+8. Supabase Nodes:
+   - Supabase Get Node:
+     - Operation: Select
+     - Table: fisler
+     - Where: `fis_no = {{$node["Information Extractor"].json["extractedData"]["fis_no"]}}`
+
+   - IF Node:
+     - Condition: `{{$node["Supabase Get"].json["length"] > 0}}`
+     - True: Supabase Update Node
+     - False: Supabase Create Node
+
+   - Supabase Update Node:
+     - Operation: Update
+     - Table: fisler
+     - Where: `fis_no = {{$node["Information Extractor"].json["extractedData"]["fis_no"]}}`
+     - Data:
+       ```json
+       {
+         "tarih_saat": "{{$node["Information Extractor"].json["extractedData"]["tarih_saat"]}}",
+         "total": {{$node["Information Extractor"].json["extractedData"]["total"]}},
+         "total_kdv": {{$node["Information Extractor"].json["extractedData"]["total_kdv"]}},
+         "items": {{$node["Information Extractor"].json["extractedData"]["items"]}},
+         "updated_at": "{{$now}}"
+       }
+       ```
+
+   - Supabase Create Node:
+     - Operation: Insert
+     - Table: fisler
+     - Data:
+       ```json
+       {
+         "fis_no": "{{$node["Information Extractor"].json["extractedData"]["fis_no"]}}",
+         "tarih_saat": "{{$node["Information Extractor"].json["extractedData"]["tarih_saat"]}}",
+         "total": {{$node["Information Extractor"].json["extractedData"]["total"]}},
+         "total_kdv": {{$node["Information Extractor"].json["extractedData"]["total_kdv"]}},
+         "items": {{$node["Information Extractor"].json["extractedData"]["items"]}}
+       }
+       ```
+
+9. Respond to Webhook Node yapılandırması:
+   - Response Code: 200
+   - Response Body: `{ "upload": "success" }`
+   - Response Headers: `{ "Content-Type": "application/json" }`
+
+10. Next.js API route güncellemesi (`app/api/upload/route.ts`):
+    ```typescript
+    import { NextRequest, NextResponse } from 'next/server';
+    
+    export async function POST(request: NextRequest) {
+      try {
+        const formData = await request.formData();
+        const file = formData.get('file') as File;
+        
+        if (!file) {
+          return NextResponse.json({ error: 'Dosya bulunamadı' }, { status: 400 });
+        }
+        
+        // n8n webhook'una gönder
+        const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
+        
+        if (!n8nWebhookUrl) {
+          return NextResponse.json({ error: 'Webhook URL yapılandırılmamış' }, { status: 500 });
+        }
+        
+        const n8nFormData = new FormData();
+        n8nFormData.append('file', file);
+        
+        const n8nResponse = await fetch(n8nWebhookUrl, {
+          method: 'POST',
+          body: n8nFormData,
+        });
+        
+        const n8nData = await n8nResponse.json();
+        
+        return NextResponse.json(n8nData);
+      } catch (error) {
+        console.error('Yükleme hatası:', error);
+        return NextResponse.json({ error: 'Dosya yükleme hatası' }, { status: 500 });
+      }
+    }
+    ```
+
+11. `.env.local` dosyasına n8n webhook URL'sini ekle:
+    ```
+    N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/path
+    ```
+
+# Test Strategy:
+1. n8n workflow'unun tüm adımlarının doğru yapılandırıldığını kontrol et
+2. Test bir fiş/fatura görseli ile workflow'u manuel olarak çalıştır
+3. Mistral OCR'ın metni doğru çıkardığını kontrol et
+4. Information Extractor'ın JSON şemasına uygun veri çıkardığını doğrula
+5. Supabase'e veri ekleme ve güncelleme işlemlerinin doğru çalıştığını test et
+6. Next.js API route üzerinden dosya yükleme işlemini test et
+7. Webhook yanıtının doğru formatta döndüğünü kontrol et (`{ "upload": "success" }`)
+8. Hata durumlarının doğru şekilde ele alındığını test et
+
+# Subtasks:
+## 1. n8n Kurulumu ve Temel Yapılandırma [pending]
+### Dependencies: None
+### Description: n8n'in yerel veya bulut ortamında kurulması ve temel yapılandırmasının yapılması
+### Details:
+1. n8n'i yerel ortamda Docker ile veya bulut üzerinde (örn. Digital Ocean) kurulumunu yap
+2. n8n arayüzüne erişim sağla ve admin hesabı oluştur
+3. Gerekli API anahtarlarını (Mistral OCR, Supabase) güvenli bir şekilde sakla
+4. n8n'in webhook URL'sini not al ve erişilebilir olduğunu kontrol et
+5. n8n'in temel ayarlarını yapılandır (zaman dilimi, loglama seviyesi, vb.)
+
+## 2. OCR İşleme Workflow Adımlarının Oluşturulması [pending]
+### Dependencies: 9.1
+### Description: Webhook, Mistral Upload, Signed URL ve OCR node'larının yapılandırılması
+### Details:
+1. Webhook Node yapılandırması:
+   - HTTP Method: POST
+   - Response Mode: Last Node
+   - Authentication: None (veya Basic Auth ekle)
+   - Webhook URL'sini not al
+
+2. Mistral Upload Node yapılandırması:
+   - API Key: Mistral API anahtarı
+   - Binary Data: webhook'tan gelen dosya
+   - Output Field: `mistralFileId`
+
+3. Mistral Signed URL Node yapılandırması:
+   - API Key: Mistral API anahtarı
+   - File ID: `{{$node["Mistral Upload"].json["mistralFileId"]}}`
+   - Output Field: `signedUrl`
+
+4. Mistral DOC OCR Node yapılandırması:
+   - API Key: Mistral API anahtarı
+   - File ID: `{{$node["Mistral Upload"].json["mistralFileId"]}}`
+   - Output Field: `ocrText`
+
+## 3. Veri Çıkarma ve Supabase Entegrasyonu [pending]
+### Dependencies: 9.2
+### Description: Information Extractor ve Supabase işlem node'larının yapılandırılması
+### Details:
+1. Information Extractor Node yapılandırması:
+   - Input Text: `{{$node["Mistral DOC OCR"].json["ocrText"]}}`
+   - Extraction Schema'yı belirtilen JSON formatında yapılandır
+   - Output Field: `extractedData`
+
+2. Supabase Get Node yapılandırması:
+   - Operation: Select
+   - Table: fisler
+   - Where: `fis_no = {{$node["Information Extractor"].json["extractedData"]["fis_no"]}}`
+
+3. IF Node yapılandırması:
+   - Condition: `{{$node["Supabase Get"].json["length"] > 0}}`
+   - True: Supabase Update Node
+   - False: Supabase Create Node
+
+4. Supabase Update ve Create Node'larını belirtilen veri yapısına göre yapılandır
+
+5. Respond to Webhook Node yapılandırması:
+   - Response Code: 200
+   - Response Body: `{ "upload": "success", "data": {{$node["Information Extractor"].json["extractedData"]}} }`
+   - Response Headers: `{ "Content-Type": "application/json" }`
+
+## 4. Next.js API Route Entegrasyonu [pending]
+### Dependencies: 9.1, 9.2, 9.3
+### Description: Next.js API route'unun n8n webhook'una dosya gönderecek şekilde güncellenmesi
+### Details:
+1. `app/api/upload/route.ts` dosyasını oluştur ve belirtilen kodu uygula
+2. `.env.local` dosyasına n8n webhook URL'sini ekle:
+   ```
+   N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/path
+   ```
+3. Dosya yükleme işlemini güvenli hale getirmek için dosya boyutu ve türü kontrolü ekle
+4. Hata yönetimini geliştir ve anlamlı hata mesajları döndür
+5. İsteğe bağlı olarak rate limiting ekle
+
+## 5. Workflow Test ve Optimizasyonu [pending]
+### Dependencies: 9.1, 9.2, 9.3, 9.4
+### Description: Tüm workflow'un test edilmesi, hata ayıklaması ve optimizasyonu
+### Details:
+1. Tüm workflow'u uçtan uca test et ve hata ayıklaması yap
+2. Hata durumları için error handling ekle:
+   - Mistral API hatası durumu
+   - OCR başarısız olma durumu
+   - Veri çıkarma hatası durumu
+   - Supabase bağlantı hatası durumu
+3. Workflow performansını optimize et:
+   - Gereksiz node'ları kaldır veya birleştir
+   - Timeout değerlerini ayarla
+4. Workflow'u dokümante et ve paylaş
+5. Webhook güvenliğini artır (Basic Auth veya API Key ekle)
+

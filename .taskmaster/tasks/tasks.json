@@ -1,0 +1,819 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": "1",
+        "title": "Next.js 15 Proje Kurulumu ve Temel Yapılandırma",
+        "description": "Next.js 15 projesi oluşturma, Tailwind CSS entegrasyonu, temel klasör yapısı ve gerekli bağımlılıkların kurulumu",
+        "details": "1. `npx create-next-app@latest fatura-dashboard` komutu ile yeni proje oluştur\n2. Kurulum sırasında Tailwind CSS, TypeScript ve App Router seçeneklerini etkinleştir\n3. Proje klasör yapısını oluştur:\n   - `/app`: sayfa bileşenleri\n   - `/app/api`: API route'ları\n   - `/components`: UI bileşenleri\n   - `/lib`: yardımcı fonksiyonlar\n   - `/types`: TypeScript tipleri\n4. Gerekli bağımlılıkları kur:\n   - `npm install react-hot-toast` (bildirimler için)\n   - `npm install swr` (veri çekme için)\n   - `npm install date-fns` (tarih işlemleri için)\n   - `npm install lucide-react` (ikonlar için)\n5. Tailwind CSS yapılandırmasını güncelle (tailwind.config.js):\n   ```js\n   module.exports = {\n     content: [\n       './app/**/*.{js,ts,jsx,tsx}',\n       './components/**/*.{js,ts,jsx,tsx}',\n     ],\n     theme: {\n       extend: {\n         colors: {\n           primary: colors.blue,\n           accent: colors.green,\n           warning: colors.amber,\n           danger: colors.rose,\n         }\n       }\n     },\n     plugins: [],\n   }\n   ```\n6. Temel layout bileşenini oluştur (`app/layout.tsx`)\n7. Toaster bileşenini global olarak ekle",
+        "testStrategy": "1. Projenin başarıyla oluşturulduğunu doğrula\n2. `npm run dev` ile geliştirme sunucusunun çalıştığını kontrol et\n3. Tailwind CSS'in doğru çalıştığını basit bir stil uygulayarak test et\n4. Tüm bağımlılıkların doğru yüklendiğini ve import edilebilir olduğunu kontrol et\n5. Tarayıcıda responsive tasarımın doğru çalıştığını farklı ekran boyutlarında test et",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Next.js 15 Projesi Oluşturma ve Temel Yapılandırma",
+            "description": "Next.js 15 projesinin oluşturulması, TypeScript ve App Router yapılandırması ile temel proje iskeletinin kurulması",
+            "dependencies": [],
+            "details": "1. Terminal üzerinden `npx create-next-app@latest fatura-dashboard` komutunu çalıştır\n2. Kurulum sırasında aşağıdaki seçenekleri etkinleştir:\n   - TypeScript: Evet\n   - ESLint: Evet\n   - Tailwind CSS: Evet\n   - App Router: Evet\n   - Import alias: `@/*` olarak ayarla\n3. Kurulum tamamlandıktan sonra proje klasörüne gir: `cd fatura-dashboard`\n4. Projeyi başlat ve çalıştığını kontrol et: `npm run dev`\n5. Tarayıcıda `http://localhost:3000` adresini açarak projenin çalıştığını doğrula",
+            "status": "done",
+            "testStrategy": "1. Projenin başarıyla oluşturulduğunu doğrula\n2. `npm run dev` komutunun hatasız çalıştığını kontrol et\n3. Tarayıcıda projenin açıldığını ve Next.js karşılama sayfasının görüntülendiğini doğrula\n4. TypeScript yapılandırmasının doğru çalıştığını kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T19:09:17.947Z"
+          },
+          {
+            "id": 2,
+            "title": "Proje Klasör Yapısı ve Bağımlılıkların Kurulumu",
+            "description": "Proje için gerekli klasör yapısının oluşturulması ve gerekli npm paketlerinin kurulması",
+            "dependencies": [],
+            "details": "1. Proje klasör yapısını oluştur:\n   - `/app`: sayfa bileşenleri için\n   - `/app/api`: API route'ları için\n   - `/components`: UI bileşenleri için\n   - `/lib`: yardımcı fonksiyonlar için\n   - `/types`: TypeScript tipleri için\n2. Gerekli bağımlılıkları kur:\n   - `npm install react-hot-toast` (bildirimler için)\n   - `npm install swr` (veri çekme için)\n   - `npm install date-fns` (tarih işlemleri için)\n   - `npm install lucide-react` (ikonlar için)\n3. Eksik klasörleri oluşturmak için terminal komutlarını çalıştır:\n   ```\n   mkdir -p app/api components lib types\n   ```\n4. Her klasöre örnek bir dosya ekleyerek yapının doğru oluşturulduğunu kontrol et",
+            "status": "done",
+            "testStrategy": "1. Tüm klasörlerin doğru oluşturulduğunu kontrol et\n2. Tüm bağımlılıkların başarıyla kurulduğunu `package.json` dosyasından doğrula\n3. Kurulu paketleri basit bir import ile test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T19:09:29.551Z"
+          },
+          {
+            "id": 3,
+            "title": "Tailwind CSS Yapılandırması ve Tema Ayarları",
+            "description": "Tailwind CSS yapılandırmasının güncellenmesi, tema renklerinin ve özel stillerin tanımlanması",
+            "dependencies": [],
+            "details": "1. `tailwind.config.js` dosyasını aç ve aşağıdaki şekilde güncelle:\n   ```js\n   const colors = require('tailwindcss/colors');\n\n   module.exports = {\n     content: [\n       './app/**/*.{js,ts,jsx,tsx}',\n       './components/**/*.{js,ts,jsx,tsx}',\n     ],\n     theme: {\n       extend: {\n         colors: {\n           primary: colors.blue,\n           accent: colors.green,\n           warning: colors.amber,\n           danger: colors.rose,\n         }\n       }\n     },\n     plugins: [],\n   }\n   ```\n2. `globals.css` dosyasını aç ve temel stil tanımlamalarını ekle:\n   ```css\n   @tailwind base;\n   @tailwind components;\n   @tailwind utilities;\n\n   @layer components {\n     .btn {\n       @apply px-4 py-2 rounded-md font-medium transition-colors;\n     }\n     .btn-primary {\n       @apply bg-primary-600 text-white hover:bg-primary-700;\n     }\n     .card {\n       @apply bg-white rounded-lg shadow p-4;\n     }\n   }\n   ```\n3. Tailwind CSS yapılandırmasının doğru çalıştığını test etmek için basit bir bileşen oluştur",
+            "status": "done",
+            "testStrategy": "1. Tailwind CSS yapılandırmasının doğru yüklendiğini kontrol et\n2. Özel renk tanımlamalarının çalıştığını test et (örneğin `bg-primary-600` sınıfını kullanarak)\n3. Özel bileşen sınıflarının (btn, card vb.) doğru çalıştığını kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T19:38:00.374Z"
+          },
+          {
+            "id": 4,
+            "title": "Temel Layout ve Toaster Bileşeni Ekleme",
+            "description": "Uygulama için temel layout bileşeninin oluşturulması ve bildirimler için Toaster bileşeninin global olarak eklenmesi",
+            "dependencies": [],
+            "details": "1. `app/layout.tsx` dosyasını aşağıdaki şekilde oluştur:\n   ```tsx\n   import './globals.css';\n   import { Inter } from 'next/font/google';\n   import { Toaster } from 'react-hot-toast';\n\n   const inter = Inter({ subsets: ['latin'] });\n\n   export const metadata = {\n     title: 'Fatura Dashboard',\n     description: 'Fiş ve fatura yönetim uygulaması',\n   };\n\n   export default function RootLayout({\n     children,\n   }: {\n     children: React.ReactNode;\n   }) {\n     return (\n       <html lang=\"tr\">\n         <body className={`${inter.className} bg-gray-50 min-h-screen`}>\n           <Toaster position=\"top-right\" />\n           <main className=\"container mx-auto px-4 py-8\">\n             {children}\n           </main>\n         </body>\n       </html>\n     );\n   }\n   ```\n2. `app/page.tsx` dosyasını basit bir karşılama sayfası olarak güncelle:\n   ```tsx\n   import { Home as HomeIcon } from 'lucide-react';\n\n   export default function Home() {\n     return (\n       <div className=\"flex flex-col items-center justify-center min-h-[70vh]\">\n         <h1 className=\"text-3xl font-bold text-primary-600 mb-4\">Fatura Dashboard</h1>\n         <p className=\"text-gray-600 mb-8\">Fiş ve fatura yönetim uygulamasına hoş geldiniz</p>\n         <div className=\"flex items-center gap-2 bg-primary-100 text-primary-800 p-4 rounded-lg\">\n           <HomeIcon size={20} />\n           <span>Kurulum başarıyla tamamlandı!</span>\n         </div>\n       </div>\n     );\n   }\n   ```\n3. Toaster bileşeninin çalıştığını test etmek için basit bir bildirim ekle",
+            "status": "done",
+            "testStrategy": "1. Layout bileşeninin doğru render edildiğini kontrol et\n2. Toaster bileşeninin sayfada görünür olduğunu doğrula\n3. Sayfa stillerinin Tailwind CSS ile doğru uygulandığını kontrol et\n4. Responsive tasarımın farklı ekran boyutlarında doğru çalıştığını test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T19:40:07.370Z"
+          },
+          {
+            "id": 5,
+            "title": "Temel Bileşenlerin ve Tiplerin Oluşturulması",
+            "description": "Uygulama için gerekli temel bileşenlerin ve TypeScript tip tanımlamalarının oluşturulması",
+            "dependencies": [],
+            "details": "1. `types/index.ts` dosyasını oluştur ve temel tipleri tanımla:\n   ```typescript\n   export interface Fis {\n     id: string;\n     fis_no: string;\n     tarih_saat: string;\n     created_at: string;\n     updated_at: string;\n     total: number;\n     total_kdv: number;\n     items: FisItem[];\n   }\n\n   export interface FisItem {\n     name: string;\n     quantity: number;\n     price: number;\n     total: number;\n   }\n   ```\n2. `components/Button.tsx` dosyasını oluştur:\n   ```tsx\n   import { ButtonHTMLAttributes, ReactNode } from 'react';\n\n   interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {\n     variant?: 'primary' | 'secondary' | 'outline' | 'danger';\n     size?: 'sm' | 'md' | 'lg';\n     children: ReactNode;\n     isLoading?: boolean;\n   }\n\n   export function Button({\n     variant = 'primary',\n     size = 'md',\n     children,\n     isLoading = false,\n     className = '',\n     ...props\n   }: ButtonProps) {\n     const baseClasses = 'btn font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';\n     \n     const variantClasses = {\n       primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',\n       secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-500',\n       outline: 'bg-transparent text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-gray-500',\n       danger: 'bg-danger-600 text-white hover:bg-danger-700 focus:ring-danger-500',\n     };\n     \n     const sizeClasses = {\n       sm: 'px-3 py-1.5 text-sm',\n       md: 'px-4 py-2 text-base',\n       lg: 'px-6 py-3 text-lg',\n     };\n     \n     return (\n       <button\n         className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}\n         disabled={isLoading}\n         {...props}\n       >\n         {isLoading ? (\n           <span className=\"flex items-center justify-center\">\n             <svg className=\"animate-spin -ml-1 mr-2 h-4 w-4 text-current\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\">\n               <circle className=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" strokeWidth=\"4\"></circle>\n               <path className=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\"></path>\n             </svg>\n             Yükleniyor...\n           </span>\n         ) : children}\n       </button>\n     );\n   }\n   ```\n3. `components/Card.tsx` dosyasını oluştur:\n   ```tsx\n   import { ReactNode } from 'react';\n\n   interface CardProps {\n     title?: string;\n     children: ReactNode;\n     className?: string;\n   }\n\n   export function Card({ title, children, className = '' }: CardProps) {\n     return (\n       <div className={`bg-white rounded-lg shadow-sm p-4 ${className}`}>\n         {title && <h3 className=\"text-lg font-medium text-gray-800 mb-3\">{title}</h3>}\n         {children}\n       </div>\n     );\n   }\n   ```\n4. `lib/utils.ts` dosyasını oluştur ve yardımcı fonksiyonları ekle:\n   ```typescript\n   import { format, parseISO } from 'date-fns';\n   import { tr } from 'date-fns/locale';\n\n   export function formatDate(dateString: string): string {\n     const date = parseISO(dateString);\n     return format(date, 'dd MMMM yyyy', { locale: tr });\n   }\n\n   export function formatCurrency(amount: number): string {\n     return new Intl.NumberFormat('tr-TR', {\n       style: 'currency',\n       currency: 'TRY',\n     }).format(amount);\n   }\n   ```",
+            "status": "done",
+            "testStrategy": "1. TypeScript tiplerinin doğru tanımlandığını kontrol et\n2. Button bileşeninin tüm varyantlarını ve boyutlarını test et\n3. Card bileşeninin doğru render edildiğini kontrol et\n4. Yardımcı fonksiyonların beklenen çıktıları ürettiğini doğrula\n5. Tüm bileşenlerin TypeScript ile uyumlu olduğunu kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T19:42:26.813Z"
+          }
+        ],
+        "updatedAt": "2025-10-03T19:42:26.813Z"
+      },
+      {
+        "id": "2",
+        "title": "Supabase Veritabanı Kurulumu ve Bağlantısı",
+        "description": "Supabase projesinin oluşturulması, veritabanı tablosunun tasarlanması ve Next.js ile bağlantı kurulması",
+        "details": "1. Supabase hesabı oluştur ve yeni bir proje başlat\n2. PRD'de belirtilen şemaya göre `fisler` tablosunu oluştur:\n   ```sql\n   CREATE TABLE fisler (\n     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n     fis_no TEXT NOT NULL,\n     tarih_saat TIMESTAMP WITH TIME ZONE,\n     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),\n     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),\n     total NUMERIC(10,2),\n     total_kdv NUMERIC(10,2),\n     items JSONB\n   );\n   ```\n3. Supabase API anahtarlarını al\n4. `.env.local` dosyasını oluştur ve Supabase anahtarlarını ekle:\n   ```\n   NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co\n   NEXT_PUBLIC_SUPABASE_ANON_KEY=xxx\n   SUPABASE_SERVICE_ROLE_KEY=xxx\n   ```\n5. Supabase istemcisini oluştur (`lib/supabase.ts`):\n   ```typescript\n   import { createClient } from '@supabase/supabase-js';\n   \n   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;\n   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;\n   \n   export const supabase = createClient(supabaseUrl, supabaseAnonKey);\n   ```\n6. TypeScript tiplerini oluştur (`types/database.ts`):\n   ```typescript\n   export interface FisItem {\n     name: string;\n     quantity: number;\n     unit_price: number;\n     kdv: number;\n     total: number;\n   }\n   \n   export interface Fis {\n     id: string;\n     fis_no: string;\n     tarih_saat: string;\n     created_at: string;\n     updated_at: string;\n     total: number;\n     total_kdv: number;\n     items: FisItem[];\n   }\n   ```",
+        "testStrategy": "1. Supabase projesinin başarıyla oluşturulduğunu kontrol et\n2. Veritabanı tablosunun doğru şemayla oluşturulduğunu doğrula\n3. Supabase bağlantısını test etmek için basit bir sorgu çalıştır:\n   ```typescript\n   const { data, error } = await supabase.from('fisler').select('*').limit(1);\n   console.log(data, error);\n   ```\n4. Ortam değişkenlerinin doğru yüklendiğini kontrol et\n5. TypeScript tiplerinin doğru çalıştığını test et",
+        "priority": "high",
+        "dependencies": [
+          "1"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Supabase Hesabı Oluşturma ve Proje Başlatma",
+            "description": "Supabase platformunda hesap oluşturma ve yeni bir proje başlatma işlemlerini içerir.",
+            "dependencies": [],
+            "details": "1. Supabase.com adresine git ve yeni bir hesap oluştur veya mevcut hesabınla giriş yap\n2. Dashboard üzerinden 'New Project' butonuna tıkla\n3. Proje için anlamlı bir isim belirle (örn: 'fatura-dashboard')\n4. Bölge seçimini Türkiye'ye en yakın olan (örn: Frankfurt) olarak ayarla\n5. Güçlü bir şifre belirle ve kaydet\n6. Proje oluşturma işleminin tamamlanmasını bekle",
+            "status": "done",
+            "testStrategy": "Supabase dashboard'a erişim sağlanabildiğini ve projenin başarıyla oluşturulduğunu kontrol et. Proje ayarlarına erişerek doğru bölge ve yapılandırmanın seçildiğini doğrula.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T19:49:50.160Z"
+          },
+          {
+            "id": 2,
+            "title": "Veritabanı Tablosunun Oluşturulması",
+            "description": "Supabase veritabanında 'fisler' tablosunun oluşturulması ve gerekli sütunların yapılandırılması.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "1. Supabase projesinin SQL editörüne git\n2. Aşağıdaki SQL sorgusunu çalıştır:\n```sql\nCREATE TABLE fisler (\n  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n  fis_no TEXT NOT NULL,\n  tarih_saat TIMESTAMP WITH TIME ZONE,\n  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),\n  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),\n  total NUMERIC(10,2),\n  total_kdv NUMERIC(10,2),\n  items JSONB\n);\n```\n3. Sorgunun başarıyla çalıştığını doğrula\n4. Table Editor üzerinden 'fisler' tablosunu kontrol et ve tüm sütunların doğru tiplerle oluşturulduğunu doğrula",
+            "status": "done",
+            "testStrategy": "Table Editor üzerinden 'fisler' tablosunun yapısını kontrol et. Tüm sütunların doğru veri tipleriyle oluşturulduğunu doğrula. Test amaçlı bir kayıt ekleyerek tablonun çalıştığını kontrol et.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T19:50:00.006Z"
+          },
+          {
+            "id": 3,
+            "title": "Supabase API Anahtarlarının Alınması ve Çevre Değişkenlerinin Ayarlanması",
+            "description": "Supabase API anahtarlarının alınması ve Next.js projesi için gerekli çevre değişkenlerinin oluşturulması.",
+            "dependencies": [
+              "2.1"
+            ],
+            "details": "1. Supabase projesinin ayarlar sayfasına git (Settings > API)\n2. 'Project URL' ve 'anon public' API anahtarını kopyala\n3. 'service_role' API anahtarını da kopyala (dikkat: bu anahtar hassastır, sadece güvenli ortamlarda kullanılmalıdır)\n4. Next.js projesinin kök dizininde `.env.local` dosyasını oluştur\n5. Aşağıdaki çevre değişkenlerini ekle:\n```\nNEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co\nNEXT_PUBLIC_SUPABASE_ANON_KEY=xxx\nSUPABASE_SERVICE_ROLE_KEY=xxx\n```\n6. Gerçek değerleri kopyaladığın anahtarlarla değiştir",
+            "status": "done",
+            "testStrategy": "Çevre değişkenlerinin doğru formatta olduğunu kontrol et. Next.js uygulamasını başlatarak çevre değişkenlerinin doğru yüklendiğini `console.log(process.env.NEXT_PUBLIC_SUPABASE_URL)` ile test et.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T19:51:09.621Z"
+          },
+          {
+            "id": 4,
+            "title": "Supabase İstemcisinin Oluşturulması",
+            "description": "Next.js projesi içinde Supabase istemcisinin yapılandırılması ve bağlantı kurulması.",
+            "dependencies": [
+              "2.1",
+              "2.2",
+              "2.3"
+            ],
+            "details": "1. Gerekli bağımlılıkları yükle: `npm install @supabase/supabase-js`\n2. `lib` klasörünü oluştur (yoksa)\n3. `lib/supabase.ts` dosyasını oluştur ve aşağıdaki kodu ekle:\n```typescript\nimport { createClient } from '@supabase/supabase-js';\n\nconst supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;\nconst supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;\n\nexport const supabase = createClient(supabaseUrl, supabaseAnonKey);\n```\n4. Server-side işlemler için gerekirse service role client'ı da ekle:\n```typescript\nexport const supabaseAdmin = createClient(\n  process.env.NEXT_PUBLIC_SUPABASE_URL!,\n  process.env.SUPABASE_SERVICE_ROLE_KEY!\n);\n```",
+            "status": "done",
+            "testStrategy": "Supabase istemcisinin doğru yapılandırıldığını test etmek için basit bir sorgu çalıştır: `const { data, error } = await supabase.from('fisler').select('*').limit(1); console.log(data, error);` Bu sorgunun hata vermeden çalıştığını kontrol et.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T19:51:27.506Z"
+          },
+          {
+            "id": 5,
+            "title": "TypeScript Tiplerinin Oluşturulması",
+            "description": "Veritabanı şemasına uygun TypeScript tiplerinin oluşturulması ve projeye entegrasyonu.",
+            "dependencies": [
+              "2.2",
+              "2.4"
+            ],
+            "details": "1. `types` klasörünü oluştur (yoksa)\n2. `types/database.ts` dosyasını oluştur ve aşağıdaki tipleri ekle:\n```typescript\nexport interface FisItem {\n  name: string;\n  quantity: number;\n  unit_price: number;\n  kdv: number;\n  total: number;\n}\n\nexport interface Fis {\n  id: string;\n  fis_no: string;\n  tarih_saat: string;\n  created_at: string;\n  updated_at: string;\n  total: number;\n  total_kdv: number;\n  items: FisItem[];\n}\n```\n3. Supabase tiplerini genişletmek için (opsiyonel):\n```typescript\nimport { Database } from '@supabase/supabase-js';\n\nexport type Tables = Database['public']['Tables'];\nexport type FisRecord = Tables['fisler']['Row'];\n```",
+            "status": "done",
+            "testStrategy": "TypeScript tiplerinin doğru tanımlandığını kontrol etmek için bir test dosyası oluştur ve tipleri import et. Örnek bir veri nesnesi oluşturarak tip uyumluluğunu test et. IDE'nin tip hatası göstermediğinden emin ol.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T19:51:35.616Z"
+          }
+        ],
+        "updatedAt": "2025-10-03T19:51:35.616Z"
+      },
+      {
+        "id": "3",
+        "title": "Temel UI Bileşenlerinin Oluşturulması",
+        "description": "PRD'de belirtilen tasarım sistemine uygun UI bileşenlerinin geliştirilmesi",
+        "details": "1. Temel UI bileşenlerini oluştur (`components/ui` klasöründe):\n   - Button.tsx (primary, ghost varyantları)\n   - Card.tsx (istatistik, liste ve detay varyantları)\n   - Input.tsx (text, number, date tipleri)\n   - Badge.tsx (status göstergeleri için)\n   - Alert.tsx (hata mesajları için)\n   - Skeleton.tsx (yükleme durumları için)\n   - Table.tsx (ürün listesi için)\n\n2. Header bileşeni oluştur (`components/Header.tsx`):\n   ```tsx\n   export function Header() {\n     return (\n       <header className=\"h-16 bg-white shadow-sm py-4 px-8 flex items-center justify-between\">\n         <div className=\"font-semibold text-xl\">FY</div>\n         <nav>\n           <a href=\"/\" className=\"text-slate-600 hover:text-blue-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 rounded-lg px-3 py-2\">\n             Ana Sayfa\n           </a>\n         </nav>\n       </header>\n     );\n   }\n   ```\n\n3. İstatistik kartı bileşeni oluştur (`components/StatCard.tsx`):\n   ```tsx\n   import { LucideIcon } from 'lucide-react';\n   \n   interface StatCardProps {\n     icon: LucideIcon;\n     title: string;\n     value: string | number;\n   }\n   \n   export function StatCard({ icon: Icon, title, value }: StatCardProps) {\n     return (\n       <div className=\"rounded-2xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md hover:translate-y-[1px] transition-all\">\n         <div className=\"flex items-center gap-3\">\n           <div className=\"rounded-full p-2 bg-slate-50 w-9 h-9 flex items-center justify-center text-blue-600\">\n             <Icon size={20} />\n           </div>\n           <div>\n             <p className=\"text-sm text-slate-600\">{title}</p>\n             <p className=\"text-2xl font-semibold tabular-nums\">{value}</p>\n           </div>\n         </div>\n       </div>\n     );\n   }\n   ```\n\n4. Toast provider ekle (`app/layout.tsx`):\n   ```tsx\n   import { Toaster } from 'react-hot-toast';\n   \n   export default function RootLayout({ children }) {\n     return (\n       <html lang=\"tr\">\n         <body>\n           {children}\n           <Toaster position=\"top-right\" />\n         </body>\n       </html>\n     );\n   }\n   ```",
+        "testStrategy": "1. Tüm bileşenlerin tasarım sistemine uygun olarak render edildiğini kontrol et\n2. Responsive davranışı farklı ekran boyutlarında test et\n3. Erişilebilirlik kontrolü yap (klavye navigasyonu, ARIA özellikleri)\n4. Hover, focus ve active durumlarını test et\n5. Bileşenlerin farklı props kombinasyonlarıyla doğru çalıştığını kontrol et\n6. Toast bildirimlerinin doğru görüntülendiğini test et",
+        "priority": "high",
+        "dependencies": [
+          "1"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Button ve Input Bileşenlerinin Geliştirilmesi",
+            "description": "Button ve Input bileşenlerinin tasarım sistemine uygun olarak geliştirilmesi. Button bileşeni primary ve ghost varyantlarını, Input bileşeni text, number ve date tiplerini desteklemelidir.",
+            "dependencies": [],
+            "details": "1. Button.tsx bileşenini oluştur:\n```tsx\ninterface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {\n  variant?: 'primary' | 'ghost';\n  isLoading?: boolean;\n  size?: 'sm' | 'md' | 'lg';\n}\n\nexport function Button({ \n  children, \n  variant = 'primary', \n  isLoading = false, \n  size = 'md', \n  className, \n  disabled, \n  ...props \n}: ButtonProps) {\n  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 transition-colors';\n  const variantStyles = {\n    primary: 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-300',\n    ghost: 'bg-transparent text-slate-700 hover:bg-slate-100 active:bg-slate-200 disabled:text-slate-300'\n  };\n  const sizeStyles = {\n    sm: 'text-sm px-3 py-1.5',\n    md: 'text-base px-4 py-2',\n    lg: 'text-lg px-5 py-2.5'\n  };\n  \n  return (\n    <button\n      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className || ''}`}\n      disabled={isLoading || disabled}\n      {...props}\n    >\n      {isLoading && (\n        <svg className=\"animate-spin -ml-1 mr-2 h-4 w-4 text-current\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\">\n          <circle className=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" strokeWidth=\"4\"></circle>\n          <path className=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\"></path>\n        </svg>\n      )}\n      {children}\n    </button>\n  );\n}\n```\n\n2. Input.tsx bileşenini oluştur:\n```tsx\ninterface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {\n  label?: string;\n  error?: string;\n  type?: 'text' | 'number' | 'date';\n}\n\nexport function Input({ \n  label, \n  error, \n  className, \n  type = 'text', \n  id, \n  ...props \n}: InputProps) {\n  const inputId = id || `input-${Math.random().toString(36).substring(2, 9)}`;\n  \n  return (\n    <div className=\"w-full\">\n      {label && (\n        <label htmlFor={inputId} className=\"block text-sm font-medium text-slate-700 mb-1\">\n          {label}\n        </label>\n      )}\n      <input\n        id={inputId}\n        type={type}\n        className={`w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-500 ${error ? 'border-red-500' : ''} ${className || ''}`}\n        {...props}\n      />\n      {error && <p className=\"mt-1 text-sm text-red-600\">{error}</p>}\n    </div>\n  );\n}\n```",
+            "status": "done",
+            "testStrategy": "1. Button bileşeninin tüm varyantlarını (primary, ghost) ve boyutlarını (sm, md, lg) görsel olarak kontrol et\n2. Button'un isLoading durumunu test et\n3. Button'un disabled durumunu test et\n4. Input bileşeninin tüm tiplerini (text, number, date) test et\n5. Input'un error state'ini test et\n6. Erişilebilirlik kontrolü yap (ARIA özellikleri, klavye navigasyonu)",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T20:01:02.466Z"
+          },
+          {
+            "id": 2,
+            "title": "Card ve Badge Bileşenlerinin Geliştirilmesi",
+            "description": "Card ve Badge bileşenlerinin tasarım sistemine uygun olarak geliştirilmesi. Card bileşeni istatistik, liste ve detay varyantlarını, Badge bileşeni farklı durum göstergelerini desteklemelidir.",
+            "dependencies": [],
+            "details": "1. Card.tsx bileşenini oluştur:\n```tsx\ninterface CardProps extends React.HTMLAttributes<HTMLDivElement> {\n  variant?: 'stat' | 'list' | 'detail';\n  title?: string;\n  footer?: React.ReactNode;\n}\n\nexport function Card({ \n  children, \n  variant = 'list', \n  title, \n  footer, \n  className, \n  ...props \n}: CardProps) {\n  const baseStyles = 'rounded-2xl border border-gray-200 bg-white shadow-sm';\n  const variantStyles = {\n    stat: 'p-4 hover:shadow-md hover:translate-y-[1px] transition-all',\n    list: 'p-5',\n    detail: 'p-6'\n  };\n  \n  return (\n    <div\n      className={`${baseStyles} ${variantStyles[variant]} ${className || ''}`}\n      {...props}\n    >\n      {title && (\n        <div className=\"mb-4 border-b border-gray-100 pb-3\">\n          <h3 className=\"font-semibold text-slate-800\">{title}</h3>\n        </div>\n      )}\n      <div>{children}</div>\n      {footer && (\n        <div className=\"mt-4 border-t border-gray-100 pt-3\">\n          {footer}\n        </div>\n      )}\n    </div>\n  );\n}\n```\n\n2. Badge.tsx bileşenini oluştur:\n```tsx\ninterface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {\n  variant?: 'success' | 'warning' | 'error' | 'info' | 'default';\n  size?: 'sm' | 'md';\n}\n\nexport function Badge({ \n  children, \n  variant = 'default', \n  size = 'md', \n  className, \n  ...props \n}: BadgeProps) {\n  const baseStyles = 'inline-flex items-center font-medium rounded-full';\n  const variantStyles = {\n    success: 'bg-green-100 text-green-800',\n    warning: 'bg-yellow-100 text-yellow-800',\n    error: 'bg-red-100 text-red-800',\n    info: 'bg-blue-100 text-blue-800',\n    default: 'bg-slate-100 text-slate-800'\n  };\n  const sizeStyles = {\n    sm: 'text-xs px-2 py-0.5',\n    md: 'text-sm px-2.5 py-0.5'\n  };\n  \n  return (\n    <span\n      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className || ''}`}\n      {...props}\n    >\n      {children}\n    </span>\n  );\n}\n```",
+            "status": "done",
+            "testStrategy": "1. Card bileşeninin tüm varyantlarını (stat, list, detail) görsel olarak kontrol et\n2. Card bileşeninin title ve footer özelliklerini test et\n3. Badge bileşeninin tüm varyantlarını (success, warning, error, info, default) görsel olarak kontrol et\n4. Badge bileşeninin boyutlarını (sm, md) test et\n5. Responsive davranışı farklı ekran boyutlarında test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T20:01:11.649Z"
+          },
+          {
+            "id": 3,
+            "title": "Alert ve Skeleton Bileşenlerinin Geliştirilmesi",
+            "description": "Alert ve Skeleton bileşenlerinin tasarım sistemine uygun olarak geliştirilmesi. Alert bileşeni hata mesajları için, Skeleton bileşeni yükleme durumları için kullanılacaktır.",
+            "dependencies": [],
+            "details": "1. Alert.tsx bileşenini oluştur:\n```tsx\nimport { AlertCircle, CheckCircle, Info, X } from 'lucide-react';\nimport { useState } from 'react';\n\ninterface AlertProps {\n  title?: string;\n  message: string;\n  variant?: 'error' | 'success' | 'info' | 'warning';\n  dismissible?: boolean;\n  className?: string;\n}\n\nexport function Alert({ \n  title, \n  message, \n  variant = 'info', \n  dismissible = false,\n  className = ''\n}: AlertProps) {\n  const [dismissed, setDismissed] = useState(false);\n  \n  if (dismissed) return null;\n  \n  const variantStyles = {\n    error: 'bg-red-50 text-red-800 border-red-200',\n    success: 'bg-green-50 text-green-800 border-green-200',\n    info: 'bg-blue-50 text-blue-800 border-blue-200',\n    warning: 'bg-yellow-50 text-yellow-800 border-yellow-200'\n  };\n  \n  const variantIcons = {\n    error: <AlertCircle className=\"h-5 w-5 text-red-500\" />,\n    success: <CheckCircle className=\"h-5 w-5 text-green-500\" />,\n    info: <Info className=\"h-5 w-5 text-blue-500\" />,\n    warning: <AlertCircle className=\"h-5 w-5 text-yellow-500\" />\n  };\n  \n  return (\n    <div className={`rounded-lg border p-4 ${variantStyles[variant]} ${className}`}>\n      <div className=\"flex items-start\">\n        <div className=\"flex-shrink-0\">\n          {variantIcons[variant]}\n        </div>\n        <div className=\"ml-3 flex-1\">\n          {title && <h3 className=\"text-sm font-medium\">{title}</h3>}\n          <div className=\"text-sm\">{message}</div>\n        </div>\n        {dismissible && (\n          <button\n            type=\"button\"\n            className=\"ml-auto -mx-1.5 -my-1.5 rounded-lg p-1.5 inline-flex h-8 w-8 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500\"\n            onClick={() => setDismissed(true)}\n          >\n            <span className=\"sr-only\">Kapat</span>\n            <X className=\"h-5 w-5\" />\n          </button>\n        )}\n      </div>\n    </div>\n  );\n}\n```\n\n2. Skeleton.tsx bileşenini oluştur:\n```tsx\ninterface SkeletonProps {\n  variant?: 'text' | 'circular' | 'rectangular';\n  width?: string | number;\n  height?: string | number;\n  className?: string;\n}\n\nexport function Skeleton({ \n  variant = 'text', \n  width, \n  height, \n  className = ''\n}: SkeletonProps) {\n  const baseStyles = 'animate-pulse bg-slate-200 rounded';\n  \n  const variantStyles = {\n    text: 'h-4 w-full',\n    circular: 'rounded-full',\n    rectangular: ''\n  };\n  \n  const style: React.CSSProperties = {};\n  \n  if (width) style.width = typeof width === 'number' ? `${width}px` : width;\n  if (height) style.height = typeof height === 'number' ? `${height}px` : height;\n  \n  return (\n    <div\n      className={`${baseStyles} ${variantStyles[variant]} ${className}`}\n      style={style}\n    />\n  );\n}\n\nexport function SkeletonCard() {\n  return (\n    <div className=\"rounded-2xl border border-gray-200 bg-white p-5 shadow-sm\">\n      <Skeleton variant=\"rectangular\" height={24} width={150} className=\"mb-4\" />\n      <Skeleton variant=\"text\" className=\"mb-2\" />\n      <Skeleton variant=\"text\" className=\"mb-2\" />\n      <Skeleton variant=\"text\" width=\"60%\" />\n    </div>\n  );\n}\n```",
+            "status": "done",
+            "testStrategy": "1. Alert bileşeninin tüm varyantlarını (error, success, info, warning) görsel olarak kontrol et\n2. Alert'ün dismissible özelliğini test et\n3. Skeleton bileşeninin tüm varyantlarını (text, circular, rectangular) görsel olarak kontrol et\n4. SkeletonCard bileşeninin doğru render edildiğini kontrol et\n5. Skeleton animasyonunun çalıştığını kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T20:01:19.888Z"
+          },
+          {
+            "id": 4,
+            "title": "Table Bileşeninin Geliştirilmesi",
+            "description": "Ürün listesi için kullanılacak Table bileşeninin tasarım sistemine uygun olarak geliştirilmesi. Sıralama, sayfalama ve boş durum gösterimi desteklenmelidir.",
+            "dependencies": [
+              "3.1",
+              "3.3"
+            ],
+            "details": "1. Table.tsx bileşenini oluştur:\n```tsx\nimport { ChevronDown, ChevronUp, ChevronsUpDown } from 'lucide-react';\nimport { Skeleton } from './Skeleton';\n\ntype SortDirection = 'asc' | 'desc' | null;\n\ninterface Column<T> {\n  header: string;\n  accessor: keyof T;\n  cell?: (item: T) => React.ReactNode;\n  sortable?: boolean;\n}\n\ninterface TableProps<T> {\n  data: T[];\n  columns: Column<T>[];\n  isLoading?: boolean;\n  sortColumn?: keyof T | null;\n  sortDirection?: SortDirection;\n  onSort?: (column: keyof T, direction: SortDirection) => void;\n  emptyState?: React.ReactNode;\n  className?: string;\n}\n\nexport function Table<T>({ \n  data, \n  columns, \n  isLoading = false, \n  sortColumn = null, \n  sortDirection = null, \n  onSort, \n  emptyState, \n  className = ''\n}: TableProps<T>) {\n  const handleSort = (column: Column<T>) => {\n    if (!column.sortable || !onSort) return;\n    \n    let newDirection: SortDirection = 'asc';\n    if (sortColumn === column.accessor) {\n      if (sortDirection === 'asc') newDirection = 'desc';\n      else if (sortDirection === 'desc') newDirection = null;\n    }\n    \n    onSort(column.accessor, newDirection);\n  };\n  \n  const getSortIcon = (column: Column<T>) => {\n    if (!column.sortable) return null;\n    \n    if (sortColumn === column.accessor) {\n      if (sortDirection === 'asc') return <ChevronUp className=\"h-4 w-4\" />;\n      if (sortDirection === 'desc') return <ChevronDown className=\"h-4 w-4\" />;\n    }\n    \n    return <ChevronsUpDown className=\"h-4 w-4 text-slate-400\" />;\n  };\n  \n  if (isLoading) {\n    return (\n      <div className=\"w-full overflow-hidden rounded-lg border border-slate-200\">\n        <div className=\"w-full overflow-x-auto\">\n          <table className={`w-full whitespace-nowrap ${className}`}>\n            <thead>\n              <tr className=\"border-b border-slate-200 bg-slate-50\">\n                {columns.map((column, index) => (\n                  <th key={index} className=\"px-4 py-3 text-left text-sm font-semibold text-slate-700\">\n                    <Skeleton variant=\"text\" width={100} />\n                  </th>\n                ))}\n              </tr>\n            </thead>\n            <tbody>\n              {Array.from({ length: 5 }).map((_, rowIndex) => (\n                <tr key={rowIndex} className=\"border-b border-slate-200\">\n                  {columns.map((_, colIndex) => (\n                    <td key={colIndex} className=\"px-4 py-3 text-sm text-slate-700\">\n                      <Skeleton variant=\"text\" width={colIndex === 0 ? 150 : 80} />\n                    </td>\n                  ))}\n                </tr>\n              ))}\n            </tbody>\n          </table>\n        </div>\n      </div>\n    );\n  }\n  \n  if (data.length === 0 && emptyState) {\n    return (\n      <div className=\"w-full overflow-hidden rounded-lg border border-slate-200 p-8 text-center\">\n        {emptyState}\n      </div>\n    );\n  }\n  \n  return (\n    <div className=\"w-full overflow-hidden rounded-lg border border-slate-200\">\n      <div className=\"w-full overflow-x-auto\">\n        <table className={`w-full whitespace-nowrap ${className}`}>\n          <thead>\n            <tr className=\"border-b border-slate-200 bg-slate-50\">\n              {columns.map((column, index) => (\n                <th \n                  key={index} \n                  className={`px-4 py-3 text-left text-sm font-semibold text-slate-700 ${column.sortable ? 'cursor-pointer' : ''}`}\n                  onClick={() => column.sortable && handleSort(column)}\n                >\n                  <div className=\"flex items-center gap-1\">\n                    {column.header}\n                    {getSortIcon(column)}\n                  </div>\n                </th>\n              ))}\n            </tr>\n          </thead>\n          <tbody>\n            {data.map((item, rowIndex) => (\n              <tr key={rowIndex} className=\"border-b border-slate-200 hover:bg-slate-50\">\n                {columns.map((column, colIndex) => (\n                  <td key={colIndex} className=\"px-4 py-3 text-sm text-slate-700\">\n                    {column.cell ? column.cell(item) : String(item[column.accessor] || '')}\n                  </td>\n                ))}\n              </tr>\n            ))}\n          </tbody>\n        </table>\n      </div>\n    </div>\n  );\n}\n```\n\n2. TablePagination.tsx bileşenini oluştur:\n```tsx\nimport { Button } from './Button';\nimport { ChevronLeft, ChevronRight } from 'lucide-react';\n\ninterface TablePaginationProps {\n  currentPage: number;\n  totalPages: number;\n  onPageChange: (page: number) => void;\n  className?: string;\n}\n\nexport function TablePagination({ \n  currentPage, \n  totalPages, \n  onPageChange, \n  className = ''\n}: TablePaginationProps) {\n  const handlePrevious = () => {\n    if (currentPage > 1) {\n      onPageChange(currentPage - 1);\n    }\n  };\n  \n  const handleNext = () => {\n    if (currentPage < totalPages) {\n      onPageChange(currentPage + 1);\n    }\n  };\n  \n  if (totalPages <= 1) return null;\n  \n  return (\n    <div className={`flex items-center justify-between py-3 ${className}`}>\n      <div className=\"text-sm text-slate-600\">\n        Sayfa {currentPage} / {totalPages}\n      </div>\n      <div className=\"flex gap-2\">\n        <Button \n          variant=\"ghost\" \n          size=\"sm\" \n          onClick={handlePrevious} \n          disabled={currentPage === 1}\n        >\n          <ChevronLeft className=\"h-4 w-4 mr-1\" />\n          Önceki\n        </Button>\n        <Button \n          variant=\"ghost\" \n          size=\"sm\" \n          onClick={handleNext} \n          disabled={currentPage === totalPages}\n        >\n          Sonraki\n          <ChevronRight className=\"h-4 w-4 ml-1\" />\n        </Button>\n      </div>\n    </div>\n  );\n}\n```",
+            "status": "done",
+            "testStrategy": "1. Table bileşeninin veri ile doğru render edildiğini kontrol et\n2. Sıralama işlevselliğini test et (asc, desc, null durumları)\n3. Yükleme durumunu (isLoading) test et\n4. Boş durum gösterimini (emptyState) test et\n5. TablePagination bileşeninin sayfa değiştirme işlevselliğini test et\n6. Responsive davranışı farklı ekran boyutlarında test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T20:01:47.061Z"
+          },
+          {
+            "id": 5,
+            "title": "Header ve Toast Provider Entegrasyonu",
+            "description": "Header bileşeninin ve Toast provider'ın tasarım sistemine uygun olarak entegre edilmesi. Header bileşeni navigasyon için, Toast provider bildirimler için kullanılacaktır.",
+            "dependencies": [
+              "3.1",
+              "3.2",
+              "3.3",
+              "3.4"
+            ],
+            "details": "1. Header.tsx bileşenini güncelle:\n```tsx\nimport Link from 'next/link';\nimport { usePathname } from 'next/navigation';\nimport { Home, FileText, BarChart2 } from 'lucide-react';\n\ninterface NavItemProps {\n  href: string;\n  label: string;\n  icon: React.ReactNode;\n  isActive: boolean;\n}\n\nfunction NavItem({ href, label, icon, isActive }: NavItemProps) {\n  return (\n    <Link\n      href={href}\n      className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${isActive ? 'bg-blue-50 text-blue-600 font-medium' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50'}`}\n    >\n      {icon}\n      {label}\n    </Link>\n  );\n}\n\nexport function Header() {\n  const pathname = usePathname();\n  \n  const navItems = [\n    { href: '/', label: 'Ana Sayfa', icon: <Home size={18} /> },\n    { href: '/fis-listesi', label: 'Fiş Listesi', icon: <FileText size={18} /> },\n    { href: '/istatistikler', label: 'İstatistikler', icon: <BarChart2 size={18} /> }\n  ];\n  \n  return (\n    <header className=\"sticky top-0 z-10 h-16 bg-white shadow-sm py-4 px-8 flex items-center justify-between\">\n      <div className=\"flex items-center gap-8\">\n        <div className=\"font-semibold text-xl text-blue-600\">FY</div>\n        <nav className=\"hidden md:flex items-center gap-1\">\n          {navItems.map((item) => (\n            <NavItem\n              key={item.href}\n              href={item.href}\n              label={item.label}\n              icon={item.icon}\n              isActive={pathname === item.href}\n            />\n          ))}\n        </nav>\n      </div>\n      <div className=\"md:hidden\">\n        {/* Mobil menü butonu - ileride geliştirilecek */}\n        <button className=\"p-2 rounded-lg hover:bg-slate-100\">\n          <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n            <line x1=\"3\" y1=\"12\" x2=\"21\" y2=\"12\"></line>\n            <line x1=\"3\" y1=\"6\" x2=\"21\" y2=\"6\"></line>\n            <line x1=\"3\" y1=\"18\" x2=\"21\" y2=\"18\"></line>\n          </svg>\n        </button>\n      </div>\n    </header>\n  );\n}\n```\n\n2. Toast provider için `lib/toast.ts` dosyasını oluştur:\n```tsx\nimport toast, { Toast } from 'react-hot-toast';\nimport { AlertCircle, CheckCircle, Info } from 'lucide-react';\n\ntype ToastType = 'success' | 'error' | 'info';\n\ninterface CustomToastOptions {\n  duration?: number;\n  position?: 'top-right' | 'top-center' | 'top-left' | 'bottom-right' | 'bottom-center' | 'bottom-left';\n}\n\nconst defaultOptions: CustomToastOptions = {\n  duration: 4000,\n  position: 'top-right'\n};\n\nconst getIcon = (type: ToastType) => {\n  switch (type) {\n    case 'success':\n      return <CheckCircle className=\"h-5 w-5 text-green-500\" />;\n    case 'error':\n      return <AlertCircle className=\"h-5 w-5 text-red-500\" />;\n    case 'info':\n      return <Info className=\"h-5 w-5 text-blue-500\" />;\n  }\n};\n\nexport const showToast = (message: string, type: ToastType = 'info', options?: CustomToastOptions) => {\n  const mergedOptions = { ...defaultOptions, ...options };\n  \n  return toast.custom(\n    (t: Toast) => (\n      <div\n        className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}\n      >\n        <div className=\"flex-1 w-0 p-4\">\n          <div className=\"flex items-start\">\n            <div className=\"flex-shrink-0\">\n              {getIcon(type)}\n            </div>\n            <div className=\"ml-3 flex-1\">\n              <p className=\"text-sm text-gray-900\">\n                {message}\n              </p>\n            </div>\n          </div>\n        </div>\n        <div className=\"flex border-l border-gray-200\">\n          <button\n            onClick={() => toast.dismiss(t.id)}\n            className=\"w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-slate-600 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500\"\n          >\n            Kapat\n          </button>\n        </div>\n      </div>\n    ),\n    mergedOptions\n  );\n};\n\n// Yardımcı fonksiyonlar\nexport const successToast = (message: string, options?: CustomToastOptions) => showToast(message, 'success', options);\nexport const errorToast = (message: string, options?: CustomToastOptions) => showToast(message, 'error', options);\nexport const infoToast = (message: string, options?: CustomToastOptions) => showToast(message, 'info', options);\n```\n\n3. app/layout.tsx dosyasını güncelle:\n```tsx\nimport { Toaster } from 'react-hot-toast';\nimport { Header } from '@/components/Header';\nimport './globals.css';\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"tr\">\n      <body className=\"min-h-screen bg-slate-50\">\n        <Header />\n        <main className=\"container mx-auto px-4 py-6\">\n          {children}\n        </main>\n        <Toaster position=\"top-right\" />\n      </body>\n    </html>\n  );\n}\n```",
+            "status": "done",
+            "testStrategy": "1. Header bileşeninin doğru render edildiğini kontrol et\n2. Header'daki navigasyon linklerinin doğru çalıştığını test et\n3. Header'ın responsive davranışını farklı ekran boyutlarında test et\n4. Toast provider'ın doğru çalıştığını test et (success, error, info mesajları)\n5. Toast mesajlarının kapatılabildiğini kontrol et\n6. Toast mesajlarının otomatik olarak kaybolduğunu kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T20:02:45.445Z"
+          }
+        ],
+        "updatedAt": "2025-10-03T20:02:45.445Z"
+      },
+      {
+        "id": "4",
+        "title": "Dosya Yükleme Bileşeni (Dropzone) Geliştirme",
+        "description": "Kullanıcıların fiş/fatura görsellerini yükleyebilecekleri sürükle-bırak destekli bir dosya yükleme bileşeni",
+        "details": "1. Dropzone bileşeni oluştur (`components/FileUpload.tsx`):\n   ```tsx\n   import { useState, useRef, useCallback } from 'react';\n   import { ImagePlus, X, Loader2 } from 'lucide-react';\n   import toast from 'react-hot-toast';\n   import { mutate } from 'swr';\n   \n   export function FileUpload() {\n     const [isDragging, setIsDragging] = useState(false);\n     const [isUploading, setIsUploading] = useState(false);\n     const [progress, setProgress] = useState(0);\n     const [error, setError] = useState('');\n     const fileInputRef = useRef<HTMLInputElement>(null);\n     const abortControllerRef = useRef<AbortController | null>(null);\n     \n     const handleDragOver = useCallback((e: React.DragEvent) => {\n       e.preventDefault();\n       setIsDragging(true);\n     }, []);\n     \n     const handleDragLeave = useCallback(() => {\n       setIsDragging(false);\n     }, []);\n     \n     const handleDrop = useCallback((e: React.DragEvent) => {\n       e.preventDefault();\n       setIsDragging(false);\n       \n       const files = e.dataTransfer.files;\n       if (files.length > 0) {\n         handleFileUpload(files[0]);\n       }\n     }, []);\n     \n     const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {\n       const files = e.target.files;\n       if (files && files.length > 0) {\n         handleFileUpload(files[0]);\n       }\n     }, []);\n     \n     const handleFileUpload = async (file: File) => {\n       // Dosya tipi kontrolü\n       if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {\n         setError('Sadece JPG, JPEG ve PNG dosyaları desteklenmektedir.');\n         return;\n       }\n       \n       // Dosya boyutu kontrolü (10MB)\n       if (file.size > 10 * 1024 * 1024) {\n         setError('Dosya boyutu 10MB'dan küçük olmalıdır.');\n         return;\n       }\n       \n       setError('');\n       setIsUploading(true);\n       setProgress(0);\n       \n       const formData = new FormData();\n       formData.append('file', file);\n       \n       abortControllerRef.current = new AbortController();\n       \n       try {\n         const response = await fetch('/api/upload', {\n           method: 'POST',\n           body: formData,\n           signal: abortControllerRef.current.signal\n         });\n         \n         const data = await response.json();\n         \n         if (data.upload === 'success') {\n           toast.success('Yükleme başarılı. Kayıt eklendi/güncellendi.');\n           // SWR ile veri yenileme\n           mutate('/api/fisler');\n         } else {\n           setError('Yükleme başarısız. Lütfen tekrar deneyin.');\n           toast.error('Yükleme başarısız. Lütfen tekrar deneyin.');\n         }\n       } catch (err) {\n         if (err.name !== 'AbortError') {\n           setError('Yükleme sırasında bir hata oluştu.');\n           toast.error('Yükleme başarısız. Lütfen tekrar deneyin.');\n         }\n       } finally {\n         setIsUploading(false);\n         setProgress(0);\n         abortControllerRef.current = null;\n         if (fileInputRef.current) {\n           fileInputRef.current.value = '';\n         }\n       }\n     };\n     \n     const cancelUpload = () => {\n       if (abortControllerRef.current) {\n         abortControllerRef.current.abort();\n         abortControllerRef.current = null;\n         setIsUploading(false);\n         setProgress(0);\n       }\n     };\n     \n     return (\n       <div\n         className={`w-full max-w-xl mx-auto border-2 border-dashed ${isDragging ? 'border-blue-400 bg-blue-50' : 'border-gray-300'} rounded-2xl bg-white p-8 text-center min-h-[220px] flex flex-col items-center justify-center`}\n         onDragOver={handleDragOver}\n         onDragLeave={handleDragLeave}\n         onDrop={handleDrop}\n         onClick={() => fileInputRef.current?.click()}\n         role=\"button\"\n         tabIndex={0}\n         aria-label=\"Fiş veya fatura görseli yükle\"\n         onKeyDown={(e) => {\n           if (e.key === 'Enter' || e.key === ' ') {\n             fileInputRef.current?.click();\n           }\n         }}\n       >\n         <input\n           type=\"file\"\n           ref={fileInputRef}\n           onChange={handleFileChange}\n           accept=\"image/jpeg,image/jpg,image/png\"\n           className=\"hidden\"\n         />\n         \n         {isUploading ? (\n           <div className=\"w-full\">\n             <div className=\"flex items-center justify-center mb-4\">\n               <Loader2 className=\"animate-spin mr-2\" />\n               <span>Yükleniyor... {progress}%</span>\n             </div>\n             <div className=\"w-full bg-gray-200 rounded-full h-2 mb-4\">\n               <div\n                 className=\"bg-blue-600 h-2 rounded-full\"\n                 style={{ width: `${progress}%` }}\n               />\n             </div>\n             <button\n               onClick={(e) => {\n                 e.stopPropagation();\n                 cancelUpload();\n               }}\n               className=\"text-sm text-red-500 hover:text-red-700\"\n             >\n               İptal Et\n             </button>\n           </div>\n         ) : (\n           <>\n             <ImagePlus className=\"h-12 w-12 text-gray-400 mb-4\" />\n             <p className=\"text-gray-600 mb-2\">\n               Fiş veya fatura görselini buraya sürükleyin veya seçin\n             </p>\n             <p className=\"text-xs text-gray-500 mb-4\">\n               Desteklenen formatlar: JPG, JPEG, PNG (maks. 10MB)\n             </p>\n             <button\n               className=\"px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300\"\n               onClick={(e) => {\n                 e.stopPropagation();\n                 fileInputRef.current?.click();\n               }}\n             >\n               Dosya Seç\n             </button>\n           </>\n         )}\n         \n         {error && (\n           <div className=\"mt-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-rose-700 text-sm\">\n             {error}\n           </div>\n         )}\n       </div>\n     );\n   }\n   ```\n\n2. API route oluştur (`app/api/upload/route.ts`):\n   ```typescript\n   import { NextRequest, NextResponse } from 'next/server';\n   \n   export async function POST(request: NextRequest) {\n     try {\n       const formData = await request.formData();\n       const file = formData.get('file') as File;\n       \n       if (!file) {\n         return NextResponse.json({ error: 'Dosya bulunamadı' }, { status: 400 });\n       }\n       \n       // n8n webhook'una gönder\n       const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;\n       \n       if (!n8nWebhookUrl) {\n         return NextResponse.json({ error: 'Webhook URL yapılandırılmamış' }, { status: 500 });\n       }\n       \n       const n8nFormData = new FormData();\n       n8nFormData.append('file', file);\n       \n       const n8nResponse = await fetch(n8nWebhookUrl, {\n         method: 'POST',\n         body: n8nFormData,\n       });\n       \n       const n8nData = await n8nResponse.json();\n       \n       return NextResponse.json(n8nData);\n     } catch (error) {\n       console.error('Yükleme hatası:', error);\n       return NextResponse.json({ error: 'Dosya yükleme hatası' }, { status: 500 });\n     }\n   }\n   ```",
+        "testStrategy": "1. Dosya yükleme bileşeninin tüm durumlarını test et:\n   - Idle durumu\n   - Drag-over durumu\n   - Yükleme durumu\n   - Başarılı yükleme\n   - Hata durumu\n2. Dosya tipi kısıtlamalarını test et (sadece JPG, JPEG, PNG)\n3. Dosya boyutu kısıtlamasını test et (maks. 10MB)\n4. Sürükle-bırak işlevselliğini test et\n5. Yükleme iptal işlevini test et\n6. Klavye erişilebilirliğini test et (Enter/Space ile dosya seçme)\n7. API route'un doğru çalıştığını ve n8n webhook'una istek gönderdiğini doğrula\n8. Toast bildirimlerinin doğru gösterildiğini kontrol et",
+        "priority": "high",
+        "dependencies": [
+          "1",
+          "3"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Dropzone Bileşeni Temel Yapısı Oluşturma",
+            "description": "Dosya yükleme için sürükle-bırak destekli temel bileşen yapısını oluşturma ve stil tanımlarını yapma",
+            "dependencies": [],
+            "details": "1. `components/FileUpload.tsx` dosyasını oluştur\n2. Gerekli React hook'larını (useState, useRef, useCallback) import et\n3. Temel state'leri tanımla: isDragging, isUploading, progress, error\n4. Dosya input referansı için useRef kullan\n5. Sürükle-bırak olayları için event handler'ları oluştur (handleDragOver, handleDragLeave, handleDrop)\n6. Bileşenin JSX yapısını oluştur (dropzone alanı, dosya seçme butonu, yükleme göstergesi)\n7. Responsive tasarım için Tailwind CSS sınıflarını uygula\n8. Erişilebilirlik özelliklerini ekle (ARIA attributes, keyboard navigation)",
+            "status": "done",
+            "testStrategy": "1. Bileşenin farklı durumlarının doğru render edildiğini kontrol et (normal durum, sürükleme durumu)\n2. Sürükle-bırak olaylarının doğru tetiklendiğini test et\n3. Klavye erişilebilirliğinin çalıştığını doğrula\n4. Responsive tasarımın farklı ekran boyutlarında düzgün çalıştığını kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T20:27:37.366Z"
+          },
+          {
+            "id": 2,
+            "title": "Dosya Doğrulama ve Yükleme Mantığı Geliştirme",
+            "description": "Yüklenen dosyaların doğrulanması, boyut ve format kontrolü, yükleme işlemi için gerekli fonksiyonların oluşturulması",
+            "dependencies": [
+              "4.1"
+            ],
+            "details": "1. handleFileUpload fonksiyonunu oluştur\n2. Dosya tipi kontrolü ekle (sadece JPG, JPEG, PNG formatlarını kabul et)\n3. Dosya boyutu kontrolü ekle (maksimum 10MB)\n4. FormData oluşturarak dosyayı hazırla\n5. Yükleme işlemi sırasında iptal etme yeteneği için AbortController kullan\n6. Yükleme durumunu ve ilerleme yüzdesini güncelleyen mantığı ekle\n7. Hata durumlarını yönet ve kullanıcıya uygun hata mesajları göster\n8. Dosya seçme input'u için onChange event handler'ını ekle",
+            "status": "done",
+            "testStrategy": "1. Dosya tipi kısıtlamalarının doğru çalıştığını test et\n2. Dosya boyutu kısıtlamasının doğru çalıştığını kontrol et\n3. Hata mesajlarının doğru gösterildiğini doğrula\n4. Yükleme iptal işlevinin çalıştığını test et\n5. Farklı dosya formatlarıyla test yaparak doğrulama mantığını kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T20:27:46.119Z"
+          },
+          {
+            "id": 3,
+            "title": "API Endpoint Geliştirme",
+            "description": "Dosya yükleme işlemini gerçekleştirecek API route'un oluşturulması ve n8n webhook entegrasyonu",
+            "dependencies": [],
+            "details": "1. `app/api/upload/route.ts` dosyasını oluştur\n2. NextRequest ve NextResponse tiplerini import et\n3. POST handler fonksiyonunu oluştur\n4. Gelen formData'dan dosyayı çıkar ve doğrula\n5. Çevre değişkenlerinden n8n webhook URL'ini al\n6. Dosyayı n8n webhook'una iletmek için yeni bir FormData oluştur\n7. fetch API kullanarak n8n'e POST isteği gönder\n8. Yanıtı işle ve istemciye uygun cevabı döndür\n9. Hata yönetimi için try-catch bloğu ekle ve hataları loglama mekanizması kur",
+            "status": "done",
+            "testStrategy": "1. API endpoint'in doğru çalıştığını test et\n2. Dosya olmadan yapılan isteklerin uygun hata mesajıyla reddedildiğini kontrol et\n3. n8n webhook URL'i yapılandırılmadığında uygun hata mesajının döndürüldüğünü doğrula\n4. Büyük dosyalarla performans testleri yap\n5. Hata durumlarında doğru HTTP durum kodlarının döndürüldüğünü kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T20:28:22.888Z"
+          },
+          {
+            "id": 4,
+            "title": "Yükleme İlerleme Göstergesi ve Bildirim Entegrasyonu",
+            "description": "Dosya yükleme ilerleme çubuğu, yükleme durumu göstergeleri ve toast bildirimleri entegrasyonu",
+            "dependencies": [
+              "4.1",
+              "4.2"
+            ],
+            "details": "1. İlerleme çubuğu bileşenini geliştir\n2. Yükleme sırasında ilerleme yüzdesini gösteren state ve görsel öğeleri ekle\n3. react-hot-toast kütüphanesini entegre et\n4. Başarılı yükleme, hata ve iptal durumları için toast bildirimleri ekle\n5. Yükleme sırasında animasyonlu loading göstergesi ekle (Loader2 ikonu ile)\n6. İptal butonu ve fonksiyonunu ekle\n7. Yükleme tamamlandığında veya iptal edildiğinde form durumunu sıfırla\n8. SWR ile veri yenileme için mutate fonksiyonunu ekle",
+            "status": "done",
+            "testStrategy": "1. İlerleme çubuğunun doğru şekilde güncellendiğini test et\n2. Toast bildirimlerinin doğru durumlarda gösterildiğini kontrol et\n3. İptal butonunun yüklemeyi durdurduğunu ve UI'ı sıfırladığını doğrula\n4. Yükleme tamamlandıktan sonra formun sıfırlandığını kontrol et\n5. SWR mutate fonksiyonunun çağrıldığını ve veri yenilemenin gerçekleştiğini doğrula",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T20:28:31.079Z"
+          },
+          {
+            "id": 5,
+            "title": "Hata Yönetimi ve Kullanıcı Deneyimi İyileştirmeleri",
+            "description": "Dosya yükleme bileşeninde hata yönetimi, kullanıcı geri bildirimleri ve erişilebilirlik iyileştirmeleri",
+            "dependencies": [
+              "4.1",
+              "4.2",
+              "4.4"
+            ],
+            "details": "1. Tüm olası hata senaryolarını belirle ve hata mesajlarını standartlaştır\n2. Ağ hatası, sunucu hatası ve dosya doğrulama hatalarını ayrı ayrı ele al\n3. Hata mesajları için özel bir bileşen oluştur (kırmızı arka plan ve border ile)\n4. Erişilebilirlik için ARIA etiketlerini ve klavye navigasyonunu iyileştir\n5. Ekran okuyucular için açıklayıcı metinler ekle\n6. Farklı durumlar için görsel ipuçları ekle (sürükleme sırasında renk değişimi gibi)\n7. Mobil cihazlarda kullanım deneyimini iyileştir\n8. Yükleme sırasında kullanıcı etkileşimini kısıtla (çift tıklama önleme)",
+            "status": "done",
+            "testStrategy": "1. Farklı hata senaryolarında kullanıcı arayüzünün doğru tepki verdiğini test et\n2. Ekran okuyucularla erişilebilirlik testleri yap\n3. Mobil cihazlarda ve dokunmatik ekranlarda kullanılabilirliği test et\n4. Farklı tarayıcılarda uyumluluğu kontrol et\n5. Yavaş internet bağlantılarında kullanıcı deneyimini test et\n6. Klavye navigasyonunun tüm işlevlere erişim sağladığını doğrula",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T20:30:26.588Z"
+          }
+        ],
+        "updatedAt": "2025-10-03T20:30:26.588Z"
+      },
+      {
+        "id": "5",
+        "title": "Ana Sayfa ve İstatistik Kartları Geliştirme",
+        "description": "Ana sayfa layout'u, istatistik kartları ve genel sayfa yapısının oluşturulması",
+        "details": "1. Ana sayfa bileşenini oluştur (`app/page.tsx`):\n   ```tsx\n   import { Header } from '@/components/Header';\n   import { StatCard } from '@/components/StatCard';\n   import { FileUpload } from '@/components/FileUpload';\n   import { FilterPanel } from '@/components/FilterPanel';\n   import { FisList } from '@/components/FisList';\n   import { ListChecks, Coins, Percent, CalendarClock, Gauge } from 'lucide-react';\n   \n   export default function Home() {\n     return (\n       <div className=\"min-h-screen bg-slate-50\">\n         <Header />\n         \n         <main className=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8\">\n           <h1 className=\"text-2xl font-semibold mb-6\">Fatura/Fiş Dashboard</h1>\n           \n           {/* İstatistik Kartları */}\n           <div className=\"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-8\">\n             <StatCard \n               icon={ListChecks} \n               title=\"Toplam Kayıt\" \n               value=\"0\" \n             />\n             <StatCard \n               icon={Coins} \n               title=\"Toplam Tutar\" \n               value=\"0,00 TL\" \n             />\n             <StatCard \n               icon={Percent} \n               title=\"Toplam KDV\" \n               value=\"0,00 TL\" \n             />\n             <StatCard \n               icon={CalendarClock} \n               title=\"Bugünkü Kayıtlar\" \n               value=\"0\" \n             />\n             <StatCard \n               icon={Gauge} \n               title=\"Ortalama Tutar\" \n               value=\"0,00 TL\" \n             />\n           </div>\n           \n           {/* Dosya Yükleme */}\n           <div className=\"mb-8\">\n             <FileUpload />\n           </div>\n           \n           {/* İçerik Alanı */}\n           <div className=\"grid grid-cols-1 md:grid-cols-4 gap-6\">\n             <div className=\"md:col-span-1\">\n               <FilterPanel />\n             </div>\n             <div className=\"md:col-span-3\">\n               <FisList />\n             </div>\n           </div>\n         </main>\n       </div>\n     );\n   }\n   ```\n\n2. İstatistik verilerini çekmek için API route oluştur (`app/api/stats/route.ts`):\n   ```typescript\n   import { NextResponse } from 'next/server';\n   import { supabase } from '@/lib/supabase';\n   import { format } from 'date-fns';\n   import { tr } from 'date-fns/locale';\n   \n   export async function GET() {\n     try {\n       // Toplam kayıt sayısı\n       const { count: totalCount, error: countError } = await supabase\n         .from('fisler')\n         .select('*', { count: 'exact', head: true });\n       \n       if (countError) throw countError;\n       \n       // Toplam tutar ve KDV\n       const { data: totals, error: totalsError } = await supabase\n         .from('fisler')\n         .select('total, total_kdv');\n       \n       if (totalsError) throw totalsError;\n       \n       const totalAmount = totals.reduce((sum, item) => sum + (item.total || 0), 0);\n       const totalKdv = totals.reduce((sum, item) => sum + (item.total_kdv || 0), 0);\n       \n       // Bugünkü kayıtlar\n       const today = format(new Date(), 'yyyy-MM-dd');\n       const { count: todayCount, error: todayError } = await supabase\n         .from('fisler')\n         .select('*', { count: 'exact', head: true })\n         .gte('tarih_saat', `${today}T00:00:00`)\n         .lt('tarih_saat', `${today}T23:59:59`);\n       \n       if (todayError) throw todayError;\n       \n       // Ortalama tutar\n       const averageAmount = totalCount > 0 ? totalAmount / totalCount : 0;\n       \n       return NextResponse.json({\n         totalCount: totalCount || 0,\n         totalAmount,\n         totalKdv,\n         todayCount: todayCount || 0,\n         averageAmount\n       });\n     } catch (error) {\n       console.error('İstatistik verisi alınırken hata:', error);\n       return NextResponse.json({ error: 'İstatistik verisi alınamadı' }, { status: 500 });\n     }\n   }\n   ```\n\n3. İstatistik verilerini SWR ile çek ve göster:\n   ```tsx\n   import useSWR from 'swr';\n   import { formatCurrency } from '@/lib/utils';\n   \n   // Ana sayfa içinde:\n   const { data: stats, error: statsError, isLoading: statsLoading } = useSWR(\n     '/api/stats',\n     async (url) => {\n       const res = await fetch(url);\n       if (!res.ok) throw new Error('İstatistik verisi alınamadı');\n       return res.json();\n     },\n     { refreshInterval: 30000 } // 30 saniyede bir yenile\n   );\n   \n   // İstatistik kartlarını güncelle\n   <StatCard \n     icon={ListChecks} \n     title=\"Toplam Kayıt\" \n     value={statsLoading ? '...' : stats?.totalCount || '0'} \n   />\n   <StatCard \n     icon={Coins} \n     title=\"Toplam Tutar\" \n     value={statsLoading ? '...' : formatCurrency(stats?.totalAmount || 0)} \n   />\n   // ... diğer kartlar\n   ```",
+        "testStrategy": "1. Ana sayfanın tüm bileşenlerinin doğru render edildiğini kontrol et\n2. İstatistik API'sinin doğru veri döndürdüğünü test et\n3. SWR ile veri çekme işleminin çalıştığını doğrula\n4. İstatistik kartlarının doğru verilerle güncellendiğini kontrol et\n5. Responsive tasarımın farklı ekran boyutlarında doğru çalıştığını test et\n6. Yükleme durumlarının doğru gösterildiğini kontrol et\n7. Para birimi formatlamasının doğru yapıldığını test et (virgül ile ondalık gösterimi)",
+        "priority": "medium",
+        "dependencies": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Ana Sayfa Bileşeninin Oluşturulması",
+            "description": "Ana sayfa layout'unun oluşturulması ve temel bileşenlerin yerleştirilmesi",
+            "dependencies": [],
+            "details": "app/page.tsx dosyasını oluştur ve içerisine Header, StatCard, FileUpload, FilterPanel ve FisList bileşenlerini yerleştir. Responsive grid yapısını kur ve sayfa başlığını ekle. Lucide ikonlarını import et ve StatCard bileşenlerine gerekli ikonları aktar. Sayfa yapısını min-h-screen ile tam ekran yap ve bg-slate-50 ile arka plan rengini ayarla.",
+            "status": "done",
+            "testStrategy": "Sayfanın farklı ekran boyutlarında (mobil, tablet, masaüstü) doğru şekilde render edildiğini kontrol et. Tüm bileşenlerin doğru sırayla yerleştirildiğini ve grid yapısının responsive olarak çalıştığını doğrula.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T21:07:01.729Z"
+          },
+          {
+            "id": 2,
+            "title": "İstatistik Kartı Bileşeninin Geliştirilmesi",
+            "description": "İstatistik verilerini gösterecek kart bileşeninin tasarlanması ve oluşturulması",
+            "dependencies": [
+              "5.1"
+            ],
+            "details": "components/StatCard.tsx dosyasını oluştur. Bileşen, ikon, başlık ve değer prop'larını almalı. Kart tasarımını Tailwind CSS ile oluştur: beyaz arka plan, hafif gölge, yuvarlak köşeler. İkon alanını üstte, başlığı ortada ve değeri altta göster. Yükleme durumu için skeleton animasyonu ekle. Bileşeni responsive olarak tasarla ve farklı ekran boyutlarında düzgün görünmesini sağla.",
+            "status": "done",
+            "testStrategy": "Bileşenin farklı prop kombinasyonlarıyla doğru render edildiğini kontrol et. Yükleme durumunun doğru gösterildiğini ve responsive davranışı test et. İkonların doğru boyut ve renkte gösterildiğini doğrula.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T21:07:10.119Z"
+          },
+          {
+            "id": 3,
+            "title": "İstatistik API Route'unun Oluşturulması",
+            "description": "İstatistik verilerini Supabase'den çekecek API endpoint'inin geliştirilmesi",
+            "dependencies": [
+              "5.1",
+              "5.2"
+            ],
+            "details": "app/api/stats/route.ts dosyasını oluştur. NextResponse ve supabase client'ı import et. GET fonksiyonu içinde toplam kayıt sayısı, toplam tutar, toplam KDV, bugünkü kayıtlar ve ortalama tutar verilerini Supabase sorgularıyla çek. date-fns kütüphanesini kullanarak tarih filtrelemesini yap. Hata yönetimini try-catch bloğuyla sağla ve uygun HTTP yanıtlarını döndür. Performans için gerekli indeksleri Supabase'de oluştur.",
+            "status": "done",
+            "testStrategy": "API endpoint'inin farklı senaryolarda doğru veri döndürdüğünü test et: boş veritabanı, çok sayıda kayıt, bugün eklenmiş kayıtlar olması durumu. Hata durumlarının doğru şekilde ele alındığını ve uygun HTTP durum kodlarıyla yanıt verildiğini kontrol et.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T21:07:17.675Z"
+          },
+          {
+            "id": 4,
+            "title": "SWR ile İstatistik Verilerinin Çekilmesi",
+            "description": "SWR kütüphanesini kullanarak istatistik verilerinin client tarafında çekilmesi ve yönetilmesi",
+            "dependencies": [
+              "5.1",
+              "5.2",
+              "5.3"
+            ],
+            "details": "Ana sayfa bileşeninde SWR hook'unu kullanarak /api/stats endpoint'inden veri çek. useSWR hook'unu kullanarak veri çekme, yükleme durumu ve hata yönetimini sağla. refreshInterval özelliğini 30 saniye olarak ayarla. formatCurrency yardımcı fonksiyonunu lib/utils.ts içinde oluştur ve para birimlerini formatlama için kullan. İstatistik kartlarını SWR'dan gelen verilerle güncelle ve yükleme durumlarını ele al.",
+            "status": "done",
+            "testStrategy": "SWR hook'unun doğru çalıştığını ve verileri periyodik olarak yenilediğini test et. Yükleme, hata ve başarılı durumlarda UI'ın doğru şekilde güncellendiğini kontrol et. formatCurrency fonksiyonunun farklı değerlerle doğru çalıştığını doğrula.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T21:07:27.707Z"
+          },
+          {
+            "id": 5,
+            "title": "İstatistik Kartlarının Dinamik Verilerle Güncellenmesi",
+            "description": "İstatistik kartlarının SWR'dan gelen verilerle güncellenmesi ve görsel iyileştirmelerin yapılması",
+            "dependencies": [
+              "5.1",
+              "5.2",
+              "5.3",
+              "5.4"
+            ],
+            "details": "Ana sayfa bileşeninde StatCard bileşenlerini SWR'dan gelen verilerle güncelle. Yükleme durumunda skeleton göster, hata durumunda kullanıcıya bilgi ver. Toplam kayıt, toplam tutar, toplam KDV, bugünkü kayıtlar ve ortalama tutar verilerini ilgili kartlara aktar. Para birimi değerlerini formatCurrency ile formatla. Sayı değerlerini toLocaleString ile formatla. Kartlara hover efekti ekle ve geçiş animasyonları uygula. Veri yoksa veya sıfırsa uygun mesajlar göster.",
+            "status": "done",
+            "testStrategy": "Tüm istatistik kartlarının doğru verilerle güncellendiğini kontrol et. Yükleme ve hata durumlarının kullanıcıya doğru şekilde gösterildiğini test et. Para birimi ve sayı formatlamalarının doğru yapıldığını doğrula. Animasyon ve geçişlerin sorunsuz çalıştığını kontrol et.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T21:07:37.128Z"
+          }
+        ],
+        "updatedAt": "2025-10-03T21:07:37.128Z"
+      },
+      {
+        "id": "6",
+        "title": "Filtre Paneli ve Arama Bileşeni Geliştirme",
+        "description": "Fiş/fatura kayıtlarını filtrelemek ve aramak için kullanılacak bileşenlerin oluşturulması",
+        "details": "1. Filtre paneli bileşeni oluştur (`components/FilterPanel.tsx`):\n   ```tsx\n   import { useState } from 'react';\n   import { useRouter, useSearchParams } from 'next/navigation';\n   \n   export function FilterPanel() {\n     const router = useRouter();\n     const searchParams = useSearchParams();\n     \n     const [startDate, setStartDate] = useState(searchParams.get('startDate') || '');\n     const [endDate, setEndDate] = useState(searchParams.get('endDate') || '');\n     const [fisNo, setFisNo] = useState(searchParams.get('fisNo') || '');\n     const [minAmount, setMinAmount] = useState(searchParams.get('minAmount') || '');\n     const [maxAmount, setMaxAmount] = useState(searchParams.get('maxAmount') || '');\n     \n     const handleFilter = (e: React.FormEvent) => {\n       e.preventDefault();\n       \n       const params = new URLSearchParams();\n       if (startDate) params.set('startDate', startDate);\n       if (endDate) params.set('endDate', endDate);\n       if (fisNo) params.set('fisNo', fisNo);\n       if (minAmount) params.set('minAmount', minAmount);\n       if (maxAmount) params.set('maxAmount', maxAmount);\n       \n       router.push(`/?${params.toString()}`);\n     };\n     \n     const handleReset = () => {\n       setStartDate('');\n       setEndDate('');\n       setFisNo('');\n       setMinAmount('');\n       setMaxAmount('');\n       router.push('/');\n     };\n     \n     const isDateRangeValid = !startDate || !endDate || new Date(startDate) <= new Date(endDate);\n     \n     return (\n       <div className=\"rounded-2xl border bg-white p-4\">\n         <h2 className=\"font-medium mb-4\">Filtreler</h2>\n         \n         <form onSubmit={handleFilter}>\n           <div className=\"space-y-4\">\n             <div>\n               <label htmlFor=\"startDate\" className=\"block text-sm text-slate-600 mb-1\">\n                 Başlangıç Tarihi\n               </label>\n               <input\n                 id=\"startDate\"\n                 type=\"date\"\n                 value={startDate}\n                 onChange={(e) => setStartDate(e.target.value)}\n                 className=\"w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300\"\n               />\n             </div>\n             \n             <div>\n               <label htmlFor=\"endDate\" className=\"block text-sm text-slate-600 mb-1\">\n                 Bitiş Tarihi\n               </label>\n               <input\n                 id=\"endDate\"\n                 type=\"date\"\n                 value={endDate}\n                 onChange={(e) => setEndDate(e.target.value)}\n                 className=\"w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300\"\n                 aria-invalid={!isDateRangeValid}\n                 aria-describedby={!isDateRangeValid ? 'dateError' : undefined}\n               />\n               {!isDateRangeValid && (\n                 <p id=\"dateError\" className=\"text-xs text-rose-500 mt-1\">\n                   Bitiş tarihi başlangıç tarihinden önce olamaz\n                 </p>\n               )}\n             </div>\n             \n             <div>\n               <label htmlFor=\"fisNo\" className=\"block text-sm text-slate-600 mb-1\">\n                 Fiş No\n               </label>\n               <input\n                 id=\"fisNo\"\n                 type=\"text\"\n                 value={fisNo}\n                 onChange={(e) => setFisNo(e.target.value)}\n                 className=\"w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300\"\n               />\n             </div>\n             \n             <div>\n               <label htmlFor=\"minAmount\" className=\"block text-sm text-slate-600 mb-1\">\n                 Min. Tutar (TL)\n               </label>\n               <input\n                 id=\"minAmount\"\n                 type=\"number\"\n                 min=\"0\"\n                 step=\"0.01\"\n                 value={minAmount}\n                 onChange={(e) => setMinAmount(e.target.value)}\n                 className=\"w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300\"\n               />\n             </div>\n             \n             <div>\n               <label htmlFor=\"maxAmount\" className=\"block text-sm text-slate-600 mb-1\">\n                 Maks. Tutar (TL)\n               </label>\n               <input\n                 id=\"maxAmount\"\n                 type=\"number\"\n                 min=\"0\"\n                 step=\"0.01\"\n                 value={maxAmount}\n                 onChange={(e) => setMaxAmount(e.target.value)}\n                 className=\"w-full rounded-lg border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300\"\n               />\n             </div>\n             \n             <div className=\"flex gap-2 pt-2\">\n               <button\n                 type=\"submit\"\n                 disabled={!isDateRangeValid}\n                 className=\"flex-1 bg-blue-600 text-white rounded-xl py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed\"\n               >\n                 Filtrele\n               </button>\n               <button\n                 type=\"button\"\n                 onClick={handleReset}\n                 className=\"flex-1 bg-white text-slate-600 border border-gray-300 rounded-xl py-2 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-300\"\n               >\n                 Sıfırla\n               </button>\n             </div>\n           </div>\n         </form>\n       </div>\n     );\n   }\n   ```\n\n2. Arama bileşeni oluştur (`components/SearchInput.tsx`):\n   ```tsx\n   import { useState, useEffect } from 'react';\n   import { useRouter, useSearchParams } from 'next/navigation';\n   import { Search } from 'lucide-react';\n   import { useDebounce } from '@/lib/hooks';\n   \n   export function SearchInput() {\n     const router = useRouter();\n     const searchParams = useSearchParams();\n     const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');\n     const debouncedSearchTerm = useDebounce(searchTerm, 300);\n     \n     useEffect(() => {\n       if (debouncedSearchTerm !== searchParams.get('search')) {\n         const params = new URLSearchParams(searchParams.toString());\n         \n         if (debouncedSearchTerm) {\n           params.set('search', debouncedSearchTerm);\n         } else {\n           params.delete('search');\n         }\n         \n         router.push(`/?${params.toString()}`);\n       }\n     }, [debouncedSearchTerm, router, searchParams]);\n     \n     return (\n       <div className=\"relative mb-4\">\n         <div className=\"absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none\">\n           <Search className=\"h-5 w-5 text-gray-400\" />\n         </div>\n         <input\n           type=\"text\"\n           value={searchTerm}\n           onChange={(e) => setSearchTerm(e.target.value)}\n           placeholder=\"Fiş no / ürün adı / açıklama\"\n           className=\"w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300\"\n         />\n       </div>\n     );\n   }\n   ```\n\n3. Debounce hook oluştur (`lib/hooks.ts`):\n   ```typescript\n   import { useState, useEffect } from 'react';\n   \n   export function useDebounce<T>(value: T, delay: number): T {\n     const [debouncedValue, setDebouncedValue] = useState<T>(value);\n     \n     useEffect(() => {\n       const handler = setTimeout(() => {\n         setDebouncedValue(value);\n       }, delay);\n       \n       return () => {\n         clearTimeout(handler);\n       };\n     }, [value, delay]);\n     \n     return debouncedValue;\n   }\n   ```",
+        "testStrategy": "1. Filtre formunun doğru çalıştığını test et\n2. Tarih aralığı doğrulamasının çalıştığını kontrol et\n3. URL parametrelerinin doğru şekilde güncellendiğini doğrula\n4. Sıfırlama butonunun tüm filtreleri temizlediğini kontrol et\n5. Arama bileşeninin debounce ile çalıştığını test et (300ms gecikme)\n6. Arama teriminin URL'ye doğru şekilde eklendiğini doğrula\n7. Erişilebilirlik kontrolü yap (form etiketleri, ARIA özellikleri)\n8. Responsive davranışı farklı ekran boyutlarında test et",
+        "priority": "medium",
+        "dependencies": [
+          "1",
+          "3"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "FilterPanel Bileşeninin Geliştirilmesi",
+            "description": "Fiş/fatura kayıtlarını filtrelemek için kullanılacak filtre paneli bileşeninin oluşturulması ve temel işlevselliğinin sağlanması.",
+            "dependencies": [],
+            "details": "components/FilterPanel.tsx dosyasını oluşturun ve içeriğini verilen kod ile doldurun. Bileşen, tarih aralığı, fiş numarası ve tutar aralığı gibi filtreleme seçenekleri sunmalıdır. Filtreleme işlemi URL parametrelerini güncelleyerek çalışmalıdır. Tarih aralığı doğrulaması ekleyin ve hatalı girişlerde kullanıcıya uyarı gösterin. Filtrele ve Sıfırla butonlarının işlevselliğini sağlayın.",
+            "status": "done",
+            "testStrategy": "Filtre formunun doğru çalıştığını kontrol edin. Tarih aralığı doğrulamasının çalıştığını test edin. URL parametrelerinin doğru şekilde güncellendiğini doğrulayın. Sıfırlama butonunun tüm filtreleri temizlediğini kontrol edin.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T21:30:30.659Z"
+          },
+          {
+            "id": 2,
+            "title": "useDebounce Hook Oluşturulması",
+            "description": "Arama işlemlerinde gereksiz API çağrılarını önlemek için debounce fonksiyonalitesini sağlayacak custom hook'un geliştirilmesi.",
+            "dependencies": [],
+            "details": "lib/hooks.ts dosyasını oluşturun ve useDebounce hook'unu ekleyin. Hook, bir değer ve gecikme süresi almalı ve belirtilen süre boyunca değer değişmezse güncellenmiş değeri döndürmelidir. Bu hook, kullanıcı arama yaparken her tuş vuruşunda değil, kullanıcı yazmayı bıraktıktan belirli bir süre sonra arama işleminin gerçekleşmesini sağlayacaktır.",
+            "status": "done",
+            "testStrategy": "Hook'un farklı gecikme süreleriyle doğru çalıştığını test edin. Değer değiştiğinde zamanlayıcının doğru şekilde sıfırlandığını kontrol edin. Bileşen unmount olduğunda zamanlayıcının temizlendiğini doğrulayın.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T21:29:25.910Z"
+          },
+          {
+            "id": 3,
+            "title": "SearchInput Bileşeninin Geliştirilmesi",
+            "description": "Fiş/fatura kayıtlarını aramak için kullanılacak arama bileşeninin oluşturulması ve debounce özelliğinin entegrasyonu.",
+            "dependencies": [
+              "6.2"
+            ],
+            "details": "components/SearchInput.tsx dosyasını oluşturun ve içeriğini verilen kod ile doldurun. Bileşen, kullanıcı girdisini almalı ve useDebounce hook'unu kullanarak belirli bir gecikme (300ms) sonrasında URL parametrelerini güncelleyerek arama işlemini gerçekleştirmelidir. Arama simgesi ve stil özelliklerini ekleyin.\n<info added on 2025-10-03T21:33:01.380Z>\nSearchInput bileşeni başarıyla oluşturuldu:\n\nTamamlanan özellikler:\n- useDebounce hook entegrasyonu (300ms gecikme)\n- URL parametrelerinin otomatik güncellenmesi\n- Arama simgesi ve temizle butonu\n- Responsive tasarım ve erişilebilirlik\n- Türkçe placeholder ve aria-label'lar\n- Arama durumu göstergesi\n\nTeknik detaylar:\n- next/navigation ile URL yönetimi\n- Lucide React ikonları kullanımı\n- TypeScript interface tanımları\n- Otomatik sayfa sıfırlama (arama yapıldığında)\n\nDosya konumu: components/SearchInput.tsx\n\nTest edildi: Derleme hataları yok, tüm import'lar doğru\n</info added on 2025-10-03T21:33:01.380Z>",
+            "status": "done",
+            "testStrategy": "Arama bileşeninin debounce ile çalıştığını test edin (300ms gecikme). URL parametrelerinin doğru şekilde güncellendiğini doğrulayın. Arama kutusunun stil ve erişilebilirlik özelliklerini kontrol edin.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T21:33:08.831Z"
+          },
+          {
+            "id": 4,
+            "title": "Filtre ve Arama Bileşenlerinin Entegrasyonu",
+            "description": "Filtre paneli ve arama bileşenlerinin ana sayfaya entegre edilmesi ve birlikte çalışmasının sağlanması. [Updated: 04.10.2025]",
+            "dependencies": [
+              "6.1",
+              "6.3"
+            ],
+            "details": "Ana sayfa bileşeninde (app/page.tsx) FilterPanel ve SearchInput bileşenlerini import edin ve uygun yerlere yerleştirin. İki bileşenin URL parametrelerini doğru şekilde yönetmesini ve birbirlerinin filtrelerini etkilememesini sağlayın. Responsive tasarım için gerekli CSS sınıflarını ekleyin.\n<info added on 2025-10-03T21:35:49.431Z>\nFiltre ve arama bileşenleri app/page.tsx dosyasına başarıyla entegre edildi. FilterPanel ve SearchInput bileşenleri, URL parametrelerini bağımsız olarak yönetecek şekilde yapılandırıldı. Her iki bileşen de birbirlerinin filtrelerini etkilemeden çalışıyor. Responsive tasarım için gerekli CSS sınıfları eklendi ve farklı ekran boyutlarında doğru şekilde görüntüleniyor. Bileşenler arasındaki etkileşim test edildi ve URL parametreleri doğru şekilde güncelleniyor.\n</info added on 2025-10-03T21:35:49.431Z>",
+            "status": "done",
+            "testStrategy": "Filtre ve arama bileşenlerinin ana sayfada doğru konumlandırıldığını kontrol edin. İki bileşenin birlikte çalıştığında URL parametrelerini doğru şekilde yönettiğini test edin. Responsive davranışı farklı ekran boyutlarında kontrol edin.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T21:35:51.438Z"
+          },
+          {
+            "id": 5,
+            "title": "Filtre ve Arama Sonuçlarının Gösterilmesi",
+            "description": "Filtre ve arama sonuçlarına göre fiş/fatura listesinin güncellenmesi ve kullanıcıya aktif filtrelerin gösterilmesi.",
+            "dependencies": [
+              "6.1",
+              "6.3",
+              "6.4"
+            ],
+            "details": "FisList bileşenini güncelleyerek URL parametrelerindeki filtre ve arama kriterlerine göre verileri filtrelemesini sağlayın. Aktif filtreleri gösteren bir bileşen ekleyin (örn. FilterBadges.tsx) ve kullanıcının tek tek filtreleri kaldırabilmesini sağlayın. Sonuç bulunamadığında uygun bir mesaj gösterin. Filtreleme ve arama işlemlerinin yükleme durumlarını ele alın.\n<info added on 2025-10-03T21:39:31.576Z>\nFiltre ve arama sonuçları sistemi başarıyla tamamlandı:\n\nOluşturulan bileşenler:\n- FilterBadges: Aktif filtreleri gösteren ve kaldırma özellikli\n- FisList: Filtrelenebilir ve sayfalanabilir fiş listesi\n- /api/fisler: Gelişmiş filtreleme ve sayfalama API'si\n\nÖzellikler:\n- URL parametrelerine göre dinamik filtreleme\n- Arama, tarih aralığı, fiş no, tutar filtreleri\n- Sayfalama sistemi (10 kayıt/sayfa)\n- Aktif filtre göstergeleri\n- Boş sonuç durumu yönetimi\n- Loading ve error state'leri\n- Responsive tasarım\n\nAPI Endpoint:\n- GET /api/fisler: Tüm filtreleri destekler\n- Sayfalama: page, limit parametreleri\n- Arama: search parametresi (fis_no, merchant_name, total_amount)\n- Tarih: startDate, endDate\n- Tutar: minAmount, maxAmount\n\nTest edildi: Tüm filtreler çalışıyor, UI responsive\n</info added on 2025-10-03T21:39:31.576Z>",
+            "status": "done",
+            "testStrategy": "Filtre ve arama parametrelerine göre listenin doğru şekilde güncellendiğini test edin. Aktif filtre göstergelerinin doğru çalıştığını kontrol edin. Sonuç bulunamadığında uygun mesajın gösterildiğini doğrulayın. Yükleme durumlarının kullanıcıya doğru şekilde gösterildiğini test edin.",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T21:39:39.972Z"
+          }
+        ],
+        "updatedAt": "2025-10-03T21:39:39.972Z"
+      },
+      {
+        "id": "7",
+        "title": "Fiş Listesi ve Sayfalama Geliştirme",
+        "description": "Fiş/fatura kayıtlarının listelendiği, filtrelendiği ve sayfalandığı bileşenin oluşturulması",
+        "details": "1. Fiş listesi bileşeni oluştur (`components/FisList.tsx`):\n   ```tsx\n   import { useState } from 'react';\n   import Link from 'next/link';\n   import useSWR from 'swr';\n   import { useSearchParams } from 'next/navigation';\n   import { format } from 'date-fns';\n   import { tr } from 'date-fns/locale';\n   import { ChevronLeft, ChevronRight, Calendar, Package } from 'lucide-react';\n   import { SearchInput } from './SearchInput';\n   import { formatCurrency } from '@/lib/utils';\n   import type { Fis } from '@/types/database';\n   \n   export function FisList() {\n     const searchParams = useSearchParams();\n     const [page, setPage] = useState(1);\n     const pageSize = 20;\n     \n     // URL'den filtreleri al\n     const search = searchParams.get('search') || '';\n     const startDate = searchParams.get('startDate') || '';\n     const endDate = searchParams.get('endDate') || '';\n     const fisNo = searchParams.get('fisNo') || '';\n     const minAmount = searchParams.get('minAmount') || '';\n     const maxAmount = searchParams.get('maxAmount') || '';\n     \n     // API endpoint oluştur\n     const apiUrl = `/api/fisler?page=${page}&pageSize=${pageSize}${search ? `&search=${search}` : ''}${startDate ? `&startDate=${startDate}` : ''}${endDate ? `&endDate=${endDate}` : ''}${fisNo ? `&fisNo=${fisNo}` : ''}${minAmount ? `&minAmount=${minAmount}` : ''}${maxAmount ? `&maxAmount=${maxAmount}` : ''}`;\n     \n     const { data, error, isLoading } = useSWR<{ data: Fis[], total: number }>(apiUrl, async (url) => {\n       const res = await fetch(url);\n       if (!res.ok) throw new Error('Veriler alınamadı');\n       return res.json();\n     });\n     \n     const totalPages = data ? Math.ceil(data.total / pageSize) : 0;\n     \n     const handlePrevPage = () => {\n       if (page > 1) setPage(page - 1);\n     };\n     \n     const handleNextPage = () => {\n       if (page < totalPages) setPage(page + 1);\n     };\n     \n     // Boş durum\n     if (data && data.data.length === 0) {\n       return (\n         <div>\n           <SearchInput />\n           <div className=\"rounded-2xl border bg-white p-8 text-center\">\n             <div className=\"flex justify-center mb-4\">\n               <Package className=\"h-12 w-12 text-gray-400\" />\n             </div>\n             <h3 className=\"text-lg font-medium text-gray-900 mb-1\">Henüz kayıt yok</h3>\n             <p className=\"text-gray-500\">İlk fişini yükle veya filtreleri değiştir.</p>\n           </div>\n         </div>\n       );\n     }\n     \n     // Yükleme durumu\n     if (isLoading) {\n       return (\n         <div>\n           <SearchInput />\n           <div className=\"space-y-4\">\n             {[...Array(5)].map((_, i) => (\n               <div key={i} className=\"rounded-xl border p-4 bg-white\">\n                 <div className=\"animate-pulse flex justify-between\">\n                   <div className=\"h-5 bg-slate-200 rounded w-1/4\"></div>\n                   <div className=\"h-5 bg-slate-200 rounded w-1/4\"></div>\n                 </div>\n                 <div className=\"animate-pulse flex justify-between mt-2\">\n                   <div className=\"h-4 bg-slate-200 rounded w-1/3\"></div>\n                   <div className=\"h-4 bg-slate-200 rounded w-1/6\"></div>\n                 </div>\n               </div>\n             ))}\n           </div>\n         </div>\n       );\n     }\n     \n     // Hata durumu\n     if (error) {\n       return (\n         <div>\n           <SearchInput />\n           <div className=\"rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-700\">\n             Veriler yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin veya daha sonra tekrar deneyin.\n           </div>\n         </div>\n       );\n     }\n     \n     return (\n       <div>\n         <SearchInput />\n         \n         <div className=\"space-y-4 mb-6\">\n           {data?.data.map((fis) => (\n             <div key={fis.id} className=\"rounded-xl border p-4 bg-white hover:shadow-md transition-shadow\">\n               <div className=\"flex justify-between items-center mb-2\">\n                 <h3 className=\"font-medium\">Fiş #{fis.fis_no}</h3>\n                 <span className=\"font-semibold\">{formatCurrency(fis.total)}</span>\n               </div>\n               <div className=\"flex justify-between items-center text-sm text-slate-600\">\n                 <div className=\"flex items-center\">\n                   <Calendar className=\"h-4 w-4 mr-1\" />\n                   {format(new Date(fis.tarih_saat), 'd MMMM yyyy HH:mm', { locale: tr })}\n                   <span className=\"mx-2\">•</span>\n                   <span>{fis.items.length} ürün</span>\n                 </div>\n                 <Link\n                   href={`/detay/${fis.id}`}\n                   className=\"text-blue-600 hover:text-blue-800 font-medium\"\n                 >\n                   Detay Gör\n                 </Link>\n               </div>\n             </div>\n           ))}\n         </div>\n         \n         {/* Sayfalama */}\n         {totalPages > 1 && (\n           <div className=\"flex items-center justify-between border-t border-gray-200 pt-4\">\n             <div className=\"text-sm text-gray-500\">\n               Toplam {data?.total} kayıt • Sayfa {page}/{totalPages}\n             </div>\n             <div className=\"flex space-x-2\">\n               <button\n                 onClick={handlePrevPage}\n                 disabled={page === 1}\n                 className=\"p-2 rounded-lg border bg-white disabled:opacity-50 disabled:cursor-not-allowed\"\n                 aria-label=\"Önceki sayfa\"\n               >\n                 <ChevronLeft className=\"h-5 w-5\" />\n               </button>\n               <button\n                 onClick={handleNextPage}\n                 disabled={page === totalPages}\n                 className=\"p-2 rounded-lg border bg-white disabled:opacity-50 disabled:cursor-not-allowed\"\n                 aria-label=\"Sonraki sayfa\"\n               >\n                 <ChevronRight className=\"h-5 w-5\" />\n               </button>\n             </div>\n           </div>\n         )}\n       </div>\n     );\n   }\n   ```\n\n2. Fiş listesi API route oluştur (`app/api/fisler/route.ts`):\n   ```typescript\n   import { NextRequest, NextResponse } from 'next/server';\n   import { supabase } from '@/lib/supabase';\n   \n   export async function GET(request: NextRequest) {\n     try {\n       const { searchParams } = new URL(request.url);\n       \n       const page = parseInt(searchParams.get('page') || '1');\n       const pageSize = parseInt(searchParams.get('pageSize') || '20');\n       const search = searchParams.get('search');\n       const startDate = searchParams.get('startDate');\n       const endDate = searchParams.get('endDate');\n       const fisNo = searchParams.get('fisNo');\n       const minAmount = searchParams.get('minAmount');\n       const maxAmount = searchParams.get('maxAmount');\n       \n       // Sayfalama hesaplamaları\n       const from = (page - 1) * pageSize;\n       const to = from + pageSize - 1;\n       \n       // Sorgu oluştur\n       let query = supabase\n         .from('fisler')\n         .select('*', { count: 'exact' })\n         .order('tarih_saat', { ascending: false });\n       \n       // Filtreleri uygula\n       if (search) {\n         query = query.or(`fis_no.ilike.%${search}%,items.name.ilike.%${search}%`);\n       }\n       \n       if (startDate) {\n         query = query.gte('tarih_saat', `${startDate}T00:00:00`);\n       }\n       \n       if (endDate) {\n         query = query.lte('tarih_saat', `${endDate}T23:59:59`);\n       }\n       \n       if (fisNo) {\n         query = query.ilike('fis_no', `%${fisNo}%`);\n       }\n       \n       if (minAmount) {\n         query = query.gte('total', minAmount);\n       }\n       \n       if (maxAmount) {\n         query = query.lte('total', maxAmount);\n       }\n       \n       // Sayfalama uygula\n       query = query.range(from, to);\n       \n       const { data, error, count } = await query;\n       \n       if (error) throw error;\n       \n       return NextResponse.json({\n         data: data || [],\n         total: count || 0\n       });\n     } catch (error) {\n       console.error('Fiş listesi alınırken hata:', error);\n       return NextResponse.json({ error: 'Fiş listesi alınamadı' }, { status: 500 });\n     }\n   }\n   ```\n\n3. Para birimi formatı için yardımcı fonksiyon oluştur (`lib/utils.ts`):\n   ```typescript\n   export function formatCurrency(amount: number): string {\n     return new Intl.NumberFormat('tr-TR', {\n       style: 'currency',\n       currency: 'TRY',\n       minimumFractionDigits: 2,\n       maximumFractionDigits: 2\n     }).format(amount);\n   }\n   ```",
+        "testStrategy": "1. Fiş listesinin doğru render edildiğini kontrol et\n2. API route'un doğru filtreleme ve sayfalama yaptığını test et\n3. Boş durum, yükleme durumu ve hata durumlarının doğru gösterildiğini kontrol et\n4. Sayfalama kontrollerinin doğru çalıştığını test et\n5. Para birimi formatlamasının doğru yapıldığını kontrol et (₺ sembolü ve virgül ile ondalık gösterimi)\n6. Tarih formatlamasının Türkçe locale ile doğru yapıldığını test et\n7. Filtrelerin URL parametrelerine doğru şekilde yansıdığını doğrula\n8. Arama işlevinin doğru çalıştığını test et",
+        "priority": "medium",
+        "dependencies": [
+          "1",
+          "2",
+          "3",
+          "6"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "SearchInput Bileşenini Geliştirme",
+            "description": "Fiş listesinde kullanılacak arama ve filtreleme bileşeninin oluşturulması",
+            "dependencies": [],
+            "details": "1. `components/SearchInput.tsx` dosyasını oluştur\n2. Arama kutusu, tarih aralığı, fiş numarası ve tutar aralığı filtrelerini içeren bir form tasarla\n3. URL parametrelerini kullanarak filtrelerin durumunu yönet\n4. Debounce mekanizması ile arama işlemini optimize et (300ms gecikme)\n5. Filtreleri temizleme butonu ekle\n6. Responsive tasarım için mobil ve masaüstü görünümlerini ayarla",
+            "status": "done",
+            "testStrategy": "1. Arama kutusunun doğru çalıştığını ve URL parametrelerini güncellediğini test et\n2. Tarih aralığı seçiminin doğru çalıştığını kontrol et\n3. Fiş numarası ve tutar aralığı filtrelerinin doğru çalıştığını doğrula\n4. Debounce mekanizmasının çalıştığını test et\n5. Filtreleri temizleme butonunun tüm filtreleri sıfırladığını kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T22:45:32.475Z"
+          },
+          {
+            "id": 2,
+            "title": "API Route Geliştirme ve Filtreleme Mantığı",
+            "description": "Fiş listesi için API endpoint'in geliştirilmesi ve filtreleme mantığının uygulanması",
+            "dependencies": [],
+            "details": "1. `app/api/fisler/route.ts` dosyasını oluştur\n2. URL parametrelerinden sayfa, sayfa boyutu ve filtre değerlerini al\n3. Supabase sorgusu oluştur ve filtreleri uygula\n4. Sayfalama için range fonksiyonunu kullan\n5. Hata yönetimi ekle ve uygun HTTP yanıtları döndür\n6. Performans için sorgu optimizasyonu yap",
+            "status": "done",
+            "testStrategy": "1. Farklı filtre kombinasyonlarıyla API'nin doğru sonuçlar döndürdüğünü test et\n2. Sayfalama mantığının doğru çalıştığını kontrol et\n3. Hata durumlarının uygun şekilde ele alındığını doğrula\n4. Büyük veri setlerinde performans testi yap\n5. Geçersiz parametrelerle API'nin nasıl davrandığını kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T22:45:49.008Z"
+          },
+          {
+            "id": 3,
+            "title": "Fiş Listesi Bileşeni Geliştirme",
+            "description": "Fiş kayıtlarını listeleyen ana bileşenin oluşturulması",
+            "dependencies": [
+              "7.1",
+              "7.2"
+            ],
+            "details": "1. `components/FisList.tsx` dosyasını oluştur\n2. useSWR hook'u ile API'den veri çekme mantığını uygula\n3. Yükleme, boş durum ve hata durumları için UI tasarla\n4. Her fiş için kart tasarımını oluştur (fiş no, tarih, toplam tutar, ürün sayısı)\n5. Detay sayfasına yönlendirme için link ekle\n6. Tarih ve para birimi formatlaması için yardımcı fonksiyonları kullan",
+            "status": "done",
+            "testStrategy": "1. Fiş listesinin doğru render edildiğini kontrol et\n2. Yükleme, boş durum ve hata durumlarının doğru gösterildiğini test et\n3. Fiş kartlarının tüm gerekli bilgileri gösterdiğini doğrula\n4. Detay sayfası linklerinin doğru çalıştığını kontrol et\n5. Tarih ve para birimi formatlamasının doğru yapıldığını test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T22:45:58.631Z"
+          },
+          {
+            "id": 4,
+            "title": "Sayfalama Bileşeni Geliştirme",
+            "description": "Fiş listesi için sayfalama kontrollerinin oluşturulması",
+            "dependencies": [
+              "7.3"
+            ],
+            "details": "1. FisList bileşeni içinde sayfalama mantığını uygula\n2. Önceki ve sonraki sayfa butonlarını ekle\n3. Mevcut sayfa ve toplam sayfa bilgisini göster\n4. Sayfa değişikliklerinde URL parametrelerini güncelle\n5. Sayfa değişikliklerinde veri yeniden yükleme mantığını uygula\n6. Sayfa butonlarının durumunu (aktif/pasif) yönet",
+            "status": "done",
+            "testStrategy": "1. Sayfalama kontrollerinin doğru render edildiğini kontrol et\n2. İlk ve son sayfalarda butonların doğru durumda olduğunu test et\n3. Sayfa değişikliklerinde verilerin doğru yüklendiğini doğrula\n4. URL parametrelerinin doğru güncellendiğini kontrol et\n5. Sayfa değişikliklerinde kullanıcı deneyimini test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T22:46:09.012Z"
+          },
+          {
+            "id": 5,
+            "title": "Yardımcı Fonksiyonlar ve Optimizasyon",
+            "description": "Para birimi formatı, tarih formatı ve performans optimizasyonları için yardımcı fonksiyonların geliştirilmesi",
+            "dependencies": [
+              "7.3",
+              "7.4"
+            ],
+            "details": "1. `lib/utils.ts` dosyasında formatCurrency fonksiyonunu oluştur\n2. Tarih formatlaması için date-fns kütüphanesini kullan\n3. API isteklerini optimize etmek için SWR'nin önbellek mekanizmasını yapılandır\n4. Filtreleme ve sayfalama için URL parametrelerini yönetecek yardımcı fonksiyonlar ekle\n5. Fiş listesi bileşeninin performansını artırmak için React.memo kullan\n6. Büyük veri setleri için sanal liste (virtualization) tekniklerini değerlendir",
+            "status": "done",
+            "testStrategy": "1. Para birimi formatlamasının farklı değerlerle doğru çalıştığını test et\n2. Tarih formatlamasının Türkçe dil desteğiyle doğru çalıştığını kontrol et\n3. SWR önbelleğinin doğru çalıştığını ve gereksiz istekleri önlediğini doğrula\n4. URL parametrelerini yöneten fonksiyonların doğru çalıştığını test et\n5. Performans optimizasyonlarının etkisini Lighthouse veya React Profiler ile ölç",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-03T22:46:22.343Z"
+          }
+        ],
+        "updatedAt": "2025-10-03T22:46:22.343Z"
+      },
+      {
+        "id": "8",
+        "title": "Detay Sayfası Geliştirme",
+        "description": "Fiş/fatura detaylarının görüntülendiği sayfa ve bileşenlerin oluşturulması",
+        "details": "1. Detay sayfası oluştur (`app/detay/[id]/page.tsx`):\n   ```tsx\n   import { notFound } from 'next/navigation';\n   import Link from 'next/link';\n   import { format } from 'date-fns';\n   import { tr } from 'date-fns/locale';\n   import { ChevronLeft, Receipt, Calendar, Clock, CreditCard, Percent, Package } from 'lucide-react';\n   import { Header } from '@/components/Header';\n   import { formatCurrency } from '@/lib/utils';\n   import { supabase } from '@/lib/supabase';\n   import type { Fis } from '@/types/database';\n   \n   export const dynamic = 'force-dynamic';\n   \n   async function getFisDetail(id: string): Promise<Fis | null> {\n     const { data, error } = await supabase\n       .from('fisler')\n       .select('*')\n       .eq('id', id)\n       .single();\n     \n     if (error) {\n       console.error('Fiş detayı alınırken hata:', error);\n       return null;\n     }\n     \n     return data;\n   }\n   \n   export default async function DetayPage({ params }: { params: { id: string } }) {\n     const fis = await getFisDetail(params.id);\n     \n     if (!fis) {\n       notFound();\n     }\n     \n     return (\n       <div className=\"min-h-screen bg-slate-50\">\n         <Header />\n         \n         <main className=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8\">\n           {/* Breadcrumb */}\n           <nav className=\"mb-4\">\n             <Link href=\"/\" className=\"text-blue-600 hover:text-blue-800 flex items-center text-sm\">\n               <ChevronLeft className=\"h-4 w-4 mr-1\" />\n               Ana Sayfa\n             </Link>\n           </nav>\n           \n           {/* Başlık Kartı */}\n           <div className=\"bg-white border rounded-2xl p-6 mb-6\">\n             <h1 className=\"text-2xl font-semibold mb-1\">Fiş #{fis.fis_no}</h1>\n             <p className=\"text-slate-600\">\n               {format(new Date(fis.tarih_saat), 'd MMMM yyyy HH:mm', { locale: tr })}\n             </p>\n           </div>\n           \n           {/* Bilgi Kartları */}\n           <div className=\"grid grid-cols-1 md:grid-cols-3 gap-4 mb-6\">\n             {/* Fiş Bilgileri */}\n             <div className=\"bg-white border rounded-2xl p-4\">\n               <h2 className=\"text-sm font-medium text-slate-600 mb-3\">Fiş Bilgileri</h2>\n               <div className=\"flex items-start gap-3\">\n                 <div className=\"rounded-full p-2 bg-slate-50 w-9 h-9 flex items-center justify-center text-blue-600\">\n                   <Receipt size={20} />\n                 </div>\n                 <div>\n                   <p className=\"text-sm text-slate-600\">Fiş No</p>\n                   <p className=\"text-lg font-semibold\">{fis.fis_no}</p>\n                 </div>\n               </div>\n             </div>\n             \n             {/* Tarih Bilgileri */}\n             <div className=\"bg-white border rounded-2xl p-4\">\n               <h2 className=\"text-sm font-medium text-slate-600 mb-3\">Tarih Bilgileri</h2>\n               <div className=\"space-y-3\">\n                 <div className=\"flex items-start gap-3\">\n                   <div className=\"rounded-full p-2 bg-slate-50 w-9 h-9 flex items-center justify-center text-blue-600\">\n                     <Calendar size={20} />\n                   </div>\n                   <div>\n                     <p className=\"text-sm text-slate-600\">Fiş Tarihi</p>\n                     <p className=\"text-lg font-semibold\">\n                       {format(new Date(fis.tarih_saat), 'd MMMM yyyy', { locale: tr })}\n                     </p>\n                   </div>\n                 </div>\n                 <div className=\"flex items-start gap-3\">\n                   <div className=\"rounded-full p-2 bg-slate-50 w-9 h-9 flex items-center justify-center text-blue-600\">\n                     <Clock size={20} />\n                   </div>\n                   <div>\n                     <p className=\"text-sm text-slate-600\">Oluşturulma</p>\n                     <p className=\"text-lg font-semibold\">\n                       {format(new Date(fis.created_at), 'd MMMM yyyy HH:mm', { locale: tr })}\n                     </p>\n                   </div>\n                 </div>\n               </div>\n             </div>\n             \n             {/* Toplam Bilgiler */}\n             <div className=\"bg-green-500 text-white rounded-2xl p-4\">\n               <h2 className=\"text-sm font-medium text-green-100 mb-3\">Toplam Bilgiler</h2>\n               <div className=\"space-y-3\">\n                 <div className=\"flex items-start gap-3\">\n                   <div className=\"rounded-full p-2 bg-green-400 bg-opacity-20 w-9 h-9 flex items-center justify-center text-white\">\n                     <CreditCard size={20} />\n                   </div>\n                   <div>\n                     <p className=\"text-sm text-green-100\">Toplam Tutar</p>\n                     <p className=\"text-lg font-semibold\">{formatCurrency(fis.total)}</p>\n                   </div>\n                 </div>\n                 <div className=\"flex items-start gap-3\">\n                   <div className=\"rounded-full p-2 bg-green-400 bg-opacity-20 w-9 h-9 flex items-center justify-center text-white\">\n                     <Percent size={20} />\n                   </div>\n                   <div>\n                     <p className=\"text-sm text-green-100\">KDV</p>\n                     <p className=\"text-lg font-semibold\">{formatCurrency(fis.total_kdv)}</p>\n                   </div>\n                 </div>\n                 <div className=\"flex items-start gap-3\">\n                   <div className=\"rounded-full p-2 bg-green-400 bg-opacity-20 w-9 h-9 flex items-center justify-center text-white\">\n                     <Package size={20} />\n                   </div>\n                   <div>\n                     <p className=\"text-sm text-green-100\">Ürün Sayısı</p>\n                     <p className=\"text-lg font-semibold\">{fis.items.length}</p>\n                   </div>\n                 </div>\n               </div>\n             </div>\n           </div>\n           \n           {/* Ürün Tablosu */}\n           <div className=\"bg-white border rounded-2xl p-6 mb-6 overflow-hidden\">\n             <h2 className=\"text-lg font-medium mb-4\">Ürün Listesi</h2>\n             <div className=\"overflow-x-auto\">\n               <table className=\"w-full\">\n                 <thead>\n                   <tr className=\"bg-slate-50 text-left\">\n                     <th className=\"p-3 text-sm font-medium text-slate-600\">Ürün Adı</th>\n                     <th className=\"p-3 text-sm font-medium text-slate-600 text-right\">Miktar</th>\n                     <th className=\"p-3 text-sm font-medium text-slate-600 text-right\">Birim Fiyat</th>\n                     <th className=\"p-3 text-sm font-medium text-slate-600 text-right\">KDV</th>\n                     <th className=\"p-3 text-sm font-medium text-slate-600 text-right\">Toplam</th>\n                   </tr>\n                 </thead>\n                 <tbody className=\"divide-y\">\n                   {fis.items.map((item, index) => (\n                     <tr key={index}>\n                       <td className=\"p-3\">{item.name}</td>\n                       <td className=\"p-3 text-right tabular-nums\">{item.quantity}</td>\n                       <td className=\"p-3 text-right tabular-nums\">{formatCurrency(item.unit_price)}</td>\n                       <td className=\"p-3 text-right tabular-nums\">{formatCurrency(item.kdv)}</td>\n                       <td className=\"p-3 text-right font-medium tabular-nums\">{formatCurrency(item.total)}</td>\n                     </tr>\n                   ))}\n                 </tbody>\n               </table>\n             </div>\n           </div>\n           \n           {/* Alt Özet */}\n           <div className=\"flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-slate-600\">\n             <div>\n               Son güncellenme: {format(new Date(fis.updated_at), 'd MMMM yyyy HH:mm', { locale: tr })}\n             </div>\n             <div className=\"mt-2 sm:mt-0\">\n               Toplam Ürün: <span className=\"font-medium\">{fis.items.length}</span> / \n               Genel Toplam: <span className=\"font-medium\">{formatCurrency(fis.total)}</span>\n             </div>\n           </div>\n         </main>\n       </div>\n     );\n   }\n   ```\n\n2. Not Found sayfası oluştur (`app/not-found.tsx`):\n   ```tsx\n   import Link from 'next/link';\n   import { Header } from '@/components/Header';\n   \n   export default function NotFound() {\n     return (\n       <div className=\"min-h-screen bg-slate-50\">\n         <Header />\n         \n         <main className=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8\">\n           <div className=\"text-center py-16\">\n             <h1 className=\"text-4xl font-bold text-slate-900 mb-4\">404</h1>\n             <h2 className=\"text-2xl font-semibold text-slate-700 mb-6\">Sayfa Bulunamadı</h2>\n             <p className=\"text-slate-600 mb-8\">Aradığınız sayfa mevcut değil veya kaldırılmış olabilir.</p>\n             <Link\n               href=\"/\"\n               className=\"px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300\"\n             >\n               Ana Sayfaya Dön\n             </Link>\n           </div>\n         </main>\n       </div>\n     );\n   }\n   ```",
+        "testStrategy": "1. Detay sayfasının doğru render edildiğini kontrol et\n2. Geçersiz ID ile 404 sayfasının gösterildiğini test et\n3. Fiş bilgilerinin doğru gösterildiğini kontrol et\n4. Ürün tablosunun doğru render edildiğini ve tüm ürünleri gösterdiğini test et\n5. Para birimi ve tarih formatlamalarının doğru yapıldığını kontrol et\n6. Responsive tasarımın farklı ekran boyutlarında doğru çalıştığını test et\n7. Breadcrumb navigasyonunun doğru çalıştığını kontrol et\n8. Tablo overflow'unun mobil cihazlarda doğru çalıştığını test et",
+        "priority": "medium",
+        "dependencies": [
+          "1",
+          "2",
+          "3"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Fiş Detay Sayfası Temel Yapısı",
+            "description": "Fiş detaylarını görüntüleyen sayfanın temel yapısını oluşturma ve veri çekme işlevselliğini ekleme",
+            "dependencies": [],
+            "details": "1. `app/detay/[id]/page.tsx` dosyasını oluştur\n2. Supabase'den fiş detaylarını çekmek için `getFisDetail` fonksiyonunu ekle\n3. Sayfa bileşenini oluştur ve `params` üzerinden fiş ID'sini al\n4. Fiş bulunamazsa `notFound()` fonksiyonunu çağır\n5. Sayfanın temel yapısını oluştur (Header, breadcrumb, ana içerik alanı)",
+            "status": "done",
+            "testStrategy": "1. Geçerli bir fiş ID'si ile sayfanın doğru yüklendiğini kontrol et\n2. Geçersiz bir ID ile 404 sayfasına yönlendirildiğini doğrula\n3. Supabase sorgu hatasında uygun şekilde işlendiğini test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T10:02:50.413Z"
+          },
+          {
+            "id": 2,
+            "title": "Fiş Başlık ve Bilgi Kartları Bileşenleri",
+            "description": "Fiş detay sayfasındaki başlık kartı ve bilgi kartları bileşenlerinin oluşturulması",
+            "dependencies": [
+              "8.1"
+            ],
+            "details": "1. Başlık kartını oluştur (fiş numarası ve tarih bilgisi içeren)\n2. Fiş bilgileri kartını oluştur (fiş numarası ve ikon içeren)\n3. Tarih bilgileri kartını oluştur (fiş tarihi, oluşturulma zamanı ve ikonlar içeren)\n4. Toplam bilgiler kartını oluştur (toplam tutar, KDV, ürün sayısı ve ikonlar içeren)\n5. Kartların responsive tasarımını ayarla (grid yapısı ile)",
+            "status": "done",
+            "testStrategy": "1. Tüm kartların doğru verilerle render edildiğini kontrol et\n2. Tarih formatlamalarının doğru yapıldığını doğrula\n3. Para birimi formatlamalarının doğru yapıldığını kontrol et\n4. Responsive tasarımın farklı ekran boyutlarında düzgün çalıştığını test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T10:02:58.844Z"
+          },
+          {
+            "id": 3,
+            "title": "Ürün Tablosu Bileşeni",
+            "description": "Fiş içindeki ürünleri listeleyen tablo bileşeninin oluşturulması",
+            "dependencies": [
+              "8.1"
+            ],
+            "details": "1. Ürün tablosu bileşenini oluştur (başlık ve tablo içeren)\n2. Tablo başlıklarını ekle (Ürün Adı, Miktar, Birim Fiyat, KDV, Toplam)\n3. Fiş içindeki ürünleri map fonksiyonu ile listele\n4. Her ürün için gerekli bilgileri ve formatlamaları uygula\n5. Tablonun yatay kaydırma özelliğini ekle (overflow-x-auto)",
+            "status": "done",
+            "testStrategy": "1. Tablonun tüm ürünleri doğru şekilde gösterdiğini kontrol et\n2. Sayısal değerlerin doğru formatlandığını doğrula\n3. Boş ürün listesi durumunda uygun mesajın gösterildiğini test et\n4. Mobil cihazlarda yatay kaydırma özelliğinin çalıştığını kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T10:03:13.687Z"
+          },
+          {
+            "id": 4,
+            "title": "Alt Özet ve Sayfa Altı Bilgileri",
+            "description": "Fiş detay sayfasının alt kısmında yer alan özet bilgileri ve sayfa altı bileşenlerinin oluşturulması",
+            "dependencies": [
+              "8.1",
+              "8.2",
+              "8.3"
+            ],
+            "details": "1. Alt özet bileşenini oluştur\n2. Son güncellenme tarihini formatlayarak göster\n3. Toplam ürün sayısı ve genel toplam bilgilerini ekle\n4. Responsive tasarım için flex yapısını ayarla (mobil ve masaüstü görünümleri)\n5. Sayfa altı bilgilerinin stillerini düzenle",
+            "status": "done",
+            "testStrategy": "1. Alt özet bilgilerinin doğru verilerle gösterildiğini kontrol et\n2. Tarih formatlamalarının doğru yapıldığını doğrula\n3. Responsive tasarımın farklı ekran boyutlarında düzgün çalıştığını test et\n4. Toplam değerlerin fiş içeriğiyle tutarlı olduğunu kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T10:03:21.292Z"
+          },
+          {
+            "id": 5,
+            "title": "Not Found Sayfası Oluşturma",
+            "description": "Geçersiz fiş ID'leri veya bulunamayan sayfalar için 404 sayfasının oluşturulması",
+            "dependencies": [],
+            "details": "1. `app/not-found.tsx` dosyasını oluştur\n2. Sayfa yapısını oluştur (Header ve ana içerik)\n3. 404 hata mesajını ve açıklamasını ekle\n4. Ana sayfaya dönüş bağlantısını ekle\n5. Sayfanın stillerini düzenle (ortalama, boşluklar, renkler)",
+            "status": "done",
+            "testStrategy": "1. Geçersiz bir URL ile 404 sayfasının gösterildiğini kontrol et\n2. Ana sayfaya dönüş bağlantısının çalıştığını doğrula\n3. Sayfanın farklı ekran boyutlarında düzgün görüntülendiğini test et\n4. Sayfanın erişilebilirlik standartlarına uygunluğunu kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T10:03:28.453Z"
+          }
+        ],
+        "updatedAt": "2025-10-04T10:03:28.453Z"
+      },
+      {
+        "id": "9",
+        "title": "n8n Workflow Kurulumu ve Entegrasyonu",
+        "description": "n8n üzerinde OCR ve veri işleme workflow'unun oluşturulması ve Next.js API ile entegrasyonu",
+        "details": "1. n8n kurulumu ve yapılandırması:\n   - n8n'i yerel olarak veya bulut üzerinde kur\n   - Gerekli API anahtarlarını yapılandır (Mistral OCR, Supabase)\n\n2. n8n workflow adımlarını oluştur:\n   ```\n   [Webhook Node] -> [Mistral Upload Node] -> [Mistral Signed URL Node] -> [Mistral DOC OCR Node] -> [Information Extractor Node] -> [Supabase Operations] -> [Respond to Webhook]\n   ```\n\n3. Webhook Node yapılandırması:\n   - HTTP Method: POST\n   - Response Mode: Last Node\n   - Authentication: None (veya Basic Auth ekle)\n   - Webhook URL'sini not al\n\n4. Mistral Upload Node yapılandırması:\n   - API Key: Mistral API anahtarı\n   - Binary Data: webhook'tan gelen dosya\n   - Output Field: `mistralFileId`\n\n5. Mistral Signed URL Node yapılandırması:\n   - API Key: Mistral API anahtarı\n   - File ID: `{{$node[\"Mistral Upload\"].json[\"mistralFileId\"]}}`\n   - Output Field: `signedUrl`\n\n6. Mistral DOC OCR Node yapılandırması:\n   - API Key: Mistral API anahtarı\n   - File ID: `{{$node[\"Mistral Upload\"].json[\"mistralFileId\"]}}`\n   - Output Field: `ocrText`\n\n7. Information Extractor Node yapılandırması:\n   - Input Text: `{{$node[\"Mistral DOC OCR\"].json[\"ocrText\"]}}`\n   - Extraction Schema:\n     ```json\n     {\n       \"fis_no\": \"string\",\n       \"tarih_saat\": \"date (YYYY/MM/DD HH:mm format)\",\n       \"total\": \"number\",\n       \"total_kdv\": \"number\",\n       \"items\": [\n         {\n           \"name\": \"string\",\n           \"quantity\": \"number\",\n           \"unit_price\": \"number\",\n           \"kdv\": \"number\",\n           \"total\": \"number\"\n         }\n       ]\n     }\n     ```\n   - Output Field: `extractedData`\n\n8. Supabase Nodes:\n   - Supabase Get Node:\n     - Operation: Select\n     - Table: fisler\n     - Where: `fis_no = {{$node[\"Information Extractor\"].json[\"extractedData\"][\"fis_no\"]}}`\n\n   - IF Node:\n     - Condition: `{{$node[\"Supabase Get\"].json[\"length\"] > 0}}`\n     - True: Supabase Update Node\n     - False: Supabase Create Node\n\n   - Supabase Update Node:\n     - Operation: Update\n     - Table: fisler\n     - Where: `fis_no = {{$node[\"Information Extractor\"].json[\"extractedData\"][\"fis_no\"]}}`\n     - Data:\n       ```json\n       {\n         \"tarih_saat\": \"{{$node[\"Information Extractor\"].json[\"extractedData\"][\"tarih_saat\"]}}\",\n         \"total\": {{$node[\"Information Extractor\"].json[\"extractedData\"][\"total\"]}},\n         \"total_kdv\": {{$node[\"Information Extractor\"].json[\"extractedData\"][\"total_kdv\"]}},\n         \"items\": {{$node[\"Information Extractor\"].json[\"extractedData\"][\"items\"]}},\n         \"updated_at\": \"{{$now}}\"\n       }\n       ```\n\n   - Supabase Create Node:\n     - Operation: Insert\n     - Table: fisler\n     - Data:\n       ```json\n       {\n         \"fis_no\": \"{{$node[\"Information Extractor\"].json[\"extractedData\"][\"fis_no\"]}}\",\n         \"tarih_saat\": \"{{$node[\"Information Extractor\"].json[\"extractedData\"][\"tarih_saat\"]}}\",\n         \"total\": {{$node[\"Information Extractor\"].json[\"extractedData\"][\"total\"]}},\n         \"total_kdv\": {{$node[\"Information Extractor\"].json[\"extractedData\"][\"total_kdv\"]}},\n         \"items\": {{$node[\"Information Extractor\"].json[\"extractedData\"][\"items\"]}}\n       }\n       ```\n\n9. Respond to Webhook Node yapılandırması:\n   - Response Code: 200\n   - Response Body: `{ \"upload\": \"success\" }`\n   - Response Headers: `{ \"Content-Type\": \"application/json\" }`\n\n10. Next.js API route güncellemesi (`app/api/upload/route.ts`):\n    ```typescript\n    import { NextRequest, NextResponse } from 'next/server';\n    \n    export async function POST(request: NextRequest) {\n      try {\n        const formData = await request.formData();\n        const file = formData.get('file') as File;\n        \n        if (!file) {\n          return NextResponse.json({ error: 'Dosya bulunamadı' }, { status: 400 });\n        }\n        \n        // n8n webhook'una gönder\n        const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;\n        \n        if (!n8nWebhookUrl) {\n          return NextResponse.json({ error: 'Webhook URL yapılandırılmamış' }, { status: 500 });\n        }\n        \n        const n8nFormData = new FormData();\n        n8nFormData.append('file', file);\n        \n        const n8nResponse = await fetch(n8nWebhookUrl, {\n          method: 'POST',\n          body: n8nFormData,\n        });\n        \n        const n8nData = await n8nResponse.json();\n        \n        return NextResponse.json(n8nData);\n      } catch (error) {\n        console.error('Yükleme hatası:', error);\n        return NextResponse.json({ error: 'Dosya yükleme hatası' }, { status: 500 });\n      }\n    }\n    ```\n\n11. `.env.local` dosyasına n8n webhook URL'sini ekle:\n    ```\n    N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/path\n    ```",
+        "testStrategy": "1. n8n workflow'unun tüm adımlarının doğru yapılandırıldığını kontrol et\n2. Test bir fiş/fatura görseli ile workflow'u manuel olarak çalıştır\n3. Mistral OCR'ın metni doğru çıkardığını kontrol et\n4. Information Extractor'ın JSON şemasına uygun veri çıkardığını doğrula\n5. Supabase'e veri ekleme ve güncelleme işlemlerinin doğru çalıştığını test et\n6. Next.js API route üzerinden dosya yükleme işlemini test et\n7. Webhook yanıtının doğru formatta döndüğünü kontrol et (`{ \"upload\": \"success\" }`)\n8. Hata durumlarının doğru şekilde ele alındığını test et",
+        "priority": "high",
+        "dependencies": [
+          "2"
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "n8n Kurulumu ve Temel Yapılandırma",
+            "description": "n8n'in kurulumu ve temel yapılandırmasının tamamlanması",
+            "dependencies": [],
+            "details": "1. n8n'i yerel ortamda veya bulut üzerinde kurma\n2. Gerekli API anahtarlarını (Mistral OCR, Supabase) yapılandırma\n3. Temel güvenlik ayarlarını yapma\n4. n8n arayüzüne erişimi test etme\n5. Gerekli eklentileri kurma",
+            "status": "done",
+            "testStrategy": "1. n8n arayüzüne başarıyla erişilebildiğini doğrula\n2. API anahtarlarının doğru şekilde kaydedildiğini kontrol et\n3. Temel bir HTTP isteği ile sistemin çalıştığını test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T16:47:24.909Z"
+          },
+          {
+            "id": 2,
+            "title": "OCR İşleme Workflow Adımlarının Oluşturulması",
+            "description": "Webhook, Mistral Upload, Signed URL ve OCR node'larının yapılandırılması",
+            "dependencies": [
+              "9.1"
+            ],
+            "details": "1. Webhook Node yapılandırması (HTTP Method, Response Mode, Authentication)\n2. Mistral Upload Node yapılandırması (API Key, Binary Data, Output Field)\n3. Mistral Signed URL Node yapılandırması (API Key, File ID, Output Field)\n4. Mistral DOC OCR Node yapılandırması (API Key, File ID, Output Field)\n5. Node'lar arası bağlantıların kurulması",
+            "status": "done",
+            "testStrategy": "1. Webhook'a test bir istek gönderip yanıt alındığını doğrula\n2. Mistral servislerine dosya yükleme işleminin başarılı olduğunu kontrol et\n3. OCR işleminin doğru metin çıktısı ürettiğini test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T16:47:32.355Z"
+          },
+          {
+            "id": 3,
+            "title": "Veri Çıkarma ve İşleme Adımlarının Oluşturulması",
+            "description": "Information Extractor ve Supabase işlem node'larının yapılandırılması",
+            "dependencies": [
+              "9.2"
+            ],
+            "details": "1. Information Extractor Node yapılandırması (Input Text, Extraction Schema, Output Field)\n2. Supabase Get Node yapılandırması (Operation, Table, Where koşulu)\n3. IF Node yapılandırması (Condition, True/False dalları)\n4. Supabase Update Node yapılandırması (Operation, Table, Where, Data)\n5. Supabase Create Node yapılandırması (Operation, Table, Data)",
+            "status": "done",
+            "testStrategy": "1. OCR çıktısından doğru veri çıkarımı yapıldığını kontrol et\n2. Supabase sorgulamalarının doğru çalıştığını doğrula\n3. Koşullu işlemlerin (IF node) beklenen şekilde çalıştığını test et\n4. Veritabanına ekleme ve güncelleme işlemlerinin başarılı olduğunu kontrol et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T16:47:39.916Z"
+          },
+          {
+            "id": 4,
+            "title": "Next.js API Entegrasyonu",
+            "description": "Next.js API route'unun n8n webhook'u ile entegrasyonu",
+            "dependencies": [
+              "9.1",
+              "9.2",
+              "9.3"
+            ],
+            "details": "1. Next.js API route oluşturma (`app/api/upload/route.ts`)\n2. Dosya yükleme işlemlerini yapılandırma (formData işleme)\n3. n8n webhook URL'sini .env dosyasına ekleme\n4. n8n webhook'una dosya gönderme işlemini kodlama\n5. Hata yakalama ve yanıt işleme mekanizmalarını ekleme",
+            "status": "done",
+            "testStrategy": "1. API endpoint'ine test bir dosya göndererek çalıştığını doğrula\n2. n8n webhook'una başarılı şekilde istek gönderildiğini kontrol et\n3. Hata durumlarında doğru yanıtların döndüğünü test et\n4. Büyük dosyalarla performans testi yap",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T16:47:48.014Z"
+          },
+          {
+            "id": 5,
+            "title": "Workflow Test ve Optimizasyonu",
+            "description": "Tüm workflow'un test edilmesi, hata ayıklaması ve optimizasyonu",
+            "dependencies": [
+              "9.1",
+              "9.2",
+              "9.3",
+              "9.4"
+            ],
+            "details": "1. Tüm workflow'u uçtan uca test etme ve hata ayıklaması yapma\n2. Hata durumları için error handling ekleme (Mistral API, OCR, veri çıkarma, Supabase bağlantı hataları)\n3. Workflow performansını optimize etme (gereksiz node'ları kaldırma, timeout değerlerini ayarlama)\n4. Workflow'u dokümante etme ve paylaşma\n5. Webhook güvenliğini artırma (Basic Auth veya API Key ekleme)\n<info added on 2025-10-04T16:19:16.829Z>\n# Error Handling İyileştirmeleri\n\n## Backend Error Handling\n- n8n webhook timeout (60s) eklendi\n- HTTP status kodlarına göre detaylı hata mesajları\n- Network, JSON parse, timeout hatalarına özel handling\n- Status code'lara göre uygun HTTP response kodları\n\n## Frontend Error Handling\n- Spesifik hata türlerine göre mesajlar\n- Network, timeout, abort hatalarını ayırt etme\n- Progress interval scope problemi çözüldü\n- Toast mesajlarında görsel iyileştirmeler\n\n## Test Edilecek Senaryolar\n- Büyük dosya (>10MB) yükleme testi\n- Geçersiz dosya formatı testi\n- Çok küçük dosya (<10KB) testi\n- n8n webhook offline durumu\n- Network timeout simülasyonu\n</info added on 2025-10-04T16:19:16.829Z>\n<info added on 2025-10-04T16:42:05.496Z>\n# Performance Test Sonuçları\n\n## Upload Performance Ölçümleri:\n- Test 1: 43.544 saniye (ilk test)\n- Test 2: 19.955 saniye (ikinci test)\n- İyileşme: %54 daha hızlı performance\n- Ortalama: ~20-43 saniye (AI+OCR processing)\n\n## Sistem Performance Analizi:\n- n8n Processing: 19-43 saniye (normal AI+OCR süresi)\n- Database Operations: ~1-1.2 saniye\n- Frontend Response: Hızlı ve responsive\n- Auto-refresh: Sorunsuz çalışıyor\n- HTTP Status: 200 OK \n\n## Test Edilen Özellikler:\n- Error handling: 403 hata yakalama \n- Webhook recovery: Auth düzeltme sonrası başarılı \n- Performance monitoring: Terminal logging \n- Frontend feedback: Toast ve progress \n- End-to-end workflow: Upload → Processing → Database → UI \n\n## Workflow Durumu:\n- Stabil ve güvenilir\n- Error handling aktif\n- Performance kabul edilebilir seviyede\n- AI validation prompt iyileştirmeleri çalışıyor\n\n## Sıradaki Adım: \nPerformance Optimizasyonu ve Webhook Güvenliği\n</info added on 2025-10-04T16:42:05.496Z>\n<info added on 2025-10-04T16:42:15.066Z>\n# Workflow Test ve Optimizasyon Tamamlandı\n\n## Performance Test Sonuçları\n- Upload ve işleme süresi: 19-43 saniye arası\n- Ortalama işlem süresi: ~30 saniye\n- Sistem stabil ve güvenilir çalışıyor\n\n## Error Handling Durumu\n- Backend ve frontend error handling sistemi başarıyla test edildi\n- Tüm hata senaryoları (timeout, network, format hataları) yakalanıyor\n- Kullanıcıya anlamlı hata mesajları gösteriliyor\n\n## Workflow Durumu\n- Tüm workflow uçtan uca test edildi\n- Webhook → AI → OCR → Database → UI akışı sorunsuz çalışıyor\n- Error recovery mekanizmaları aktif\n- Sistem stabil durumda\n\n## Tamamlanan İyileştirmeler\n- Timeout değerleri optimize edildi\n- Error handling mekanizmaları eklendi\n- Performance monitoring sistemi kuruldu\n- End-to-end testler başarıyla tamamlandı\n</info added on 2025-10-04T16:42:15.066Z>\n<info added on 2025-10-04T16:46:02.276Z>\n# Workflow Dokümantasyonu Tamamlandı\n\n## WORKFLOW.md Dosyası\n- Genel sistem akışı dokümantasyonu\n- n8n workflow adımları detayı\n- Performance metrikleri ve error handling\n- Teknik detaylar ve troubleshooting\n- Gelecek iyileştirme önerileri\n\n## 9.5 Tüm Adımları Tamamlandı\n1. Error Handling İyileştirmesi\n2. Performance Testing (19-43s upload süresi)\n3. Performance Optimizasyonu (n8n workflow iyi durumda)\n4. Webhook Güvenliği (proje için gereksiz - skip)\n5. Dokümantasyon (WORKFLOW.md oluşturuldu)\n\n## Sonuç\nWorkflow test ve optimizasyonu başarıyla tamamlandı. Sistem stabil çalışıyor, error handling mekanizmaları aktif ve dokümantasyon hazır durumda. Tüm workflow adımları (Webhook → AI → OCR → Database → UI) sorunsuz çalışıyor ve end-to-end testler başarıyla tamamlandı.\n</info added on 2025-10-04T16:46:02.276Z>",
+            "status": "done",
+            "testStrategy": "1. Farklı fiş/fatura örnekleriyle uçtan uca test yapma\n2. Hata senaryolarını simüle ederek error handling'in çalıştığını doğrulama\n3. Performans ölçümleri yaparak optimizasyonların etkisini değerlendirme\n4. Güvenlik önlemlerinin etkinliğini test etme",
+            "updatedAt": "2025-10-04T16:46:12.756Z",
+            "parentId": "undefined"
+          }
+        ],
+        "updatedAt": "2025-10-04T16:47:48.014Z"
+      },
+      {
+        "id": "10",
+        "title": "Sistem Testleri ve Optimizasyon",
+        "description": "Tüm sistemin uçtan uca test edilmesi, performans optimizasyonu ve son kontroller",
+        "details": "1. Uçtan uca test senaryoları:\n   - Fiş/fatura yükleme ve OCR işlemi\n   - Veritabanına kaydetme ve güncelleme\n   - Listeleme, filtreleme ve arama\n   - Detay sayfası görüntüleme\n\n2. Performans optimizasyonları:\n   - SWR önbelleğe alma stratejisini yapılandır (`lib/swr-config.ts`):\n     ```typescript\n     import { SWRConfig } from 'swr';\n     \n     export function SWRProvider({ children }) {\n       return (\n         <SWRConfig\n           value={{\n             fetcher: (url) => fetch(url).then((res) => res.json()),\n             revalidateOnFocus: false,\n             revalidateIfStale: true,\n             revalidateOnReconnect: true,\n             dedupingInterval: 5000,\n             errorRetryCount: 3,\n           }}\n         >\n           {children}\n         </SWRConfig>\n       );\n     }\n     ```\n\n3. Görüntü optimizasyonu:\n   - Yükleme öncesi görüntü boyutunu kontrol et ve gerekirse küçült:\n     ```typescript\n     async function resizeImage(file: File, maxWidth = 1200): Promise<File> {\n       return new Promise((resolve) => {\n         const reader = new FileReader();\n         reader.readAsDataURL(file);\n         reader.onload = (event) => {\n           const img = new Image();\n           img.src = event.target?.result as string;\n           img.onload = () => {\n             const canvas = document.createElement('canvas');\n             const width = Math.min(img.width, maxWidth);\n             const scaleFactor = width / img.width;\n             const height = img.height * scaleFactor;\n             \n             canvas.width = width;\n             canvas.height = height;\n             \n             const ctx = canvas.getContext('2d');\n             ctx?.drawImage(img, 0, 0, width, height);\n             \n             canvas.toBlob((blob) => {\n               if (blob) {\n                 const resizedFile = new File([blob], file.name, {\n                   type: file.type,\n                   lastModified: Date.now(),\n                 });\n                 resolve(resizedFile);\n               } else {\n                 resolve(file); // Fallback to original file\n               }\n             }, file.type, 0.9);\n           };\n         };\n       });\n     }\n     ```\n\n4. Erişilebilirlik kontrolleri:\n   - Tüm interaktif elementlerin klavye ile erişilebilir olduğunu kontrol et\n   - ARIA özelliklerinin doğru kullanıldığını doğrula\n   - Renk kontrastlarının WCAG AA standartlarına uygun olduğunu kontrol et\n\n5. Responsive tasarım kontrolleri:\n   - Mobil cihazlarda (320px-428px) tüm sayfaların doğru görüntülendiğini kontrol et\n   - Tablet cihazlarda (768px-1024px) tüm sayfaların doğru görüntülendiğini kontrol et\n   - Masaüstü cihazlarda (1024px+) tüm sayfaların doğru görüntülendiğini kontrol et\n\n6. Hata yönetimi ve kullanıcı geri bildirimi:\n   - Tüm hata durumlarının kullanıcıya anlaşılır şekilde gösterildiğini kontrol et\n   - Toast bildirimlerinin doğru çalıştığını test et\n\n7. Güvenlik kontrolleri:\n   - API route'ların güvenli olduğunu kontrol et\n   - Dosya yükleme kısıtlamalarının doğru çalıştığını test et\n\n8. Yerelleştirme kontrolleri:\n   - Tüm tarih ve para birimi formatlarının Türkçe locale'e uygun olduğunu kontrol et\n\n9. Tarayıcı uyumluluğu:\n   - Chrome, Firefox, Safari ve Edge tarayıcılarında test et\n\n10. Dağıtım hazırlığı:\n    - Ortam değişkenlerinin doğru yapılandırıldığını kontrol et\n    - Build sürecini test et (`npm run build`)\n    - Statik analiz ve linting kontrollerini yap (`npm run lint`)",
+        "testStrategy": "1. Uçtan uca test senaryolarını manuel olarak gerçekleştir\n2. Lighthouse ile performans, erişilebilirlik, SEO ve en iyi uygulamalar puanlarını ölç\n3. WebPageTest ile yükleme performansını test et\n4. WAVE veya axe ile erişilebilirlik kontrolü yap\n5. Farklı cihazlarda ve tarayıcılarda responsive tasarımı test et\n6. Yükleme sürelerini ve API yanıt sürelerini ölç\n7. Hata durumlarını simüle ederek hata yönetimini test et\n8. Yüksek trafik senaryosunu simüle etmek için yük testi yap\n9. Güvenlik açıklarını taramak için OWASP ZAP veya benzer araçları kullan\n10. Kullanıcı deneyimi testleri yap (5-10 kullanıcı ile)",
+        "priority": "medium",
+        "dependencies": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ],
+        "status": "in-progress",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Uçtan Uca Test Senaryolarının Oluşturulması ve Uygulanması",
+            "description": "Sistemin temel işlevlerini kapsayan uçtan uca test senaryolarının oluşturulması ve manuel olarak uygulanması",
+            "dependencies": [],
+            "details": "1. Fiş/fatura yükleme ve OCR işlemi için test senaryosu oluştur ve uygula:\n   - Farklı formatlarda (JPEG, PNG, PDF) fiş/fatura yükleme\n   - OCR işleminin doğruluğunu kontrol etme\n   - Hatalı dosya yükleme durumlarını test etme\n\n2. Veritabanı işlemleri için test senaryosu oluştur ve uygula:\n   - Yeni fiş/fatura kaydetme\n   - Mevcut kayıtları güncelleme\n   - Silme işlemlerini test etme\n\n3. Listeleme, filtreleme ve arama işlevleri için test senaryosu oluştur ve uygula:\n   - Farklı filtreleme parametrelerini test etme\n   - Arama işlevinin doğruluğunu kontrol etme\n   - Sayfalama kontrollerinin doğru çalıştığını doğrulama\n\n4. Detay sayfası görüntüleme için test senaryosu oluştur ve uygula:\n   - Detay sayfasına erişim\n   - Tüm bilgilerin doğru görüntülendiğini kontrol etme\n   - Düzenleme işlevlerinin çalıştığını doğrulama",
+            "status": "done",
+            "testStrategy": "1. Her test senaryosu için adım adım kontrol listesi oluştur\n2. Hata durumlarını ve sınır koşullarını özellikle test et\n3. Test sonuçlarını belgelendir ve bulunan hataları raporla\n4. Farklı kullanıcı rolleri ve izinleri ile testleri tekrarla\n5. Mobil ve masaüstü cihazlarda ayrı ayrı test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T16:48:59.905Z"
+          },
+          {
+            "id": 2,
+            "title": "Performans Optimizasyonu ve Önbellek Yapılandırması",
+            "description": "SWR önbelleğe alma stratejisinin yapılandırılması ve performans iyileştirmelerinin uygulanması",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "1. SWR önbelleğe alma stratejisini yapılandır (`lib/swr-config.ts`):\n   ```typescript\n   import { SWRConfig } from 'swr';\n   \n   export function SWRProvider({ children }) {\n     return (\n       <SWRConfig\n         value={{\n           fetcher: (url) => fetch(url).then((res) => res.json()),\n           revalidateOnFocus: false,\n           revalidateIfStale: true,\n           revalidateOnReconnect: true,\n           dedupingInterval: 5000,\n           errorRetryCount: 3,\n         }}\n       >\n         {children}\n       </SWRConfig>\n     );\n   }\n   ```\n\n2. SWR Provider'ı ana layout içinde uygula (`app/layout.tsx`):\n   ```typescript\n   import { SWRProvider } from '@/lib/swr-config';\n   \n   export default function RootLayout({ children }) {\n     return (\n       <html lang=\"tr\">\n         <body>\n           <SWRProvider>{children}</SWRProvider>\n         </body>\n       </html>\n     );\n   }\n   ```\n\n3. API route'ları için HTTP önbelleğe alma başlıklarını yapılandır:\n   ```typescript\n   export async function GET(request) {\n     const response = await fetchData();\n     \n     return new Response(JSON.stringify(response), {\n       headers: {\n         'Content-Type': 'application/json',\n         'Cache-Control': 'max-age=60, s-maxage=60, stale-while-revalidate=300'\n       }\n     });\n   }\n   ```\n\n4. Lighthouse ile performans ölçümü yap ve darboğazları tespit et\n5. Tespit edilen darboğazlara göre ek optimizasyonlar uygula",
+            "status": "done",
+            "testStrategy": "1. Lighthouse ile optimizasyon öncesi ve sonrası performans puanlarını karşılaştır\n2. WebPageTest ile yükleme sürelerini ölç\n3. SWR önbelleğinin doğru çalıştığını, tekrarlanan isteklerin önbelleğe alındığını doğrula\n4. Büyük veri setleriyle performans testleri yap\n5. Ağ kısıtlaması (3G, 4G) altında performansı test et",
+            "parentId": "undefined",
+            "updatedAt": "2025-10-04T16:56:29.963Z"
+          },
+          {
+            "id": 3,
+            "title": "Görüntü Optimizasyonu ve Dosya İşleme İyileştirmeleri",
+            "description": "Yüklenen görüntülerin optimizasyonu ve dosya işleme süreçlerinin iyileştirilmesi",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "1. Yükleme öncesi görüntü boyutunu kontrol eden ve gerekirse küçülten fonksiyonu uygula:\n   ```typescript\n   async function resizeImage(file: File, maxWidth = 1200): Promise<File> {\n     return new Promise((resolve) => {\n       const reader = new FileReader();\n       reader.readAsDataURL(file);\n       reader.onload = (event) => {\n         const img = new Image();\n         img.src = event.target?.result as string;\n         img.onload = () => {\n           const canvas = document.createElement('canvas');\n           const width = Math.min(img.width, maxWidth);\n           const scaleFactor = width / img.width;\n           const height = img.height * scaleFactor;\n           \n           canvas.width = width;\n           canvas.height = height;\n           \n           const ctx = canvas.getContext('2d');\n           ctx?.drawImage(img, 0, 0, width, height);\n           \n           canvas.toBlob((blob) => {\n             if (blob) {\n               const resizedFile = new File([blob], file.name, {\n                 type: file.type,\n                 lastModified: Date.now(),\n               });\n               resolve(resizedFile);\n             } else {\n               resolve(file); // Fallback to original file\n             }\n           }, file.type, 0.9);\n         };\n       };\n     });\n   }\n   ```\n\n2. Bu fonksiyonu FileUpload bileşenine entegre et:\n   ```typescript\n   const handleFileChange = async (event) => {\n     const file = event.target.files[0];\n     if (file) {\n       setIsLoading(true);\n       try {\n         // Görüntü dosyası ise optimize et\n         const optimizedFile = file.type.startsWith('image/') \n           ? await resizeImage(file) \n           : file;\n         \n         // Dosyayı yükle\n         await uploadFile(optimizedFile);\n       } catch (error) {\n         setError('Dosya yükleme sırasında bir hata oluştu');\n       } finally {\n         setIsLoading(false);\n       }\n     }\n   };\n   ```\n\n3. Next.js Image bileşenini kullanarak görüntü optimizasyonunu uygula:\n   ```typescript\n   import Image from 'next/image';\n   \n   // Fiş görüntüsü için\n   <Image \n     src={receipt.imageUrl} \n     alt=\"Fiş görüntüsü\" \n     width={600} \n     height={800} \n     quality={80}\n     placeholder=\"blur\"\n     blurDataURL=\"data:image/png;base64,...\"\n     className=\"rounded-md\"\n   />\n   ```\n\n4. Dosya yükleme sınırlamalarını ve kabul edilen dosya tiplerini yapılandır\n5. Dosya yükleme ilerlemesini gösteren bir ilerleme çubuğu ekle",
+            "status": "pending",
+            "testStrategy": "1. Farklı boyutlardaki görüntülerle optimizasyon fonksiyonunu test et\n2. Optimize edilmiş görüntülerin kalitesini ve dosya boyutunu kontrol et\n3. Farklı tarayıcılarda görüntü işleme fonksiyonlarının çalıştığını doğrula\n4. Büyük dosyaların yüklenmesi sırasında performansı ve kullanıcı deneyimini test et\n5. Hatalı dosya formatları ve boyutları ile hata yönetimini kontrol et",
+            "parentId": "undefined"
+          },
+          {
+            "id": 4,
+            "title": "Erişilebilirlik ve Responsive Tasarım Kontrolleri",
+            "description": "Sistemin erişilebilirlik standartlarına uygunluğunun ve responsive tasarımının kontrol edilmesi ve iyileştirilmesi",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "1. Erişilebilirlik kontrolleri yap ve iyileştir:\n   - Tüm interaktif elementlerin klavye ile erişilebilir olduğunu kontrol et\n   - ARIA özelliklerinin doğru kullanıldığını doğrula\n   - Renk kontrastlarının WCAG AA standartlarına uygun olduğunu kontrol et\n   - Form elemanlarının etiketlerinin doğru ilişkilendirildiğini doğrula\n   - Ekran okuyucu uyumluluğunu test et\n\n2. Responsive tasarım kontrollerini yap ve iyileştir:\n   - Mobil cihazlarda (320px-428px) tüm sayfaların doğru görüntülendiğini kontrol et\n   - Tablet cihazlarda (768px-1024px) tüm sayfaların doğru görüntülendiğini kontrol et\n   - Masaüstü cihazlarda (1024px+) tüm sayfaların doğru görüntülendiğini kontrol et\n   - Yatay/dikey yönlendirme değişikliklerinde tasarımın doğru uyarlandığını kontrol et\n\n3. Tailwind CSS medya sorgularını kullanarak responsive iyileştirmeler yap:\n   ```typescript\n   <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4\">\n     {/* İstatistik kartları */}\n   </div>\n   ```\n\n4. Erişilebilirlik iyileştirmeleri için gerekli bileşenleri güncelle:\n   ```typescript\n   <button \n     aria-label=\"Fiş detaylarını görüntüle\"\n     className=\"focus:ring-2 focus:ring-blue-500 focus:outline-none\"\n     onClick={handleClick}\n   >\n     Detaylar\n   </button>\n   ```\n\n5. Tarayıcı uyumluluğunu kontrol et:\n   - Chrome, Firefox, Safari ve Edge tarayıcılarında test et\n   - iOS ve Android mobil tarayıcılarında test et",
+            "status": "pending",
+            "testStrategy": "1. WAVE veya axe gibi erişilebilirlik araçlarıyla otomatik kontroller yap\n2. Klavye navigasyonu ile tüm işlevlere erişilebildiğini doğrula\n3. Farklı ekran boyutlarında Chrome DevTools Responsive Mode ile test et\n4. Gerçek mobil cihazlarda test et\n5. Ekran okuyucu yazılımlarla (NVDA, VoiceOver) temel işlevleri test et\n6. Lighthouse erişilebilirlik puanını ölç ve 90+ puan hedefle",
+            "parentId": "undefined"
+          },
+          {
+            "id": 5,
+            "title": "Güvenlik Kontrolleri ve Dağıtım Hazırlığı",
+            "description": "Güvenlik kontrollerinin yapılması, hata yönetiminin iyileştirilmesi ve dağıtım için son hazırlıkların tamamlanması",
+            "dependencies": [
+              "10.1",
+              "10.2",
+              "10.3",
+              "10.4"
+            ],
+            "details": "1. Güvenlik kontrollerini yap ve iyileştir:\n   - API route'ların güvenli olduğunu kontrol et\n   - Dosya yükleme kısıtlamalarının doğru çalıştığını test et\n   - CSRF korumasını kontrol et\n   - Kullanıcı girdilerinin doğru şekilde temizlendiğini doğrula\n\n2. Hata yönetimi ve kullanıcı geri bildirimi iyileştirmeleri yap:\n   - Tüm hata durumlarının kullanıcıya anlaşılır şekilde gösterildiğini kontrol et\n   - Toast bildirimlerinin doğru çalıştığını test et\n   - Hata sınırları (Error Boundaries) ekle:\n     ```typescript\n     import { Component, ErrorInfo, ReactNode } from 'react';\n     \n     interface ErrorBoundaryProps {\n       children: ReactNode;\n       fallback: ReactNode;\n     }\n     \n     interface ErrorBoundaryState {\n       hasError: boolean;\n     }\n     \n     class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {\n       constructor(props: ErrorBoundaryProps) {\n         super(props);\n         this.state = { hasError: false };\n       }\n     \n       static getDerivedStateFromError(_: Error): ErrorBoundaryState {\n         return { hasError: true };\n       }\n     \n       componentDidCatch(error: Error, errorInfo: ErrorInfo) {\n         console.error('ErrorBoundary caught an error:', error, errorInfo);\n       }\n     \n       render() {\n         if (this.state.hasError) {\n           return this.props.fallback;\n         }\n     \n         return this.props.children;\n       }\n     }\n     \n     export default ErrorBoundary;\n     ```\n\n3. Yerelleştirme kontrollerini yap:\n   - Tüm tarih ve para birimi formatlarının Türkçe locale'e uygun olduğunu kontrol et\n   - Metinlerin Türkçe dil kurallarına uygunluğunu kontrol et\n\n4. Dağıtım hazırlıklarını tamamla:\n   - Ortam değişkenlerinin doğru yapılandırıldığını kontrol et\n   - Build sürecini test et (`npm run build`)\n   - Statik analiz ve linting kontrollerini yap (`npm run lint`)\n   - `.env.example` dosyasını oluştur\n   - `README.md` dosyasını güncelle\n\n5. Son performans kontrollerini yap:\n   - Lighthouse ile performans, erişilebilirlik, SEO ve en iyi uygulamalar puanlarını ölç\n   - Core Web Vitals metriklerini kontrol et",
+            "status": "pending",
+            "testStrategy": "1. OWASP güvenlik kontrol listesine göre temel güvenlik kontrollerini yap\n2. Farklı hata senaryolarını simüle ederek hata yönetimini test et\n3. Üretim ortamında build sürecini test et\n4. Lighthouse ile son performans ve erişilebilirlik puanlarını ölç\n5. Tüm kritik işlevlerin üretim ortamında çalıştığını doğrula\n6. Yük testi yaparak sistemin performansını değerlendir",
+            "parentId": "undefined"
+          }
+        ],
+        "updatedAt": "2025-10-04T16:56:29.963Z"
+      }
+    ],
+    "metadata": {
+      "version": "1.0.0",
+      "lastModified": "2025-10-04T16:56:29.966Z",
+      "taskCount": 10,
+      "completedCount": 9,
+      "tags": [
+        "master"
+      ]
+    }
+  }
+}

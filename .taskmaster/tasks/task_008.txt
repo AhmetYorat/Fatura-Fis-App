@@ -1,0 +1,278 @@
+# Task ID: 8
+# Title: Detay Sayfası Geliştirme
+# Status: pending
+# Dependencies: 1, 2, 3
+# Priority: medium
+# Description: Fiş/fatura detaylarının görüntülendiği sayfa ve bileşenlerin oluşturulması
+# Details:
+1. Detay sayfası oluştur (`app/detay/[id]/page.tsx`):
+   ```tsx
+   import { notFound } from 'next/navigation';
+   import Link from 'next/link';
+   import { format } from 'date-fns';
+   import { tr } from 'date-fns/locale';
+   import { ChevronLeft, Receipt, Calendar, Clock, CreditCard, Percent, Package } from 'lucide-react';
+   import { Header } from '@/components/Header';
+   import { formatCurrency } from '@/lib/utils';
+   import { supabase } from '@/lib/supabase';
+   import type { Fis } from '@/types/database';
+   
+   export const dynamic = 'force-dynamic';
+   
+   async function getFisDetail(id: string): Promise<Fis | null> {
+     const { data, error } = await supabase
+       .from('fisler')
+       .select('*')
+       .eq('id', id)
+       .single();
+     
+     if (error) {
+       console.error('Fiş detayı alınırken hata:', error);
+       return null;
+     }
+     
+     return data;
+   }
+   
+   export default async function DetayPage({ params }: { params: { id: string } }) {
+     const fis = await getFisDetail(params.id);
+     
+     if (!fis) {
+       notFound();
+     }
+     
+     return (
+       <div className="min-h-screen bg-slate-50">
+         <Header />
+         
+         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+           {/* Breadcrumb */}
+           <nav className="mb-4">
+             <Link href="/" className="text-blue-600 hover:text-blue-800 flex items-center text-sm">
+               <ChevronLeft className="h-4 w-4 mr-1" />
+               Ana Sayfa
+             </Link>
+           </nav>
+           
+           {/* Başlık Kartı */}
+           <div className="bg-white border rounded-2xl p-6 mb-6">
+             <h1 className="text-2xl font-semibold mb-1">Fiş #{fis.fis_no}</h1>
+             <p className="text-slate-600">
+               {format(new Date(fis.tarih_saat), 'd MMMM yyyy HH:mm', { locale: tr })}
+             </p>
+           </div>
+           
+           {/* Bilgi Kartları */}
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+             {/* Fiş Bilgileri */}
+             <div className="bg-white border rounded-2xl p-4">
+               <h2 className="text-sm font-medium text-slate-600 mb-3">Fiş Bilgileri</h2>
+               <div className="flex items-start gap-3">
+                 <div className="rounded-full p-2 bg-slate-50 w-9 h-9 flex items-center justify-center text-blue-600">
+                   <Receipt size={20} />
+                 </div>
+                 <div>
+                   <p className="text-sm text-slate-600">Fiş No</p>
+                   <p className="text-lg font-semibold">{fis.fis_no}</p>
+                 </div>
+               </div>
+             </div>
+             
+             {/* Tarih Bilgileri */}
+             <div className="bg-white border rounded-2xl p-4">
+               <h2 className="text-sm font-medium text-slate-600 mb-3">Tarih Bilgileri</h2>
+               <div className="space-y-3">
+                 <div className="flex items-start gap-3">
+                   <div className="rounded-full p-2 bg-slate-50 w-9 h-9 flex items-center justify-center text-blue-600">
+                     <Calendar size={20} />
+                   </div>
+                   <div>
+                     <p className="text-sm text-slate-600">Fiş Tarihi</p>
+                     <p className="text-lg font-semibold">
+                       {format(new Date(fis.tarih_saat), 'd MMMM yyyy', { locale: tr })}
+                     </p>
+                   </div>
+                 </div>
+                 <div className="flex items-start gap-3">
+                   <div className="rounded-full p-2 bg-slate-50 w-9 h-9 flex items-center justify-center text-blue-600">
+                     <Clock size={20} />
+                   </div>
+                   <div>
+                     <p className="text-sm text-slate-600">Oluşturulma</p>
+                     <p className="text-lg font-semibold">
+                       {format(new Date(fis.created_at), 'd MMMM yyyy HH:mm', { locale: tr })}
+                     </p>
+                   </div>
+                 </div>
+               </div>
+             </div>
+             
+             {/* Toplam Bilgiler */}
+             <div className="bg-green-500 text-white rounded-2xl p-4">
+               <h2 className="text-sm font-medium text-green-100 mb-3">Toplam Bilgiler</h2>
+               <div className="space-y-3">
+                 <div className="flex items-start gap-3">
+                   <div className="rounded-full p-2 bg-green-400 bg-opacity-20 w-9 h-9 flex items-center justify-center text-white">
+                     <CreditCard size={20} />
+                   </div>
+                   <div>
+                     <p className="text-sm text-green-100">Toplam Tutar</p>
+                     <p className="text-lg font-semibold">{formatCurrency(fis.total)}</p>
+                   </div>
+                 </div>
+                 <div className="flex items-start gap-3">
+                   <div className="rounded-full p-2 bg-green-400 bg-opacity-20 w-9 h-9 flex items-center justify-center text-white">
+                     <Percent size={20} />
+                   </div>
+                   <div>
+                     <p className="text-sm text-green-100">KDV</p>
+                     <p className="text-lg font-semibold">{formatCurrency(fis.total_kdv)}</p>
+                   </div>
+                 </div>
+                 <div className="flex items-start gap-3">
+                   <div className="rounded-full p-2 bg-green-400 bg-opacity-20 w-9 h-9 flex items-center justify-center text-white">
+                     <Package size={20} />
+                   </div>
+                   <div>
+                     <p className="text-sm text-green-100">Ürün Sayısı</p>
+                     <p className="text-lg font-semibold">{fis.items.length}</p>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+           
+           {/* Ürün Tablosu */}
+           <div className="bg-white border rounded-2xl p-6 mb-6 overflow-hidden">
+             <h2 className="text-lg font-medium mb-4">Ürün Listesi</h2>
+             <div className="overflow-x-auto">
+               <table className="w-full">
+                 <thead>
+                   <tr className="bg-slate-50 text-left">
+                     <th className="p-3 text-sm font-medium text-slate-600">Ürün Adı</th>
+                     <th className="p-3 text-sm font-medium text-slate-600 text-right">Miktar</th>
+                     <th className="p-3 text-sm font-medium text-slate-600 text-right">Birim Fiyat</th>
+                     <th className="p-3 text-sm font-medium text-slate-600 text-right">KDV</th>
+                     <th className="p-3 text-sm font-medium text-slate-600 text-right">Toplam</th>
+                   </tr>
+                 </thead>
+                 <tbody className="divide-y">
+                   {fis.items.map((item, index) => (
+                     <tr key={index}>
+                       <td className="p-3">{item.name}</td>
+                       <td className="p-3 text-right tabular-nums">{item.quantity}</td>
+                       <td className="p-3 text-right tabular-nums">{formatCurrency(item.unit_price)}</td>
+                       <td className="p-3 text-right tabular-nums">{formatCurrency(item.kdv)}</td>
+                       <td className="p-3 text-right font-medium tabular-nums">{formatCurrency(item.total)}</td>
+                     </tr>
+                   ))}
+                 </tbody>
+               </table>
+             </div>
+           </div>
+           
+           {/* Alt Özet */}
+           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-slate-600">
+             <div>
+               Son güncellenme: {format(new Date(fis.updated_at), 'd MMMM yyyy HH:mm', { locale: tr })}
+             </div>
+             <div className="mt-2 sm:mt-0">
+               Toplam Ürün: <span className="font-medium">{fis.items.length}</span> / 
+               Genel Toplam: <span className="font-medium">{formatCurrency(fis.total)}</span>
+             </div>
+           </div>
+         </main>
+       </div>
+     );
+   }
+   ```
+
+2. Not Found sayfası oluştur (`app/not-found.tsx`):
+   ```tsx
+   import Link from 'next/link';
+   import { Header } from '@/components/Header';
+   
+   export default function NotFound() {
+     return (
+       <div className="min-h-screen bg-slate-50">
+         <Header />
+         
+         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+           <div className="text-center py-16">
+             <h1 className="text-4xl font-bold text-slate-900 mb-4">404</h1>
+             <h2 className="text-2xl font-semibold text-slate-700 mb-6">Sayfa Bulunamadı</h2>
+             <p className="text-slate-600 mb-8">Aradığınız sayfa mevcut değil veya kaldırılmış olabilir.</p>
+             <Link
+               href="/"
+               className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+             >
+               Ana Sayfaya Dön
+             </Link>
+           </div>
+         </main>
+       </div>
+     );
+   }
+   ```
+
+# Test Strategy:
+1. Detay sayfasının doğru render edildiğini kontrol et
+2. Geçersiz ID ile 404 sayfasının gösterildiğini test et
+3. Fiş bilgilerinin doğru gösterildiğini kontrol et
+4. Ürün tablosunun doğru render edildiğini ve tüm ürünleri gösterdiğini test et
+5. Para birimi ve tarih formatlamalarının doğru yapıldığını kontrol et
+6. Responsive tasarımın farklı ekran boyutlarında doğru çalıştığını test et
+7. Breadcrumb navigasyonunun doğru çalıştığını kontrol et
+8. Tablo overflow'unun mobil cihazlarda doğru çalıştığını test et
+
+# Subtasks:
+## 1. Fiş Detay Sayfası Temel Yapısı [pending]
+### Dependencies: None
+### Description: Fiş detaylarını görüntüleyen sayfanın temel yapısını oluşturma ve veri çekme işlevselliğini ekleme
+### Details:
+1. `app/detay/[id]/page.tsx` dosyasını oluştur
+2. Supabase'den fiş detaylarını çekmek için `getFisDetail` fonksiyonunu ekle
+3. Sayfa bileşenini oluştur ve `params` üzerinden fiş ID'sini al
+4. Fiş bulunamazsa `notFound()` fonksiyonunu çağır
+5. Sayfanın temel yapısını oluştur (Header, breadcrumb, ana içerik alanı)
+
+## 2. Fiş Başlık ve Bilgi Kartları Bileşenleri [pending]
+### Dependencies: 8.1
+### Description: Fiş detay sayfasındaki başlık kartı ve bilgi kartları bileşenlerinin oluşturulması
+### Details:
+1. Başlık kartını oluştur (fiş numarası ve tarih bilgisi içeren)
+2. Fiş bilgileri kartını oluştur (fiş numarası ve ikon içeren)
+3. Tarih bilgileri kartını oluştur (fiş tarihi, oluşturulma zamanı ve ikonlar içeren)
+4. Toplam bilgiler kartını oluştur (toplam tutar, KDV, ürün sayısı ve ikonlar içeren)
+5. Kartların responsive tasarımını ayarla (grid yapısı ile)
+
+## 3. Ürün Tablosu Bileşeni [pending]
+### Dependencies: 8.1
+### Description: Fiş içindeki ürünleri listeleyen tablo bileşeninin oluşturulması
+### Details:
+1. Ürün tablosu bileşenini oluştur (başlık ve tablo içeren)
+2. Tablo başlıklarını ekle (Ürün Adı, Miktar, Birim Fiyat, KDV, Toplam)
+3. Fiş içindeki ürünleri map fonksiyonu ile listele
+4. Her ürün için gerekli bilgileri ve formatlamaları uygula
+5. Tablonun yatay kaydırma özelliğini ekle (overflow-x-auto)
+
+## 4. Alt Özet ve Sayfa Altı Bilgileri [pending]
+### Dependencies: 8.1, 8.2, 8.3
+### Description: Fiş detay sayfasının alt kısmında yer alan özet bilgileri ve sayfa altı bileşenlerinin oluşturulması
+### Details:
+1. Alt özet bileşenini oluştur
+2. Son güncellenme tarihini formatlayarak göster
+3. Toplam ürün sayısı ve genel toplam bilgilerini ekle
+4. Responsive tasarım için flex yapısını ayarla (mobil ve masaüstü görünümleri)
+5. Sayfa altı bilgilerinin stillerini düzenle
+
+## 5. Not Found Sayfası Oluşturma [pending]
+### Dependencies: None
+### Description: Geçersiz fiş ID'leri veya bulunamayan sayfalar için 404 sayfasının oluşturulması
+### Details:
+1. `app/not-found.tsx` dosyasını oluştur
+2. Sayfa yapısını oluştur (Header ve ana içerik)
+3. 404 hata mesajını ve açıklamasını ekle
+4. Ana sayfaya dönüş bağlantısını ekle
+5. Sayfanın stillerini düzenle (ortalama, boşluklar, renkler)
+
